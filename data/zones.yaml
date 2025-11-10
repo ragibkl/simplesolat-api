@@ -1,0 +1,180 @@
+- state: Johor
+  zone_code: JHR01
+  location: Pulau Aur dan Pulau Pemanggil 
+- state: Johor
+  zone_code: JHR02
+  location: Johor Bahru, Kota Tinggi, Mersing, Kulai
+- state: Johor
+  zone_code: JHR03
+  location: Kluang, Pontian
+- state: Johor
+  zone_code: JHR04
+  location: Batu Pahat, Muar, Segamat, Gemas Johor, Tangkak
+- state: Kedah
+  zone_code: KDH01
+  location: Kota Setar, Kubang Pasu, Pokok Sena (Daerah Kecil)
+- state: Kedah
+  zone_code: KDH02
+  location: Kuala Muda, Yan, Pendang
+- state: Kedah
+  zone_code: KDH03
+  location: Padang Terap, Sik
+- state: Kedah
+  zone_code: KDH04
+  location: Baling
+- state: Kedah
+  zone_code: KDH05
+  location: Bandar Baharu, Kulim
+- state: Kedah
+  zone_code: KDH06
+  location: Langkawi
+- state: Kedah
+  zone_code: KDH07
+  location: Puncak Gunung Jerai
+- state: Kelantan
+  zone_code: KTN01
+  location: Bachok, Kota Bharu, Machang, Pasir Mas, Pasir Puteh, Tanah Merah, Tumpat, Kuala Krai, Mukim Chiku
+- state: Kelantan
+  zone_code: KTN02
+  location: Gua Musang (Daerah Galas Dan Bertam), Jeli, Jajahan Kecil Lojing
+- state: Melaka
+  zone_code: MLK01
+  location: SELURUH NEGERI MELAKA
+- state: Negeri Sembilan
+  zone_code: NGS01
+  location: Tampin, Jempol
+- state: Negeri Sembilan
+  zone_code: NGS02
+  location: Jelebu, Kuala Pilah, Rembau
+- state: Negeri Sembilan
+  zone_code: NGS03
+  location: Port Dickson, Seremban
+- state: Pahang
+  zone_code: PHG01
+  location: Pulau Tioman
+- state: Pahang
+  zone_code: PHG02
+  location: Kuantan, Pekan, Muadzam Shah
+- state: Pahang
+  zone_code: PHG03
+  location: Jerantut, Temerloh, Maran, Bera, Chenor, Jengka
+- state: Pahang
+  zone_code: PHG04
+  location: Bentong, Lipis, Raub
+- state: Pahang
+  zone_code: PHG05
+  location: Genting Sempah, Janda Baik, Bukit Tinggi
+- state: Pahang
+  zone_code: PHG06
+  location: Cameron Highlands, Genting Higlands, Bukit Fraser
+- state: Pahang
+  zone_code: PHG07
+  location: Zon Khas Daerah Rompin, (Mukim Rompin, Mukim Endau, Mukim Pontian)
+- state: Perlis
+  zone_code: PLS01
+  location: Kangar, Padang Besar, Arau
+- state: Pulau Pinang
+  zone_code: PNG01
+  location: Seluruh Negeri Pulau Pinang
+- state: Perak
+  zone_code: PRK01
+  location: Tapah, Slim River, Tanjung Malim
+- state: Perak
+  zone_code: PRK02
+  location: Kuala Kangsar, Sg. Siput , Ipoh, Batu Gajah, Kampar
+- state: Perak
+  zone_code: PRK03
+  location: Lenggong, Pengkalan Hulu, Grik
+- state: Perak
+  zone_code: PRK04
+  location: Temengor, Belum
+- state: Perak
+  zone_code: PRK05
+  location: Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Sitiawan, Pulau Pangkor
+- state: Perak
+  zone_code: PRK06
+  location: Selama, Taiping, Bagan Serai, Parit Buntar
+- state: Perak
+  zone_code: PRK07
+  location: Bukit Larut
+- state: Sabah
+  zone_code: SBH01
+  location: Bahagian Sandakan (Timur), Bukit Garam, Semawang, Temanggong, Tambisan, Bandar Sandakan, Sukau
+- state: Sabah
+  zone_code: SBH02
+  location: Beluran, Telupid, Pinangah, Terusan, Kuamut, Bahagian Sandakan (Barat)
+- state: Sabah
+  zone_code: SBH03
+  location: Lahad Datu, Silabukan, Kunak, Sahabat, Semporna, Tungku, Bahagian Tawau (Timur)
+- state: Sabah
+  zone_code: SBH04
+  location: Bandar Tawau, Balong, Merotai, Kalabakan, Bahagian Tawau (Barat)
+- state: Sabah
+  zone_code: SBH05
+  location: Kudat, Kota Marudu, Pitas, Pulau Banggi, Bahagian Kudat
+- state: Sabah
+  zone_code: SBH06
+  location: Gunung Kinabalu
+- state: Sabah
+  zone_code: SBH07
+  location: Kota Kinabalu, Ranau, Kota Belud, Tuaran, Penampang, Papar, Putatan, Bahagian Pantai Barat
+- state: Sabah
+  zone_code: SBH08
+  location: Pensiangan, Keningau, Tambunan, Nabawan, Bahagian Pendalaman (Atas)
+- state: Sabah
+  zone_code: SBH09
+  location: Beaufort, Kuala Penyu, Sipitang, Tenom, Long Pasia, Membakut, Weston, Bahagian Pendalaman (Bawah)
+- state: Selangor
+  zone_code: SGR01
+  location: Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, S.Alam
+- state: Selangor
+  zone_code: SGR02
+  location: Kuala Selangor, Sabak Bernam
+- state: Selangor
+  zone_code: SGR03
+  location: Klang, Kuala Langat
+- state: Sarawak
+  zone_code: SWK01
+  location: Limbang, Lawas, Sundar, Trusan
+- state: Sarawak
+  zone_code: SWK02
+  location: Miri, Niah, Bekenu, Sibuti, Marudi
+- state: Sarawak
+  zone_code: SWK03
+  location: Pandan, Belaga, Suai, Tatau, Sebauh, Bintulu
+- state: Sarawak
+  zone_code: SWK04
+  location: Sibu, Mukah, Dalat, Song, Igan, Oya, Balingian, Kanowit, Kapit
+- state: Sarawak
+  zone_code: SWK05
+  location: Sarikei, Matu, Julau, Rajang, Daro, Bintangor, Belawai
+- state: Sarawak
+  zone_code: SWK06
+  location: Lubok Antu, Sri Aman, Roban, Debak, Kabong, Lingga, Engkelili, Betong, Spaoh, Pusa, Saratok
+- state: Sarawak
+  zone_code: SWK07
+  location: Serian, Simunjan, Samarahan, Sebuyau, Meludam
+- state: Sarawak
+  zone_code: SWK08
+  location: Kuching, Bau, Lundu, Sematan
+- state: Sarawak
+  zone_code: SWK09
+  location: Zon Khas (Kampung Patarikan)
+- state: Terengganu
+  zone_code: TRG01
+  location: Kuala Terengganu, Marang, Kuala Nerus
+- state: Terengganu
+  zone_code: TRG02
+  location: Besut, Setiu
+- state: Terengganu
+  zone_code: TRG03
+  location: Hulu Terengganu
+- state: Terengganu
+  zone_code: TRG04
+  location: Dungun, Kemaman
+- state: Wilayah Persekutuan
+  zone_code: WLY01
+  location: Kuala Lumpur, Putrajaya
+- state: Wilayah Persekutuan
+  zone_code: WLY02
+  location: Labuan

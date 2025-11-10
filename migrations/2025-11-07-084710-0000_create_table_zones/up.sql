@@ -1,0 +1,7 @@
+-- Your SQL goes here
+CREATE TABLE IF NOT EXISTS zones (
+    zone_code VARCHAR(10) PRIMARY KEY,
+    state VARCHAR(100) NOT NULL,
+    location TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
