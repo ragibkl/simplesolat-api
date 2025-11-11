@@ -4,15 +4,15 @@ diesel::table! {
     prayer_times (id) {
         id -> Int8,
         #[max_length = 10]
-        zone_code -> Nullable<Varchar>,
-        date -> Nullable<Date>,
-        imsak -> Nullable<Time>,
-        fajr -> Nullable<Time>,
-        syuruk -> Nullable<Time>,
-        dhuhr -> Nullable<Time>,
-        asr -> Nullable<Time>,
-        maghrib -> Nullable<Time>,
-        isha -> Nullable<Time>,
+        zone_code -> Varchar,
+        date -> Date,
+        imsak -> Time,
+        fajr -> Time,
+        syuruk -> Time,
+        dhuhr -> Time,
+        asr -> Time,
+        maghrib -> Time,
+        isha -> Time,
         created_at -> Timestamp,
     }
 }
