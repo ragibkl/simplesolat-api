@@ -5,7 +5,7 @@ use diesel::prelude::*;
 #[diesel(table_name = crate::schema::prayer_times)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct SelectPrayerTime {
-    pub id: i32,
+    pub id: i64,
     pub zone_code: String,
     pub date: NaiveDate,
     pub imsak: NaiveTime,

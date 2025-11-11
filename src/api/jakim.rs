@@ -23,7 +23,7 @@ struct JakimResponse {
     #[serde(rename = "prayerTime")]
     prayer_time: Vec<PrayerTime>,
     status: String,
-    zone: String,
+    // zone: String,
 }
 
 /// Fetches prayer times from Jakim e-solat API
