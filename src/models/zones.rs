@@ -18,5 +18,15 @@ pub fn upsert_zone(conn: &mut PgConnection, zone: UpsertZone) {
         .do_update()
         .set(&zone)
         .execute(conn)
-        .expect("Error saving new post");
+        .unwrap();
+}
+
+pub fn select_zones(conn: &mut PgConnection) -> Vec<UpsertZone> {
+    use crate::schema::zones;
+
+    zones::table
+        .select(UpsertZone::as_select())
+        .order(zones::zone_code.asc())
+        .load(conn)
+        .unwrap()
 }

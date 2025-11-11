@@ -1,7 +1,6 @@
-use std::fs;
 use diesel::PgConnection;
 use serde::Deserialize;
-
+use std::fs;
 
 #[derive(Debug, Deserialize)]
 pub struct Zone {

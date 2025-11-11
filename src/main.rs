@@ -1,23 +1,4 @@
-mod models;
-mod service;
-mod schema;
-
-use std::env;
-
-use diesel::prelude::*;
-use dotenvy::dotenv;
-
-pub fn establish_connection() -> PgConnection {
-    dotenv().ok();
-
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    PgConnection::establish(&database_url)
-        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
-}
-
-fn main() {
+#[tokio::main]
+async fn main() {
     println!("Hello, world!");
-    let conn = &mut establish_connection();
-
-    service::zones::upsert_zones_from_data(conn);
 }
