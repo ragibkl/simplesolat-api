@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE IF NOT EXISTS prayer_times (
-    id BIGINT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     zone_code VARCHAR(10) NOT NULL,
     date DATE NOT NULL,
     imsak TIME NOT NULL,
