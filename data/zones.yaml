@@ -1,180 +1,370 @@
-- state: Johor
-  zone_code: JHR01
-  location: Pulau Aur dan Pulau Pemanggil 
-- state: Johor
-  zone_code: JHR02
-  location: Johor Bahru, Kota Tinggi, Mersing, Kulai
-- state: Johor
-  zone_code: JHR03
-  location: Kluang, Pontian
-- state: Johor
-  zone_code: JHR04
-  location: Batu Pahat, Muar, Segamat, Gemas Johor, Tangkak
-- state: Kedah
-  zone_code: KDH01
-  location: Kota Setar, Kubang Pasu, Pokok Sena (Daerah Kecil)
-- state: Kedah
-  zone_code: KDH02
-  location: Kuala Muda, Yan, Pendang
-- state: Kedah
-  zone_code: KDH03
-  location: Padang Terap, Sik
-- state: Kedah
-  zone_code: KDH04
-  location: Baling
-- state: Kedah
-  zone_code: KDH05
-  location: Bandar Baharu, Kulim
-- state: Kedah
-  zone_code: KDH06
-  location: Langkawi
-- state: Kedah
-  zone_code: KDH07
-  location: Puncak Gunung Jerai
-- state: Kelantan
-  zone_code: KTN01
-  location: Bachok, Kota Bharu, Machang, Pasir Mas, Pasir Puteh, Tanah Merah, Tumpat, Kuala Krai, Mukim Chiku
-- state: Kelantan
-  zone_code: KTN02
-  location: Gua Musang (Daerah Galas Dan Bertam), Jeli, Jajahan Kecil Lojing
-- state: Melaka
-  zone_code: MLK01
-  location: SELURUH NEGERI MELAKA
-- state: Negeri Sembilan
-  zone_code: NGS01
-  location: Tampin, Jempol
-- state: Negeri Sembilan
-  zone_code: NGS02
-  location: Jelebu, Kuala Pilah, Rembau
-- state: Negeri Sembilan
-  zone_code: NGS03
-  location: Port Dickson, Seremban
-- state: Pahang
-  zone_code: PHG01
-  location: Pulau Tioman
-- state: Pahang
-  zone_code: PHG02
-  location: Kuantan, Pekan, Muadzam Shah
-- state: Pahang
-  zone_code: PHG03
-  location: Jerantut, Temerloh, Maran, Bera, Chenor, Jengka
-- state: Pahang
-  zone_code: PHG04
-  location: Bentong, Lipis, Raub
-- state: Pahang
-  zone_code: PHG05
-  location: Genting Sempah, Janda Baik, Bukit Tinggi
-- state: Pahang
-  zone_code: PHG06
-  location: Cameron Highlands, Genting Higlands, Bukit Fraser
-- state: Pahang
-  zone_code: PHG07
-  location: Zon Khas Daerah Rompin, (Mukim Rompin, Mukim Endau, Mukim Pontian)
-- state: Perlis
-  zone_code: PLS01
-  location: Kangar, Padang Besar, Arau
-- state: Pulau Pinang
-  zone_code: PNG01
-  location: Seluruh Negeri Pulau Pinang
-- state: Perak
-  zone_code: PRK01
-  location: Tapah, Slim River, Tanjung Malim
-- state: Perak
-  zone_code: PRK02
-  location: Kuala Kangsar, Sg. Siput , Ipoh, Batu Gajah, Kampar
-- state: Perak
-  zone_code: PRK03
-  location: Lenggong, Pengkalan Hulu, Grik
-- state: Perak
-  zone_code: PRK04
-  location: Temengor, Belum
-- state: Perak
-  zone_code: PRK05
-  location: Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Sitiawan, Pulau Pangkor
-- state: Perak
-  zone_code: PRK06
-  location: Selama, Taiping, Bagan Serai, Parit Buntar
-- state: Perak
-  zone_code: PRK07
-  location: Bukit Larut
-- state: Sabah
-  zone_code: SBH01
-  location: Bahagian Sandakan (Timur), Bukit Garam, Semawang, Temanggong, Tambisan, Bandar Sandakan, Sukau
-- state: Sabah
-  zone_code: SBH02
-  location: Beluran, Telupid, Pinangah, Terusan, Kuamut, Bahagian Sandakan (Barat)
-- state: Sabah
-  zone_code: SBH03
-  location: Lahad Datu, Silabukan, Kunak, Sahabat, Semporna, Tungku, Bahagian Tawau (Timur)
-- state: Sabah
-  zone_code: SBH04
-  location: Bandar Tawau, Balong, Merotai, Kalabakan, Bahagian Tawau (Barat)
-- state: Sabah
-  zone_code: SBH05
-  location: Kudat, Kota Marudu, Pitas, Pulau Banggi, Bahagian Kudat
-- state: Sabah
-  zone_code: SBH06
-  location: Gunung Kinabalu
-- state: Sabah
-  zone_code: SBH07
-  location: Kota Kinabalu, Ranau, Kota Belud, Tuaran, Penampang, Papar, Putatan, Bahagian Pantai Barat
-- state: Sabah
-  zone_code: SBH08
-  location: Pensiangan, Keningau, Tambunan, Nabawan, Bahagian Pendalaman (Atas)
-- state: Sabah
-  zone_code: SBH09
-  location: Beaufort, Kuala Penyu, Sipitang, Tenom, Long Pasia, Membakut, Weston, Bahagian Pendalaman (Bawah)
-- state: Selangor
-  zone_code: SGR01
-  location: Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, S.Alam
-- state: Selangor
-  zone_code: SGR02
-  location: Kuala Selangor, Sabak Bernam
-- state: Selangor
-  zone_code: SGR03
-  location: Klang, Kuala Langat
-- state: Sarawak
-  zone_code: SWK01
-  location: Limbang, Lawas, Sundar, Trusan
-- state: Sarawak
-  zone_code: SWK02
-  location: Miri, Niah, Bekenu, Sibuti, Marudi
-- state: Sarawak
-  zone_code: SWK03
-  location: Pandan, Belaga, Suai, Tatau, Sebauh, Bintulu
-- state: Sarawak
-  zone_code: SWK04
-  location: Sibu, Mukah, Dalat, Song, Igan, Oya, Balingian, Kanowit, Kapit
-- state: Sarawak
-  zone_code: SWK05
-  location: Sarikei, Matu, Julau, Rajang, Daro, Bintangor, Belawai
-- state: Sarawak
-  zone_code: SWK06
-  location: Lubok Antu, Sri Aman, Roban, Debak, Kabong, Lingga, Engkelili, Betong, Spaoh, Pusa, Saratok
-- state: Sarawak
-  zone_code: SWK07
-  location: Serian, Simunjan, Samarahan, Sebuyau, Meludam
-- state: Sarawak
-  zone_code: SWK08
-  location: Kuching, Bau, Lundu, Sematan
-- state: Sarawak
-  zone_code: SWK09
-  location: Zon Khas (Kampung Patarikan)
-- state: Terengganu
-  zone_code: TRG01
-  location: Kuala Terengganu, Marang, Kuala Nerus
-- state: Terengganu
-  zone_code: TRG02
-  location: Besut, Setiu
-- state: Terengganu
-  zone_code: TRG03
-  location: Hulu Terengganu
-- state: Terengganu
-  zone_code: TRG04
-  location: Dungun, Kemaman
-- state: Wilayah Persekutuan
-  zone_code: WLY01
-  location: Kuala Lumpur, Putrajaya
-- state: Wilayah Persekutuan
-  zone_code: WLY02
-  location: Labuan
+zones:
+  # Johor
+  - code: JHR01
+    state: Johor
+    location: Pulau Aur dan Pulau Pemanggil
+    latitude: 2.4502
+    longitude: 104.5076
+
+  - code: JHR02
+    state: Johor
+    location: Johor Bahru, Kota Tinggi, Mersing, Kulai
+    latitude: 1.4927
+    longitude: 103.7414
+
+  - code: JHR03
+    state: Johor
+    location: Kluang, Pontian
+    latitude: 2.0333
+    longitude: 103.3167
+
+  - code: JHR04
+    state: Johor
+    location: Batu Pahat, Muar, Segamat, Gemas Johor, Tangkak
+    latitude: 1.8542
+    longitude: 102.9325
+
+  # Kedah
+  - code: KDH01
+    state: Kedah
+    location: Kota Setar, Kubang Pasu, Pokok Sena (Daerah Kecil)
+    latitude: 6.1184
+    longitude: 100.3681
+
+  - code: KDH02
+    state: Kedah
+    location: Kuala Muda, Yan, Pendang
+    latitude: 5.7761
+    longitude: 100.4464
+
+  - code: KDH03
+    state: Kedah
+    location: Padang Terap, Sik
+    latitude: 6.1266
+    longitude: 100.7994
+
+  - code: KDH04
+    state: Kedah
+    location: Baling
+    latitude: 5.6667
+    longitude: 100.9167
+
+  - code: KDH05
+    state: Kedah
+    location: Bandar Baharu, Kulim
+    latitude: 5.3645
+    longitude: 100.5619
+
+  - code: KDH06
+    state: Kedah
+    location: Langkawi
+    latitude: 6.3500
+    longitude: 99.8000
+
+  - code: KDH07
+    state: Kedah
+    location: Gunung Jerai
+    latitude: 5.8000
+    longitude: 100.4333
+
+  # Kelantan
+  - code: KTN01
+    state: Kelantan
+    location: Kota Bharu, Bachok, Pasir Puteh, Tumpat, Pasir Mas, Tanah Merah, Machang, Kuala Krai, Mukim Chiku
+    latitude: 6.1333
+    longitude: 102.2500
+
+  - code: KTN03
+    state: Kelantan
+    location: Jeli, Gua Musang (Daerah Galas Dan Bertam)
+    latitude: 5.7000
+    longitude: 102.2333
+
+  # Melaka
+  - code: MLK01
+    state: Melaka
+    location: Bandar Melaka, Alor Gajah, Jasin, Masjid Tanah, Merlimau, Nyalas
+    latitude: 2.1896
+    longitude: 102.2501
+
+  # Negeri Sembilan
+  - code: NGS01
+    state: Negeri Sembilan
+    location: Tampin, Jempol
+    latitude: 2.4667
+    longitude: 102.2333
+
+  - code: NGS02
+    state: Negeri Sembilan
+    location: Port Dickson, Seremban, Kuala Pilah, Jelebu, Rembau
+    latitude: 2.7258
+    longitude: 101.9424
+
+  # Pahang
+  - code: PHG01
+    state: Pahang
+    location: Pulau Tioman
+    latitude: 2.8125
+    longitude: 104.1667
+
+  - code: PHG02
+    state: Pahang
+    location: Kuantan, Pekan, Rompin, Muadzam Shah
+    latitude: 3.8077
+    longitude: 103.3260
+
+  - code: PHG03
+    state: Pahang
+    location: Jerantut, Temerloh, Maran, Bera, chenor, Jengka
+    latitude: 3.8833
+    longitude: 102.3667
+
+  - code: PHG04
+    state: Pahang
+    location: Bentong, Lipis, Raub
+    latitude: 3.5167
+    longitude: 101.9083
+
+  - code: PHG05
+    state: Pahang
+    location: Genting Sempah, Janda Baik, Bukit Tinggi
+    latitude: 3.3833
+    longitude: 101.7833
+
+  - code: PHG06
+    state: Pahang
+    location: Cameron Highlands, Genting Higlands, Bukit Fraser
+    latitude: 4.4701
+    longitude: 101.3811
+
+  # Perlis
+  - code: PLS01
+    state: Perlis
+    location: Kangar, Padang Besar, Arau
+    latitude: 6.4333
+    longitude: 100.2000
+
+  # Penang
+  - code: PNG01
+    state: Pulau Pinang
+    location: Seluruh Negeri Pulau Pinang
+    latitude: 5.4164
+    longitude: 100.3327
+
+  # Perak
+  - code: PRK01
+    state: Perak
+    location: Tapah, Slim River, Tanjung Malim
+    latitude: 3.7000
+    longitude: 101.2667
+
+  - code: PRK02
+    state: Perak
+    location: Kuala Kangsar, Sg. Siput , Ipoh, Batu Gajah, Kampar
+    latitude: 4.7667
+    longitude: 101.0833
+
+  - code: PRK03
+    state: Perak
+    location: Lenggong, Pengkalan Hulu, Grik
+    latitude: 5.1000
+    longitude: 100.9667
+
+  - code: PRK04
+    state: Perak
+    location: Temengor, Belum
+    latitude: 5.5333
+    longitude: 101.3500
+
+  - code: PRK05
+    state: Perak
+    location: Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Setiawan, Pulau Pangkor
+    latitude: 4.0250
+    longitude: 100.8167
+
+  - code: PRK06
+    state: Perak
+    location: Selama, Taiping, Bagan Serai, Parit Buntar
+    latitude: 5.0083
+    longitude: 100.7333
+
+  - code: PRK07
+    state: Perak
+    location: Bukit Larut
+    latitude: 4.8500
+    longitude: 100.7833
+
+  # Sabah
+  - code: SBH01
+    state: Sabah
+    location: Bahagian Sandakan (Timur), Bukit Garam, Semawang, Temanggong, Tambisan, Bandar Sandakan, Sukau
+    latitude: 5.8333
+    longitude: 118.1167
+
+  - code: SBH02
+    state: Sabah
+    location: Beluran, Telupid, Pinangah, Terusan, Kuamut, Bahagian Sandakan (Barat)
+    latitude: 5.9667
+    longitude: 117.1667
+
+  - code: SBH03
+    state: Sabah
+    location: Lahad Datu, Silabukan, Kunak, Sahabat, Semporna, Tungku, Bahagian Tawau (Timur)
+    latitude: 4.9820
+    longitude: 118.3295
+
+  - code: SBH04
+    state: Sabah
+    location: Bandar Tawau, Balong, Merotai, Kalabakan, Bahagian Tawau (Barat)
+    latitude: 4.2481
+    longitude: 117.8935
+
+  - code: SBH05
+    state: Sabah
+    location: Kudat, Kota Marudu, Pitas, Pulau Banggi, Bahagian Kudat
+    latitude: 6.8833
+    longitude: 116.8333
+
+  - code: SBH06
+    state: Sabah
+    location: Gunung Kinabalu
+    latitude: 6.0750
+    longitude: 116.5583
+
+  - code: SBH07
+    state: Sabah
+    location: Kota Kinabalu, Ranau, Kota Belud, Tuaran, Penampang, Papar, Putatan, Bahagian Pantai Barat
+    latitude: 5.9804
+    longitude: 116.0735
+
+  - code: SBH08
+    state: Sabah
+    location: Pensiangan, Keningau, Tambunan, Nabawan, Bahagian Pendalaman (Atas)
+    latitude: 5.3333
+    longitude: 116.1667
+
+  - code: SBH09
+    state: Sabah
+    location: Beaufort, Kuala Penyu, Sipitang, Tenom, Long Pa Sia, Membakut, Weston, Bahagian Pendalaman (Bawah)
+    latitude: 5.3471
+    longitude: 115.7469
+
+  # Sarawak
+  - code: SWK01
+    state: Sarawak
+    location: Limbang, Lawas, Sundar, Trusan
+    latitude: 4.7500
+    longitude: 115.0167
+
+  - code: SWK02
+    state: Sarawak
+    location: Miri, Niah, Bekenu, Sibuti, Marudi
+    latitude: 4.3950
+    longitude: 113.9911
+
+  - code: SWK03
+    state: Sarawak
+    location: Pandan, Belaga, Suai, Tatau, Sebauh, Bintulu
+    latitude: 3.1667
+    longitude: 113.0333
+
+  - code: SWK04
+    state: Sarawak
+    location: Sibu, Mukah, Dalat, Song, Igan, Oya, Balingian, Kanowit, Kapit
+    latitude: 2.3000
+    longitude: 111.8167
+
+  - code: SWK05
+    state: Sarawak
+    location: Sarikei, Matu, Julau, Rajang, Daro, Bintangor, Belawai
+    latitude: 2.1167
+    longitude: 111.5167
+
+  - code: SWK06
+    state: Sarawak
+    location: Lubok Antu, Sri Aman, Roban, Debak, Kabong, Lingga, Engkelili, Betong, Spaoh, Pusa, Saratok
+    latitude: 1.2333
+    longitude: 111.4500
+
+  - code: SWK07
+    state: Sarawak
+    location: Serian, Simunjan, Samarahan, Sebuyau, Meludam
+    latitude: 1.1167
+    longitude: 110.6000
+
+  - code: SWK08
+    state: Sarawak
+    location: Kuching, Bau, Lundu, Sematan
+    latitude: 1.5533
+    longitude: 110.3593
+
+  - code: SWK09
+    state: Sarawak
+    location: Zon Khas (Kampung Patarikan)
+    latitude: 1.4167
+    longitude: 110.3500
+
+  # Selangor
+  - code: SGR01
+    state: Selangor
+    location: Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, Rawang, S.Alam
+    latitude: 3.0738
+    longitude: 101.5183
+
+  - code: SGR02
+    state: Selangor
+    location: Kuala Selangor, Sabak Bernam
+    latitude: 3.3389
+    longitude: 101.2519
+
+  - code: SGR03
+    state: Selangor
+    location: Klang, Kuala Langat
+    latitude: 3.0333
+    longitude: 101.4500
+
+  # Terengganu
+  - code: TRG01
+    state: Terengganu
+    location: Kuala Terengganu, Marang, Kuala Nerus
+    latitude: 5.3302
+    longitude: 103.1408
+
+  - code: TRG02
+    state: Terengganu
+    location: Besut, Setiu
+    latitude: 5.8167
+    longitude: 102.5667
+
+  - code: TRG03
+    state: Terengganu
+    location: Hulu Terengganu
+    latitude: 5.1667
+    longitude: 102.8333
+
+  - code: TRG04
+    state: Terengganu
+    location: Dungun, Kemaman
+    latitude: 4.7576
+    longitude: 103.4176
+
+  # WP Kuala Lumpur
+  - code: WLY01
+    state: W.P. Kuala Lumpur
+    location: Kuala Lumpur
+    latitude: 3.1390
+    longitude: 101.6869
+
+  # WP Labuan
+  - code: WLY02
+    state: W.P. Labuan
+    location: Labuan
+    latitude: 5.2831
+    longitude: 115.2308
+
+  # WP Putrajaya
+  - code: WLY03
+    state: W.P. Putrajaya
+    location: Putrajaya
+    latitude: 2.9264
+    longitude: 101.6964
