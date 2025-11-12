@@ -57,3 +57,21 @@ pub fn upsert_prayer_times(conn: &mut PgConnection, prayer_times: &[UpsertPrayer
         .execute(conn)
         .unwrap();
 }
+
+pub fn select_prayer_times_for_zone(
+    conn: &mut PgConnection,
+    zone_code: &str,
+    from: NaiveDate,
+    to: NaiveDate,
+) -> Vec<SelectPrayerTime> {
+    use crate::schema::prayer_times;
+
+    prayer_times::table
+        .filter(prayer_times::zone_code.eq(zone_code))
+        .filter(prayer_times::date.ge(from))
+        .filter(prayer_times::date.le(to))
+        .select(SelectPrayerTime::as_select())
+        .order(prayer_times::date.asc())
+        .load(conn)
+        .unwrap()
+}

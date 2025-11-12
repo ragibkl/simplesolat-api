@@ -19,7 +19,7 @@ pub async fn sync_prayer_times_for_zone(
     date_start: NaiveDate,
     date_end: NaiveDate,
 ) {
-    let last_prayer_time = select_last_prayer_time_for_zone(conn, &zone_code);
+    let last_prayer_time = select_last_prayer_time_for_zone(conn, zone_code);
 
     let date_start = match last_prayer_time {
         None => date_start,
