@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   # monosolat-api:
-  #   image: ghcr.io/ragibkl/simplesolat-api:sha-9171512
+  #   image: ghcr.io/ragibkl/simplesolat-api:master
   #   environment:
   #     DATABASE_URL: postgres://user:password@postgres/simplesolat_db
   #   ports:
