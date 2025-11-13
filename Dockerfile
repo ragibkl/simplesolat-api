@@ -10,6 +10,8 @@ RUN apk add build-base \
     clang-dev \
     clang-libs \
     linux-headers \
+    libpq \
+    libpq-dev \
     openssl \
     openssl-dev \
     rust
@@ -35,7 +37,7 @@ FROM alpine:3.22 AS prod
 WORKDIR /app
 
 # install runtime dependencies
-RUN apk add openssl libgcc libstdc++
+RUN apk add openssl libgcc libstdc++ libpq
 
 # set default logging, can be overridden
 ENV RUST_LOG=info
