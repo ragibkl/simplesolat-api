@@ -1,5 +1,5 @@
 ## builder
-FROM alpine:3.19 AS builder
+FROM alpine:3.22 AS builder
 
 WORKDIR /code/monosolat-api
 
@@ -28,7 +28,7 @@ RUN cargo build --release
 
 
 ## runtime
-FROM alpine:3.19 AS prod
+FROM alpine:3.22 AS prod
 
 WORKDIR /app
 
