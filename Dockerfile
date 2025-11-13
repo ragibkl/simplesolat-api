@@ -1,7 +1,7 @@
 ## builder
 FROM alpine:3.22 AS builder
 
-WORKDIR /code/monosolat-api
+WORKDIR /code/simplesolat-api
 
 # install system dependencies
 RUN apk add build-base \
@@ -47,9 +47,8 @@ ENV RUST_LOG=info
 COPY data /app/data
 
 # copy binary
-# COPY --from=builder /code/monosolat-api/target/release/monosolat-api /usr/local/bin/monosolat-api
-# COPY --from=builder /code/monosolat-api/target/release/sync /usr/local/bin/sync
-COPY --from=builder /code/monosolat-api/target/release/* /usr/local/bin/
+COPY --from=builder /code/simplesolat-api/target/release/simplesolat-api /usr/local/bin/simplesolat-api
+COPY --from=builder /code/simplesolat-api/target/release/sync /usr/local/bin/sync
 
 # set entrypoint
-ENTRYPOINT ["/usr/local/bin/monosolat-api"]
+ENTRYPOINT ["/usr/local/bin/simplesolat-api"]

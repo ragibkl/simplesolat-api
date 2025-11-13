@@ -1,7 +1,6 @@
 services:
   postgres:
     image: postgres:18-alpine
-    container_name: prayer-times-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: user
@@ -11,6 +10,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  # monosolat-api:
+  #   image: ghcr.io/ragibkl/simplesolat-api:sha-9171512
+  #   environment:
+  #     DATABASE_URL: postgres://user:password@postgres/simplesolat_db
+  #   ports:
+  #     - 3000:3000
 
 volumes:
   postgres_data:

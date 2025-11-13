@@ -13,8 +13,8 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    // Load environment variables
-    dotenvy::dotenv().ok();
+    // // Load environment variables
+    // dotenvy::dotenv().ok();
 
     let router = create_app_router().await;
 

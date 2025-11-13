@@ -9,8 +9,8 @@ pub type DbConnection = r2d2::PooledConnection<ConnectionManager<PgConnection>>;
 
 pub fn connect_db() -> DbPool {
     // Get database URL from environment
-    let database_url =
-        std::env::var("DATABASE_URL").expect("DATABASE_URL must be set in .env file");
+    let database_url = std::env::var("DATABASE_URL")
+        .unwrap_or("postgres://user:password@localhost/simplesolat_db".to_string());
 
     // Create database connection pool
     let manager = ConnectionManager::<PgConnection>::new(database_url);
