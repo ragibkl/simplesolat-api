@@ -29,6 +29,7 @@ COPY /src/ ./src/
 RUN touch ./src/main.rs
 RUN touch ./src/bin/sync.rs
 RUN cargo build --release
+RUN ls target/*
 
 
 ## runtime
@@ -46,8 +47,9 @@ ENV RUST_LOG=info
 COPY data /app/data
 
 # copy binary
-COPY --from=builder /code/monosolat-api/target/release/monosolat-api /usr/local/bin/monosolat-api
-COPY --from=builder /code/monosolat-api/target/release/sync /usr/local/bin/sync
+# COPY --from=builder /code/monosolat-api/target/release/monosolat-api /usr/local/bin/monosolat-api
+# COPY --from=builder /code/monosolat-api/target/release/sync /usr/local/bin/sync
+COPY --from=builder /code/monosolat-api/target/release/* /usr/local/bin/
 
 # set entrypoint
 ENTRYPOINT ["/usr/local/bin/monosolat-api"]
