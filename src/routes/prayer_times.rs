@@ -27,6 +27,7 @@ fn datetime_to_timestamp(date: NaiveDate, time: NaiveTime) -> i64 {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WaktuSolat {
     pub date: NaiveDate,
+    pub zone: String,
     pub imsak: i64,   // Unix timestamp
     pub fajr: i64,    // Unix timestamp
     pub syuruk: i64,  // Unix timestamp
@@ -40,6 +41,7 @@ impl From<&SelectPrayerTime> for WaktuSolat {
     fn from(value: &SelectPrayerTime) -> Self {
         Self {
             date: value.date,
+            zone: value.zone_code.to_string(),
             imsak: datetime_to_timestamp(value.date, value.imsak),
             fajr: datetime_to_timestamp(value.date, value.fajr),
             syuruk: datetime_to_timestamp(value.date, value.syuruk),
