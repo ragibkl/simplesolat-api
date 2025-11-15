@@ -63,27 +63,27 @@ zones:
 
   - code: KDH07
     state: Kedah
-    location: Gunung Jerai
+    location: Puncak Gunung Jerai
     latitude: 5.8000
     longitude: 100.4333
 
   # Kelantan
   - code: KTN01
     state: Kelantan
-    location: Kota Bharu, Bachok, Pasir Puteh, Tumpat, Pasir Mas, Tanah Merah, Machang, Kuala Krai, Mukim Chiku
+    location: Bachok, Kota Bharu, Machang, Pasir Mas, Pasir Puteh, Tanah Merah, Tumpat, Kuala Krai, Mukim Chiku
     latitude: 6.1333
     longitude: 102.2500
 
-  - code: KTN03
+  - code: KTN02
     state: Kelantan
-    location: Jeli, Gua Musang (Daerah Galas Dan Bertam)
+    location: Gua Musang (Daerah Galas Dan Bertam), Jeli, Jajahan Kecil Lojing
     latitude: 5.7000
     longitude: 102.2333
 
   # Melaka
   - code: MLK01
     state: Melaka
-    location: Bandar Melaka, Alor Gajah, Jasin, Masjid Tanah, Merlimau, Nyalas
+    location: SELURUH NEGERI MELAKA
     latitude: 2.1896
     longitude: 102.2501
 
@@ -96,9 +96,15 @@ zones:
 
   - code: NGS02
     state: Negeri Sembilan
-    location: Port Dickson, Seremban, Kuala Pilah, Jelebu, Rembau
+    location: Jelebu, Kuala Pilah, Rembau
     latitude: 2.7258
     longitude: 101.9424
+
+  - code: NGS03
+    state: Negeri Sembilan
+    location: Port Dickson, Seremban
+    latitude: 2.5214
+    longitude: 101.7971
 
   # Pahang
   - code: PHG01
@@ -109,13 +115,13 @@ zones:
 
   - code: PHG02
     state: Pahang
-    location: Kuantan, Pekan, Rompin, Muadzam Shah
+    location: Kuantan, Pekan, Muadzam Shah
     latitude: 3.8077
     longitude: 103.3260
 
   - code: PHG03
     state: Pahang
-    location: Jerantut, Temerloh, Maran, Bera, chenor, Jengka
+    location: Jerantut, Temerloh, Maran, Bera, Chenor, Jengka
     latitude: 3.8833
     longitude: 102.3667
 
@@ -136,6 +142,12 @@ zones:
     location: Cameron Highlands, Genting Higlands, Bukit Fraser
     latitude: 4.4701
     longitude: 101.3811
+
+  - code: PHG07
+    state: Pahang
+    location: Zon Khas Daerah Rompin, (Mukim Rompin, Mukim Endau, Mukim Pontian)
+    latitude: 2.7500
+    longitude: 103.4500
 
   # Perlis
   - code: PLS01
@@ -178,7 +190,7 @@ zones:
 
   - code: PRK05
     state: Perak
-    location: Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Setiawan, Pulau Pangkor
+    location: Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Sitiawan, Pulau Pangkor
     latitude: 4.0250
     longitude: 100.8167
 
@@ -245,7 +257,7 @@ zones:
 
   - code: SBH09
     state: Sabah
-    location: Beaufort, Kuala Penyu, Sipitang, Tenom, Long Pa Sia, Membakut, Weston, Bahagian Pendalaman (Bawah)
+    location: Beaufort, Kuala Penyu, Sipitang, Tenom, Long Pasia, Membakut, Weston, Bahagian Pendalaman (Bawah)
     latitude: 5.3471
     longitude: 115.7469
 
@@ -304,10 +316,10 @@ zones:
     latitude: 1.4167
     longitude: 110.3500
 
-  # Selangor
+  # Selangor (3 zones) - SGR01 updated (no Rawang)
   - code: SGR01
     state: Selangor
-    location: Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, Rawang, S.Alam
+    location: Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, S.Alam
     latitude: 3.0738
     longitude: 101.5183
 
@@ -348,23 +360,15 @@ zones:
     latitude: 4.7576
     longitude: 103.4176
 
-  # WP Kuala Lumpur
+  # Wilayah Persekutuan
   - code: WLY01
     state: W.P. Kuala Lumpur
-    location: Kuala Lumpur
+    location: Kuala Lumpur, Putrajaya
     latitude: 3.1390
     longitude: 101.6869
 
-  # WP Labuan
   - code: WLY02
     state: W.P. Labuan
     location: Labuan
     latitude: 5.2831
     longitude: 115.2308
-
-  # WP Putrajaya
-  - code: WLY03
-    state: W.P. Putrajaya
-    location: Putrajaya
-    latitude: 2.9264
-    longitude: 101.6964
