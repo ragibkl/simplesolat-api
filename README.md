@@ -11,7 +11,7 @@ A simple, reliable API that serves accurate prayer times for all 80 Malaysian pr
 ## Features
 
 - ✅ **Official Jakim Data** - Accurate prayer times from JAKIM e-Solat
-- ✅ **All 80 Malaysian Zones** - Complete coverage (Johor, Sabah, Sarawak, etc.)
+- ✅ **Complete Malaysia Coverage** - All JAKIM prayer zones
 - ✅ **7 Prayer Times** - Imsak, Fajr, Syuruk, Dhuhr, Asr, Maghrib, Isha
 - ✅ **Flexible Date Ranges** - Query any date range
 - ✅ **Unix Timestamps** - Easy to use in mobile apps
@@ -70,7 +70,7 @@ GET /prayer-times/by-zone/:zone
 
 ### Zone Codes
 
-All 80 Malaysian prayer zones are supported. Examples:
+All JAKIM prayer zones are supported. Examples:
 
 - `WLY01` - W.P. Kuala Lumpur
 - `SGR01` - Selangor (Gombak, Petaling, Sepang, etc.)
@@ -221,7 +221,7 @@ simplesolat-api/
 ├── migrations/           # Diesel migrations
 ├── docker-compose.yml    # PostgreSQL setup
 ├── Cargo.toml            # Rust dependencies
-├── zones.yaml            # All 80 Malaysian zones
+├── zones.yaml            # All Jakim prayer zones
 └── README.md
 ```
 
