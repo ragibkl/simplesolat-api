@@ -2,6 +2,9 @@ use diesel::{
     PgConnection,
     r2d2::{self, ConnectionManager},
 };
+use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
+
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();
 
 // Database connection pool type
 pub type DbPool = r2d2::Pool<ConnectionManager<PgConnection>>;
@@ -19,9 +22,14 @@ pub fn connect_db() -> DbPool {
         .build(manager)
         .expect("Failed to create database pool");
 
-    // Test the connection
+    // Test the connection and run migrations
     match db_pool.get() {
-        Ok(_) => tracing::info!("✓ Database connection successful"),
+        Ok(mut conn) => {
+            tracing::info!("✓ Database connection successful");
+            conn.run_pending_migrations(MIGRATIONS)
+                .expect("Failed to run database migrations");
+            tracing::info!("✓ Database migrations up to date");
+        }
         Err(e) => {
             tracing::error!("✗ Failed to connect to database: {}", e);
             panic!("Cannot start server without database connection");
