@@ -2,7 +2,7 @@
 
 > REST API for Malaysian prayer times using official Jakim data
 
-**Live API:** https://api.simplesolat.apps.bancuh.net
+**Live API:** https://api.simplesolat.com
 
 A simple, reliable API that serves accurate prayer times for all 80 Malaysian prayer zones using data from JAKIM e-Solat.
 
@@ -26,7 +26,7 @@ A simple, reliable API that serves accurate prayer times for all 80 Malaysian pr
 
 ```bash
 # Get prayer times for specific zone and date range
-curl "https://api.simplesolat.apps.bancuh.net/prayer-times/by-zone/SGR01?from=2026-01-01&to=2026-01-31"
+curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2026-01-01&to=2026-01-31"
 ```
 
 ### Response
@@ -105,23 +105,23 @@ All times are Unix timestamps (seconds since epoch) in Malaysia timezone (UTC+8)
 
 **Single Day:**
 ```bash
-curl "https://api.simplesolat.apps.bancuh.net/prayer-times/by-zone/WLY01?from=2026-01-01&to=2026-01-01"
+curl "https://api.simplesolat.com/prayer-times/by-zone/WLY01?from=2026-01-01&to=2026-01-01"
 ```
 
 **Month:**
 ```bash
-curl "https://api.simplesolat.apps.bancuh.net/prayer-times/by-zone/SGR01?from=2026-01-01&to=2026-01-31"
+curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2026-01-01&to=2026-01-31"
 ```
 
 **Year Transition:**
 ```bash
-curl "https://api.simplesolat.apps.bancuh.net/prayer-times/by-zone/JHR01?from=2025-12-15&to=2026-01-15"
+curl "https://api.simplesolat.com/prayer-times/by-zone/JHR01?from=2025-12-15&to=2026-01-15"
 ```
 
 **Next 90 Days:**
 ```bash
 # From today
-curl "https://api.simplesolat.apps.bancuh.net/prayer-times/by-zone/SGR01?from=2025-11-13&to=2026-02-11"
+curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2025-11-13&to=2026-02-11"
 ```
 
 ---
