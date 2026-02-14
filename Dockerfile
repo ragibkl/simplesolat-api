@@ -23,6 +23,7 @@ RUN cargo build --release
 RUN rm -rf ./src/
 
 # copy code files
+COPY /migrations/ ./migrations/
 COPY /src/ ./src/
 
 # build code
