@@ -1,24 +1,28 @@
 zones:
   # Johor
   - code: JHR01
+    country: MY
     state: Johor
     location: Pulau Aur dan Pulau Pemanggil
     latitude: 2.4502
     longitude: 104.5076
 
   - code: JHR02
+    country: MY
     state: Johor
     location: Johor Bahru, Kota Tinggi, Mersing, Kulai
     latitude: 1.4927
     longitude: 103.7414
 
   - code: JHR03
+    country: MY
     state: Johor
     location: Kluang, Pontian
     latitude: 2.0333
     longitude: 103.3167
 
   - code: JHR04
+    country: MY
     state: Johor
     location: Batu Pahat, Muar, Segamat, Gemas Johor, Tangkak
     latitude: 1.8542
@@ -26,42 +30,49 @@ zones:
 
   # Kedah
   - code: KDH01
+    country: MY
     state: Kedah
     location: Kota Setar, Kubang Pasu, Pokok Sena (Daerah Kecil)
     latitude: 6.1184
     longitude: 100.3681
 
   - code: KDH02
+    country: MY
     state: Kedah
     location: Kuala Muda, Yan, Pendang
     latitude: 5.7761
     longitude: 100.4464
 
   - code: KDH03
+    country: MY
     state: Kedah
     location: Padang Terap, Sik
     latitude: 6.1266
     longitude: 100.7994
 
   - code: KDH04
+    country: MY
     state: Kedah
     location: Baling
     latitude: 5.6667
     longitude: 100.9167
 
   - code: KDH05
+    country: MY
     state: Kedah
     location: Bandar Baharu, Kulim
     latitude: 5.3645
     longitude: 100.5619
 
   - code: KDH06
+    country: MY
     state: Kedah
     location: Langkawi
     latitude: 6.3500
     longitude: 99.8000
 
   - code: KDH07
+    country: MY
     state: Kedah
     location: Puncak Gunung Jerai
     latitude: 5.8000
@@ -69,12 +80,14 @@ zones:
 
   # Kelantan
   - code: KTN01
+    country: MY
     state: Kelantan
     location: Bachok, Kota Bharu, Machang, Pasir Mas, Pasir Puteh, Tanah Merah, Tumpat, Kuala Krai, Mukim Chiku
     latitude: 6.1333
     longitude: 102.2500
 
   - code: KTN02
+    country: MY
     state: Kelantan
     location: Gua Musang (Daerah Galas Dan Bertam), Jeli, Jajahan Kecil Lojing
     latitude: 5.7000
@@ -82,6 +95,7 @@ zones:
 
   # Melaka
   - code: MLK01
+    country: MY
     state: Melaka
     location: SELURUH NEGERI MELAKA
     latitude: 2.1896
@@ -89,18 +103,21 @@ zones:
 
   # Negeri Sembilan
   - code: NGS01
+    country: MY
     state: Negeri Sembilan
     location: Tampin, Jempol
     latitude: 2.4667
     longitude: 102.2333
 
   - code: NGS02
+    country: MY
     state: Negeri Sembilan
     location: Jelebu, Kuala Pilah, Rembau
     latitude: 2.7258
     longitude: 101.9424
 
   - code: NGS03
+    country: MY
     state: Negeri Sembilan
     location: Port Dickson, Seremban
     latitude: 2.5214
@@ -108,42 +125,49 @@ zones:
 
   # Pahang
   - code: PHG01
+    country: MY
     state: Pahang
     location: Pulau Tioman
     latitude: 2.8125
     longitude: 104.1667
 
   - code: PHG02
+    country: MY
     state: Pahang
     location: Kuantan, Pekan, Muadzam Shah
     latitude: 3.8077
     longitude: 103.3260
 
   - code: PHG03
+    country: MY
     state: Pahang
     location: Jerantut, Temerloh, Maran, Bera, Chenor, Jengka
     latitude: 3.8833
     longitude: 102.3667
 
   - code: PHG04
+    country: MY
     state: Pahang
     location: Bentong, Lipis, Raub
     latitude: 3.5167
     longitude: 101.9083
 
   - code: PHG05
+    country: MY
     state: Pahang
     location: Genting Sempah, Janda Baik, Bukit Tinggi
     latitude: 3.3833
     longitude: 101.7833
 
   - code: PHG06
+    country: MY
     state: Pahang
     location: Cameron Highlands, Genting Higlands, Bukit Fraser
     latitude: 4.4701
     longitude: 101.3811
 
   - code: PHG07
+    country: MY
     state: Pahang
     location: Zon Khas Daerah Rompin, (Mukim Rompin, Mukim Endau, Mukim Pontian)
     latitude: 2.7500
@@ -151,6 +175,7 @@ zones:
 
   # Perlis
   - code: PLS01
+    country: MY
     state: Perlis
     location: Kangar, Padang Besar, Arau
     latitude: 6.4333
@@ -158,6 +183,7 @@ zones:
 
   # Penang
   - code: PNG01
+    country: MY
     state: Pulau Pinang
     location: Seluruh Negeri Pulau Pinang
     latitude: 5.4164
@@ -165,42 +191,49 @@ zones:
 
   # Perak
   - code: PRK01
+    country: MY
     state: Perak
     location: Tapah, Slim River, Tanjung Malim
     latitude: 3.7000
     longitude: 101.2667
 
   - code: PRK02
+    country: MY
     state: Perak
     location: Kuala Kangsar, Sg. Siput , Ipoh, Batu Gajah, Kampar
     latitude: 4.7667
     longitude: 101.0833
 
   - code: PRK03
+    country: MY
     state: Perak
     location: Lenggong, Pengkalan Hulu, Grik
     latitude: 5.1000
     longitude: 100.9667
 
   - code: PRK04
+    country: MY
     state: Perak
     location: Temengor, Belum
     latitude: 5.5333
     longitude: 101.3500
 
   - code: PRK05
+    country: MY
     state: Perak
     location: Kg Gajah, Teluk Intan, Bagan Datuk, Seri Iskandar, Beruas, Parit, Lumut, Sitiawan, Pulau Pangkor
     latitude: 4.0250
     longitude: 100.8167
 
   - code: PRK06
+    country: MY
     state: Perak
     location: Selama, Taiping, Bagan Serai, Parit Buntar
     latitude: 5.0083
     longitude: 100.7333
 
   - code: PRK07
+    country: MY
     state: Perak
     location: Bukit Larut
     latitude: 4.8500
@@ -208,54 +241,63 @@ zones:
 
   # Sabah
   - code: SBH01
+    country: MY
     state: Sabah
     location: Bahagian Sandakan (Timur), Bukit Garam, Semawang, Temanggong, Tambisan, Bandar Sandakan, Sukau
     latitude: 5.8333
     longitude: 118.1167
 
   - code: SBH02
+    country: MY
     state: Sabah
     location: Beluran, Telupid, Pinangah, Terusan, Kuamut, Bahagian Sandakan (Barat)
     latitude: 5.9667
     longitude: 117.1667
 
   - code: SBH03
+    country: MY
     state: Sabah
     location: Lahad Datu, Silabukan, Kunak, Sahabat, Semporna, Tungku, Bahagian Tawau (Timur)
     latitude: 4.9820
     longitude: 118.3295
 
   - code: SBH04
+    country: MY
     state: Sabah
     location: Bandar Tawau, Balong, Merotai, Kalabakan, Bahagian Tawau (Barat)
     latitude: 4.2481
     longitude: 117.8935
 
   - code: SBH05
+    country: MY
     state: Sabah
     location: Kudat, Kota Marudu, Pitas, Pulau Banggi, Bahagian Kudat
     latitude: 6.8833
     longitude: 116.8333
 
   - code: SBH06
+    country: MY
     state: Sabah
     location: Gunung Kinabalu
     latitude: 6.0750
     longitude: 116.5583
 
   - code: SBH07
+    country: MY
     state: Sabah
     location: Kota Kinabalu, Ranau, Kota Belud, Tuaran, Penampang, Papar, Putatan, Bahagian Pantai Barat
     latitude: 5.9804
     longitude: 116.0735
 
   - code: SBH08
+    country: MY
     state: Sabah
     location: Pensiangan, Keningau, Tambunan, Nabawan, Bahagian Pendalaman (Atas)
     latitude: 5.3333
     longitude: 116.1667
 
   - code: SBH09
+    country: MY
     state: Sabah
     location: Beaufort, Kuala Penyu, Sipitang, Tenom, Long Pasia, Membakut, Weston, Bahagian Pendalaman (Bawah)
     latitude: 5.3471
@@ -263,54 +305,63 @@ zones:
 
   # Sarawak
   - code: SWK01
+    country: MY
     state: Sarawak
     location: Limbang, Lawas, Sundar, Trusan
     latitude: 4.7500
     longitude: 115.0167
 
   - code: SWK02
+    country: MY
     state: Sarawak
     location: Miri, Niah, Bekenu, Sibuti, Marudi
     latitude: 4.3950
     longitude: 113.9911
 
   - code: SWK03
+    country: MY
     state: Sarawak
     location: Pandan, Belaga, Suai, Tatau, Sebauh, Bintulu
     latitude: 3.1667
     longitude: 113.0333
 
   - code: SWK04
+    country: MY
     state: Sarawak
     location: Sibu, Mukah, Dalat, Song, Igan, Oya, Balingian, Kanowit, Kapit
     latitude: 2.3000
     longitude: 111.8167
 
   - code: SWK05
+    country: MY
     state: Sarawak
     location: Sarikei, Matu, Julau, Rajang, Daro, Bintangor, Belawai
     latitude: 2.1167
     longitude: 111.5167
 
   - code: SWK06
+    country: MY
     state: Sarawak
     location: Lubok Antu, Sri Aman, Roban, Debak, Kabong, Lingga, Engkelili, Betong, Spaoh, Pusa, Saratok
     latitude: 1.2333
     longitude: 111.4500
 
   - code: SWK07
+    country: MY
     state: Sarawak
     location: Serian, Simunjan, Samarahan, Sebuyau, Meludam
     latitude: 1.1167
     longitude: 110.6000
 
   - code: SWK08
+    country: MY
     state: Sarawak
     location: Kuching, Bau, Lundu, Sematan
     latitude: 1.5533
     longitude: 110.3593
 
   - code: SWK09
+    country: MY
     state: Sarawak
     location: Zon Khas (Kampung Patarikan)
     latitude: 1.4167
@@ -318,18 +369,21 @@ zones:
 
   # Selangor (3 zones) - SGR01 updated (no Rawang)
   - code: SGR01
+    country: MY
     state: Selangor
     location: Gombak, Petaling, Sepang, Hulu Langat, Hulu Selangor, S.Alam
     latitude: 3.0738
     longitude: 101.5183
 
   - code: SGR02
+    country: MY
     state: Selangor
     location: Kuala Selangor, Sabak Bernam
     latitude: 3.3389
     longitude: 101.2519
 
   - code: SGR03
+    country: MY
     state: Selangor
     location: Klang, Kuala Langat
     latitude: 3.0333
@@ -337,24 +391,28 @@ zones:
 
   # Terengganu
   - code: TRG01
+    country: MY
     state: Terengganu
     location: Kuala Terengganu, Marang, Kuala Nerus
     latitude: 5.3302
     longitude: 103.1408
 
   - code: TRG02
+    country: MY
     state: Terengganu
     location: Besut, Setiu
     latitude: 5.8167
     longitude: 102.5667
 
   - code: TRG03
+    country: MY
     state: Terengganu
     location: Hulu Terengganu
     latitude: 5.1667
     longitude: 102.8333
 
   - code: TRG04
+    country: MY
     state: Terengganu
     location: Dungun, Kemaman
     latitude: 4.7576
@@ -362,13 +420,23 @@ zones:
 
   # Wilayah Persekutuan
   - code: WLY01
+    country: MY
     state: W.P. Kuala Lumpur
     location: Kuala Lumpur, Putrajaya
     latitude: 3.1390
     longitude: 101.6869
 
   - code: WLY02
+    country: MY
     state: W.P. Labuan
     location: Labuan
     latitude: 5.2831
     longitude: 115.2308
+
+  # Singapore (1 zone)
+  - code: SGP01
+    country: SG
+    state: Singapore
+    location: Seluruh Singapura
+    latitude: 1.3521
+    longitude: 103.8198

@@ -25,6 +25,8 @@ diesel::table! {
         state -> Varchar,
         location -> Text,
         created_at -> Timestamp,
+        #[max_length = 2]
+        country -> Varchar,
     }
 }
 

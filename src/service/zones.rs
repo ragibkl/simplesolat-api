@@ -6,6 +6,7 @@ use std::fs;
 #[derive(Debug, Deserialize)]
 pub struct Zone {
     code: String,
+    country: String,
     state: String,
     location: String,
     latitude: f64,
@@ -21,6 +22,7 @@ impl From<&Zone> for crate::models::zones::UpsertZone {
     fn from(value: &Zone) -> Self {
         Self {
             zone_code: value.code.to_string(),
+            country: value.country.to_string(),
             state: value.state.to_string(),
             location: value.location.to_string(),
         }

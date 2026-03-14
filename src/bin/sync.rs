@@ -12,4 +12,7 @@ async fn main() {
 
     println!("Sync prayer times data from Jakim");
     service::prayer_times::sync_prayer_times_from_jakim(&mut conn).await;
+
+    println!("Sync prayer times data from MUIS");
+    service::prayer_times::sync_prayer_times_from_muis(&mut conn).await;
 }

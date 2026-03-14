@@ -10,6 +10,7 @@ use crate::{
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Zone {
     pub zone: String,
+    pub country: String,
     pub state: String,
     pub location: String,
 }
@@ -18,6 +19,7 @@ impl From<&UpsertZone> for Zone {
     fn from(value: &UpsertZone) -> Self {
         Self {
             zone: value.zone_code.to_string(),
+            country: value.country.to_string(),
             state: value.state.to_string(),
             location: value.location.to_string(),
         }
