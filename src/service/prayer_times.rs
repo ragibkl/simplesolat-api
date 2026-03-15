@@ -6,7 +6,7 @@ use diesel::PgConnection;
 use tokio::time::sleep;
 
 use crate::{
-    api::{jakim, muis},
+    api::{equran, jakim, muis},
     models::{
         prayer_times::{UpsertPrayerTime, select_last_prayer_time_for_zone, upsert_prayer_times},
         zones::select_zones_by_country,
@@ -151,4 +151,103 @@ pub async fn sync_prayer_times_from_muis(conn: &mut PgConnection) {
         zone_code
     );
     upsert_prayer_times(conn, &prayer_times);
+}
+
+pub async fn sync_prayer_times_from_equran(conn: &mut PgConnection) {
+    let zones = select_zones_by_country(conn, "ID");
+    let current_date = Utc::now().with_timezone(&chrono_tz::Asia::Jakarta).date_naive();
+    let current_year = current_date.year();
+
+    println!(
+        "[sync_prayer_times_from_equran] Syncing {} zones for years {} and {}",
+        zones.len(),
+        current_year,
+        current_year + 1
+    );
+
+    for zone in zones.iter() {
+        let last_prayer_time = select_last_prayer_time_for_zone(conn, &zone.zone_code);
+
+        for year in [current_year, current_year + 1] {
+            let year_end = NaiveDate::from_ymd_opt(year, 12, 31).unwrap();
+
+            // Skip this year if already fully synced
+            if let Some(ref last) = last_prayer_time {
+                if last.date >= year_end {
+                    continue;
+                }
+            }
+
+            // Determine which month to start from
+            let start_month = if let Some(ref last) = last_prayer_time {
+                if last.date.year() == year {
+                    last.date.month() as i32
+                } else {
+                    1
+                }
+            } else {
+                1
+            };
+
+            for month in start_month..=12 {
+                println!(
+                    "[sync_prayer_times_from_equran] Fetch zone: {}, {}-{:02}",
+                    zone.zone_code, year, month
+                );
+
+                let records = match equran::fetch_equran_prayer_times(
+                    &zone.state,
+                    &zone.location,
+                    month,
+                    year,
+                )
+                .await
+                {
+                    Ok(r) => r,
+                    Err(e) => {
+                        println!(
+                            "[sync_prayer_times_from_equran] Error for zone: {}, {}-{:02}: {:?}",
+                            zone.zone_code, year, month, e
+                        );
+                        sleep(Duration::from_millis(200)).await;
+                        continue;
+                    }
+                };
+
+                let prayer_times: Vec<UpsertPrayerTime> = records
+                    .iter()
+                    .filter_map(|r| {
+                        let date = NaiveDate::parse_from_str(&r.tanggal_lengkap, "%Y-%m-%d").ok()?;
+
+                        // Skip dates we already have
+                        if let Some(ref last) = last_prayer_time {
+                            if date <= last.date {
+                                return None;
+                            }
+                        }
+
+                        Some(UpsertPrayerTime {
+                            zone_code: zone.zone_code.to_string(),
+                            date,
+                            imsak: r.imsak.parse().ok()?,
+                            fajr: r.subuh.parse().ok()?,
+                            syuruk: r.terbit.parse().ok()?,
+                            dhuhr: r.dzuhur.parse().ok()?,
+                            asr: r.ashar.parse().ok()?,
+                            maghrib: r.maghrib.parse().ok()?,
+                            isha: r.isya.parse().ok()?,
+                        })
+                    })
+                    .collect();
+
+                if !prayer_times.is_empty() {
+                    upsert_prayer_times(conn, &prayer_times);
+                }
+
+                sleep(Duration::from_millis(200)).await;
+            }
+        }
+    }
+
+    println!("[sync_prayer_times_from_equran] Done");
 }
