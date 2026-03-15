@@ -293,6 +293,9 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
     let current_date = Utc::now().with_timezone(&Kuala_Lumpur).date_naive();
     let current_year = current_date.year();
 
+    // Check base zone (BRN01) to determine which months need syncing
+    let last_base = select_last_prayer_time_for_zone(conn, "BRN01");
+
     println!(
         "[sync_prayer_times_from_kheu] Syncing {} zones for years {} and {}",
         zones.len(),
@@ -302,7 +305,31 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
 
     // Fetch base times once per month, then apply offsets per zone
     for year in [current_year, current_year + 1] {
-        for month in 1..=12u32 {
+        let year_end = NaiveDate::from_ymd_opt(year, 12, 31).unwrap();
+
+        // Skip this year entirely if base zone is already fully synced
+        if let Some(ref last) = last_base {
+            if last.date >= year_end {
+                println!(
+                    "[sync_prayer_times_from_kheu] Skip year {} (already synced)",
+                    year
+                );
+                continue;
+            }
+        }
+
+        // Start from the month after the last synced data
+        let start_month = if let Some(ref last) = last_base {
+            if last.date.year() == year {
+                last.date.month()
+            } else {
+                1
+            }
+        } else {
+            1
+        };
+
+        for month in start_month..=12u32 {
             println!(
                 "[sync_prayer_times_from_kheu] Fetch {}-{:02}",
                 year, month
