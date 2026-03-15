@@ -39,9 +39,15 @@ pub async fn fetch_muis_prayer_times() -> Result<Vec<MuisRecord>, Box<dyn std::e
         .timeout(std::time::Duration::from_secs(30))
         .build()?;
 
-    let response = client
+    let mut request = client
         .get(url)
-        .header("User-Agent", "Simplesolat/1.0")
+        .header("User-Agent", "Simplesolat/1.0");
+
+    if let Ok(api_key) = std::env::var("MUIS_API_KEY") {
+        request = request.header("x-api-key", api_key);
+    }
+
+    let response = request
         .query(&[
             ("resource_id", "d_a6a206cba471fe04b62dd886ef5eaf22"),
             ("limit", "1100"),
