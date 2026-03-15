@@ -107,7 +107,7 @@ pub async fn sync_prayer_times_from_muis(conn: &mut PgConnection) {
     let records = match muis::fetch_muis_prayer_times().await {
         Ok(r) => r,
         Err(e) => {
-            println!("[sync_prayer_times_from_muis] Error: {}", e);
+            println!("[sync_prayer_times_from_muis] Error: {:?}", e);
             return;
         }
     };
