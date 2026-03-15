@@ -440,3 +440,3657 @@ zones:
     location: Seluruh Singapura
     latitude: 1.3521
     longitude: 103.8198
+
+  # Indonesia (517 zones)
+  # Aceh
+  - code: ACH01
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Barat
+    latitude: 0
+    longitude: 0
+
+  - code: ACH02
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Barat Daya
+    latitude: 0
+    longitude: 0
+
+  - code: ACH03
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Besar
+    latitude: 0
+    longitude: 0
+
+  - code: ACH04
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Jaya
+    latitude: 0
+    longitude: 0
+
+  - code: ACH05
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: ACH06
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Singkil
+    latitude: 0
+    longitude: 0
+
+  - code: ACH07
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Tamiang
+    latitude: 0
+    longitude: 0
+
+  - code: ACH08
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: ACH09
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Tenggara
+    latitude: 0
+    longitude: 0
+
+  - code: ACH10
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Timur
+    latitude: 0
+    longitude: 0
+
+  - code: ACH11
+    country: ID
+    state: Aceh
+    location: Kab. Aceh Utara
+    latitude: 0
+    longitude: 0
+
+  - code: ACH12
+    country: ID
+    state: Aceh
+    location: Kab. Bener Meriah
+    latitude: 0
+    longitude: 0
+
+  - code: ACH13
+    country: ID
+    state: Aceh
+    location: Kab. Bireuen
+    latitude: 0
+    longitude: 0
+
+  - code: ACH14
+    country: ID
+    state: Aceh
+    location: Kab. Gayo Lues
+    latitude: 0
+    longitude: 0
+
+  - code: ACH15
+    country: ID
+    state: Aceh
+    location: Kab. Nagan Raya
+    latitude: 0
+    longitude: 0
+
+  - code: ACH16
+    country: ID
+    state: Aceh
+    location: Kab. Pidie
+    latitude: 0
+    longitude: 0
+
+  - code: ACH17
+    country: ID
+    state: Aceh
+    location: Kab. Pidie Jaya
+    latitude: 0
+    longitude: 0
+
+  - code: ACH18
+    country: ID
+    state: Aceh
+    location: Kab. Simeulue
+    latitude: 0
+    longitude: 0
+
+  - code: ACH19
+    country: ID
+    state: Aceh
+    location: Kota Banda Aceh
+    latitude: 0
+    longitude: 0
+
+  - code: ACH20
+    country: ID
+    state: Aceh
+    location: Kota Langsa
+    latitude: 0
+    longitude: 0
+
+  - code: ACH21
+    country: ID
+    state: Aceh
+    location: Kota Lhokseumawe
+    latitude: 0
+    longitude: 0
+
+  - code: ACH22
+    country: ID
+    state: Aceh
+    location: Kota Sabang
+    latitude: 0
+    longitude: 0
+
+  - code: ACH23
+    country: ID
+    state: Aceh
+    location: Kota Subulussalam
+    latitude: 0
+    longitude: 0
+
+  # Bali
+  - code: BAL01
+    country: ID
+    state: Bali
+    location: Kab. Badung
+    latitude: 0
+    longitude: 0
+
+  - code: BAL02
+    country: ID
+    state: Bali
+    location: Kab. Bangli
+    latitude: 0
+    longitude: 0
+
+  - code: BAL03
+    country: ID
+    state: Bali
+    location: Kab. Buleleng
+    latitude: 0
+    longitude: 0
+
+  - code: BAL04
+    country: ID
+    state: Bali
+    location: Kab. Gianyar
+    latitude: 0
+    longitude: 0
+
+  - code: BAL05
+    country: ID
+    state: Bali
+    location: Kab. Jembrana
+    latitude: 0
+    longitude: 0
+
+  - code: BAL06
+    country: ID
+    state: Bali
+    location: Kab. Karangasem
+    latitude: 0
+    longitude: 0
+
+  - code: BAL07
+    country: ID
+    state: Bali
+    location: Kab. Klungkung
+    latitude: 0
+    longitude: 0
+
+  - code: BAL08
+    country: ID
+    state: Bali
+    location: Kab. Tabanan
+    latitude: 0
+    longitude: 0
+
+  - code: BAL09
+    country: ID
+    state: Bali
+    location: Kota Denpasar
+    latitude: 0
+    longitude: 0
+
+  # Banten
+  - code: BTN01
+    country: ID
+    state: Banten
+    location: Kab. Lebak
+    latitude: 0
+    longitude: 0
+
+  - code: BTN02
+    country: ID
+    state: Banten
+    location: Kab. Pandeglang
+    latitude: 0
+    longitude: 0
+
+  - code: BTN03
+    country: ID
+    state: Banten
+    location: Kab. Serang
+    latitude: 0
+    longitude: 0
+
+  - code: BTN04
+    country: ID
+    state: Banten
+    location: Kab. Tangerang
+    latitude: 0
+    longitude: 0
+
+  - code: BTN05
+    country: ID
+    state: Banten
+    location: Kota Cilegon
+    latitude: 0
+    longitude: 0
+
+  - code: BTN06
+    country: ID
+    state: Banten
+    location: Kota Serang
+    latitude: 0
+    longitude: 0
+
+  - code: BTN07
+    country: ID
+    state: Banten
+    location: Kota Tangerang
+    latitude: 0
+    longitude: 0
+
+  - code: BTN08
+    country: ID
+    state: Banten
+    location: Kota Tangerang Selatan
+    latitude: 0
+    longitude: 0
+
+  # Bengkulu
+  - code: BKL01
+    country: ID
+    state: Bengkulu
+    location: Kab. Bengkulu Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: BKL02
+    country: ID
+    state: Bengkulu
+    location: Kab. Bengkulu Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: BKL03
+    country: ID
+    state: Bengkulu
+    location: Kab. Bengkulu Utara
+    latitude: 0
+    longitude: 0
+
+  - code: BKL04
+    country: ID
+    state: Bengkulu
+    location: Kab. Kaur
+    latitude: 0
+    longitude: 0
+
+  - code: BKL05
+    country: ID
+    state: Bengkulu
+    location: Kab. Kepahiang
+    latitude: 0
+    longitude: 0
+
+  - code: BKL06
+    country: ID
+    state: Bengkulu
+    location: Kab. Lebong
+    latitude: 0
+    longitude: 0
+
+  - code: BKL07
+    country: ID
+    state: Bengkulu
+    location: Kab. Mukomuko
+    latitude: 0
+    longitude: 0
+
+  - code: BKL08
+    country: ID
+    state: Bengkulu
+    location: Kab. Rejang Lebong
+    latitude: 0
+    longitude: 0
+
+  - code: BKL09
+    country: ID
+    state: Bengkulu
+    location: Kab. Seluma
+    latitude: 0
+    longitude: 0
+
+  - code: BKL10
+    country: ID
+    state: Bengkulu
+    location: Kota Bengkulu
+    latitude: 0
+    longitude: 0
+
+  # D.I. Yogyakarta
+  - code: DIY01
+    country: ID
+    state: D.I. Yogyakarta
+    location: Kab. Bantul
+    latitude: 0
+    longitude: 0
+
+  - code: DIY02
+    country: ID
+    state: D.I. Yogyakarta
+    location: Kab. Gunungkidul
+    latitude: 0
+    longitude: 0
+
+  - code: DIY03
+    country: ID
+    state: D.I. Yogyakarta
+    location: Kab. Kulon Progo
+    latitude: 0
+    longitude: 0
+
+  - code: DIY04
+    country: ID
+    state: D.I. Yogyakarta
+    location: Kab. Sleman
+    latitude: 0
+    longitude: 0
+
+  - code: DIY05
+    country: ID
+    state: D.I. Yogyakarta
+    location: Kota Yogyakarta
+    latitude: 0
+    longitude: 0
+
+  # DKI Jakarta
+  - code: DKI01
+    country: ID
+    state: DKI Jakarta
+    location: Kab. Kepulauan Seribu
+    latitude: 0
+    longitude: 0
+
+  - code: DKI02
+    country: ID
+    state: DKI Jakarta
+    location: Kota Jakarta
+    latitude: 0
+    longitude: 0
+
+  # Gorontalo
+  - code: GTO01
+    country: ID
+    state: Gorontalo
+    location: Kab. Boalemo
+    latitude: 0
+    longitude: 0
+
+  - code: GTO02
+    country: ID
+    state: Gorontalo
+    location: Kab. Bone Bolango
+    latitude: 0
+    longitude: 0
+
+  - code: GTO03
+    country: ID
+    state: Gorontalo
+    location: Kab. Gorontalo
+    latitude: 0
+    longitude: 0
+
+  - code: GTO04
+    country: ID
+    state: Gorontalo
+    location: Kab. Gorontalo Utara
+    latitude: 0
+    longitude: 0
+
+  - code: GTO05
+    country: ID
+    state: Gorontalo
+    location: Kab. Pahuwato
+    latitude: 0
+    longitude: 0
+
+  - code: GTO06
+    country: ID
+    state: Gorontalo
+    location: Kota Gorontalo
+    latitude: 0
+    longitude: 0
+
+  # Jambi
+  - code: JMB01
+    country: ID
+    state: Jambi
+    location: Kab. Batanghari
+    latitude: 0
+    longitude: 0
+
+  - code: JMB02
+    country: ID
+    state: Jambi
+    location: Kab. Bungo
+    latitude: 0
+    longitude: 0
+
+  - code: JMB03
+    country: ID
+    state: Jambi
+    location: Kab. Kerinci
+    latitude: 0
+    longitude: 0
+
+  - code: JMB04
+    country: ID
+    state: Jambi
+    location: Kab. Merangin
+    latitude: 0
+    longitude: 0
+
+  - code: JMB05
+    country: ID
+    state: Jambi
+    location: Kab. Muaro Jambi
+    latitude: 0
+    longitude: 0
+
+  - code: JMB06
+    country: ID
+    state: Jambi
+    location: Kab. Sarolangun
+    latitude: 0
+    longitude: 0
+
+  - code: JMB07
+    country: ID
+    state: Jambi
+    location: Kab. Tanjung Jabung Barat
+    latitude: 0
+    longitude: 0
+
+  - code: JMB08
+    country: ID
+    state: Jambi
+    location: Kab. Tanjung Jabung Timur
+    latitude: 0
+    longitude: 0
+
+  - code: JMB09
+    country: ID
+    state: Jambi
+    location: Kab. Tebo
+    latitude: 0
+    longitude: 0
+
+  - code: JMB10
+    country: ID
+    state: Jambi
+    location: Kota Jambi
+    latitude: 0
+    longitude: 0
+
+  - code: JMB11
+    country: ID
+    state: Jambi
+    location: Kota Sungai Penuh
+    latitude: 0
+    longitude: 0
+
+  # Jawa Barat
+  - code: JBR01
+    country: ID
+    state: Jawa Barat
+    location: Kab. Bandung
+    latitude: 0
+    longitude: 0
+
+  - code: JBR02
+    country: ID
+    state: Jawa Barat
+    location: Kab. Bandung Barat
+    latitude: 0
+    longitude: 0
+
+  - code: JBR03
+    country: ID
+    state: Jawa Barat
+    location: Kab. Bekasi
+    latitude: 0
+    longitude: 0
+
+  - code: JBR04
+    country: ID
+    state: Jawa Barat
+    location: Kab. Bogor
+    latitude: 0
+    longitude: 0
+
+  - code: JBR05
+    country: ID
+    state: Jawa Barat
+    location: Kab. Ciamis
+    latitude: 0
+    longitude: 0
+
+  - code: JBR06
+    country: ID
+    state: Jawa Barat
+    location: Kab. Cianjur
+    latitude: 0
+    longitude: 0
+
+  - code: JBR07
+    country: ID
+    state: Jawa Barat
+    location: Kab. Cirebon
+    latitude: 0
+    longitude: 0
+
+  - code: JBR08
+    country: ID
+    state: Jawa Barat
+    location: Kab. Garut
+    latitude: 0
+    longitude: 0
+
+  - code: JBR09
+    country: ID
+    state: Jawa Barat
+    location: Kab. Indramayu
+    latitude: 0
+    longitude: 0
+
+  - code: JBR10
+    country: ID
+    state: Jawa Barat
+    location: Kab. Karawang
+    latitude: 0
+    longitude: 0
+
+  - code: JBR11
+    country: ID
+    state: Jawa Barat
+    location: Kab. Kuningan
+    latitude: 0
+    longitude: 0
+
+  - code: JBR12
+    country: ID
+    state: Jawa Barat
+    location: Kab. Majalengka
+    latitude: 0
+    longitude: 0
+
+  - code: JBR13
+    country: ID
+    state: Jawa Barat
+    location: Kab. Pangandaran
+    latitude: 0
+    longitude: 0
+
+  - code: JBR14
+    country: ID
+    state: Jawa Barat
+    location: Kab. Purwakarta
+    latitude: 0
+    longitude: 0
+
+  - code: JBR15
+    country: ID
+    state: Jawa Barat
+    location: Kab. Subang
+    latitude: 0
+    longitude: 0
+
+  - code: JBR16
+    country: ID
+    state: Jawa Barat
+    location: Kab. Sukabumi
+    latitude: 0
+    longitude: 0
+
+  - code: JBR17
+    country: ID
+    state: Jawa Barat
+    location: Kab. Sumedang
+    latitude: 0
+    longitude: 0
+
+  - code: JBR18
+    country: ID
+    state: Jawa Barat
+    location: Kab. Tasikmalaya
+    latitude: 0
+    longitude: 0
+
+  - code: JBR19
+    country: ID
+    state: Jawa Barat
+    location: Kota Bandung
+    latitude: 0
+    longitude: 0
+
+  - code: JBR20
+    country: ID
+    state: Jawa Barat
+    location: Kota Banjar
+    latitude: 0
+    longitude: 0
+
+  - code: JBR21
+    country: ID
+    state: Jawa Barat
+    location: Kota Bekasi
+    latitude: 0
+    longitude: 0
+
+  - code: JBR22
+    country: ID
+    state: Jawa Barat
+    location: Kota Bogor
+    latitude: 0
+    longitude: 0
+
+  - code: JBR23
+    country: ID
+    state: Jawa Barat
+    location: Kota Cimahi
+    latitude: 0
+    longitude: 0
+
+  - code: JBR24
+    country: ID
+    state: Jawa Barat
+    location: Kota Cirebon
+    latitude: 0
+    longitude: 0
+
+  - code: JBR25
+    country: ID
+    state: Jawa Barat
+    location: Kota Depok
+    latitude: 0
+    longitude: 0
+
+  - code: JBR26
+    country: ID
+    state: Jawa Barat
+    location: Kota Sukabumi
+    latitude: 0
+    longitude: 0
+
+  - code: JBR27
+    country: ID
+    state: Jawa Barat
+    location: Kota Tasikmalaya
+    latitude: 0
+    longitude: 0
+
+  # Jawa Tengah
+  - code: JTG01
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Banjarnegara
+    latitude: 0
+    longitude: 0
+
+  - code: JTG02
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Banyumas
+    latitude: 0
+    longitude: 0
+
+  - code: JTG03
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Batang
+    latitude: 0
+    longitude: 0
+
+  - code: JTG04
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Blora
+    latitude: 0
+    longitude: 0
+
+  - code: JTG05
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Boyolali
+    latitude: 0
+    longitude: 0
+
+  - code: JTG06
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Brebes
+    latitude: 0
+    longitude: 0
+
+  - code: JTG07
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Cilacap
+    latitude: 0
+    longitude: 0
+
+  - code: JTG08
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Demak
+    latitude: 0
+    longitude: 0
+
+  - code: JTG09
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Grobogan
+    latitude: 0
+    longitude: 0
+
+  - code: JTG10
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Jepara
+    latitude: 0
+    longitude: 0
+
+  - code: JTG11
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Karanganyar
+    latitude: 0
+    longitude: 0
+
+  - code: JTG12
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Kebumen
+    latitude: 0
+    longitude: 0
+
+  - code: JTG13
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Kendal
+    latitude: 0
+    longitude: 0
+
+  - code: JTG14
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Klaten
+    latitude: 0
+    longitude: 0
+
+  - code: JTG15
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Kudus
+    latitude: 0
+    longitude: 0
+
+  - code: JTG16
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Magelang
+    latitude: 0
+    longitude: 0
+
+  - code: JTG17
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Pati
+    latitude: 0
+    longitude: 0
+
+  - code: JTG18
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Pekalongan
+    latitude: 0
+    longitude: 0
+
+  - code: JTG19
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Pemalang
+    latitude: 0
+    longitude: 0
+
+  - code: JTG20
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Purbalingga
+    latitude: 0
+    longitude: 0
+
+  - code: JTG21
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Purworejo
+    latitude: 0
+    longitude: 0
+
+  - code: JTG22
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Rembang
+    latitude: 0
+    longitude: 0
+
+  - code: JTG23
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Semarang
+    latitude: 0
+    longitude: 0
+
+  - code: JTG24
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Sragen
+    latitude: 0
+    longitude: 0
+
+  - code: JTG25
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Sukoharjo
+    latitude: 0
+    longitude: 0
+
+  - code: JTG26
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Tegal
+    latitude: 0
+    longitude: 0
+
+  - code: JTG27
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Temanggung
+    latitude: 0
+    longitude: 0
+
+  - code: JTG28
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Wonogiri
+    latitude: 0
+    longitude: 0
+
+  - code: JTG29
+    country: ID
+    state: Jawa Tengah
+    location: Kab. Wonosobo
+    latitude: 0
+    longitude: 0
+
+  - code: JTG30
+    country: ID
+    state: Jawa Tengah
+    location: Kota Magelang
+    latitude: 0
+    longitude: 0
+
+  - code: JTG31
+    country: ID
+    state: Jawa Tengah
+    location: Kota Pekalongan
+    latitude: 0
+    longitude: 0
+
+  - code: JTG32
+    country: ID
+    state: Jawa Tengah
+    location: Kota Salatiga
+    latitude: 0
+    longitude: 0
+
+  - code: JTG33
+    country: ID
+    state: Jawa Tengah
+    location: Kota Semarang
+    latitude: 0
+    longitude: 0
+
+  - code: JTG34
+    country: ID
+    state: Jawa Tengah
+    location: Kota Surakarta
+    latitude: 0
+    longitude: 0
+
+  - code: JTG35
+    country: ID
+    state: Jawa Tengah
+    location: Kota Tegal
+    latitude: 0
+    longitude: 0
+
+  # Jawa Timur
+  - code: JTM01
+    country: ID
+    state: Jawa Timur
+    location: Kab. Bangkalan
+    latitude: 0
+    longitude: 0
+
+  - code: JTM02
+    country: ID
+    state: Jawa Timur
+    location: Kab. Banyuwangi
+    latitude: 0
+    longitude: 0
+
+  - code: JTM03
+    country: ID
+    state: Jawa Timur
+    location: Kab. Blitar
+    latitude: 0
+    longitude: 0
+
+  - code: JTM04
+    country: ID
+    state: Jawa Timur
+    location: Kab. Bojonegoro
+    latitude: 0
+    longitude: 0
+
+  - code: JTM05
+    country: ID
+    state: Jawa Timur
+    location: Kab. Bondowoso
+    latitude: 0
+    longitude: 0
+
+  - code: JTM06
+    country: ID
+    state: Jawa Timur
+    location: Kab. Gresik
+    latitude: 0
+    longitude: 0
+
+  - code: JTM07
+    country: ID
+    state: Jawa Timur
+    location: Kab. Jember
+    latitude: 0
+    longitude: 0
+
+  - code: JTM08
+    country: ID
+    state: Jawa Timur
+    location: Kab. Jombang
+    latitude: 0
+    longitude: 0
+
+  - code: JTM09
+    country: ID
+    state: Jawa Timur
+    location: Kab. Kediri
+    latitude: 0
+    longitude: 0
+
+  - code: JTM10
+    country: ID
+    state: Jawa Timur
+    location: Kab. Lamongan
+    latitude: 0
+    longitude: 0
+
+  - code: JTM11
+    country: ID
+    state: Jawa Timur
+    location: Kab. Lumajang
+    latitude: 0
+    longitude: 0
+
+  - code: JTM12
+    country: ID
+    state: Jawa Timur
+    location: Kab. Madiun
+    latitude: 0
+    longitude: 0
+
+  - code: JTM13
+    country: ID
+    state: Jawa Timur
+    location: Kab. Magetan
+    latitude: 0
+    longitude: 0
+
+  - code: JTM14
+    country: ID
+    state: Jawa Timur
+    location: Kab. Malang
+    latitude: 0
+    longitude: 0
+
+  - code: JTM15
+    country: ID
+    state: Jawa Timur
+    location: Kab. Mojokerto
+    latitude: 0
+    longitude: 0
+
+  - code: JTM16
+    country: ID
+    state: Jawa Timur
+    location: Kab. Nganjuk
+    latitude: 0
+    longitude: 0
+
+  - code: JTM17
+    country: ID
+    state: Jawa Timur
+    location: Kab. Ngawi
+    latitude: 0
+    longitude: 0
+
+  - code: JTM18
+    country: ID
+    state: Jawa Timur
+    location: Kab. Pacitan
+    latitude: 0
+    longitude: 0
+
+  - code: JTM19
+    country: ID
+    state: Jawa Timur
+    location: Kab. Pamekasan
+    latitude: 0
+    longitude: 0
+
+  - code: JTM20
+    country: ID
+    state: Jawa Timur
+    location: Kab. Pasuruan
+    latitude: 0
+    longitude: 0
+
+  - code: JTM21
+    country: ID
+    state: Jawa Timur
+    location: Kab. Ponorogo
+    latitude: 0
+    longitude: 0
+
+  - code: JTM22
+    country: ID
+    state: Jawa Timur
+    location: Kab. Probolinggo
+    latitude: 0
+    longitude: 0
+
+  - code: JTM23
+    country: ID
+    state: Jawa Timur
+    location: Kab. Sampang
+    latitude: 0
+    longitude: 0
+
+  - code: JTM24
+    country: ID
+    state: Jawa Timur
+    location: Kab. Sidoarjo
+    latitude: 0
+    longitude: 0
+
+  - code: JTM25
+    country: ID
+    state: Jawa Timur
+    location: Kab. Situbondo
+    latitude: 0
+    longitude: 0
+
+  - code: JTM26
+    country: ID
+    state: Jawa Timur
+    location: Kab. Sumenep
+    latitude: 0
+    longitude: 0
+
+  - code: JTM27
+    country: ID
+    state: Jawa Timur
+    location: Kab. Trenggalek
+    latitude: 0
+    longitude: 0
+
+  - code: JTM28
+    country: ID
+    state: Jawa Timur
+    location: Kab. Tuban
+    latitude: 0
+    longitude: 0
+
+  - code: JTM29
+    country: ID
+    state: Jawa Timur
+    location: Kab. Tulungagung
+    latitude: 0
+    longitude: 0
+
+  - code: JTM30
+    country: ID
+    state: Jawa Timur
+    location: Kota Batu
+    latitude: 0
+    longitude: 0
+
+  - code: JTM31
+    country: ID
+    state: Jawa Timur
+    location: Kota Blitar
+    latitude: 0
+    longitude: 0
+
+  - code: JTM32
+    country: ID
+    state: Jawa Timur
+    location: Kota Kediri
+    latitude: 0
+    longitude: 0
+
+  - code: JTM33
+    country: ID
+    state: Jawa Timur
+    location: Kota Madiun
+    latitude: 0
+    longitude: 0
+
+  - code: JTM34
+    country: ID
+    state: Jawa Timur
+    location: Kota Malang
+    latitude: 0
+    longitude: 0
+
+  - code: JTM35
+    country: ID
+    state: Jawa Timur
+    location: Kota Mojokerto
+    latitude: 0
+    longitude: 0
+
+  - code: JTM36
+    country: ID
+    state: Jawa Timur
+    location: Kota Pasuruan
+    latitude: 0
+    longitude: 0
+
+  - code: JTM37
+    country: ID
+    state: Jawa Timur
+    location: Kota Probolinggo
+    latitude: 0
+    longitude: 0
+
+  - code: JTM38
+    country: ID
+    state: Jawa Timur
+    location: Kota Surabaya
+    latitude: 0
+    longitude: 0
+
+  # Kalimantan Barat
+  - code: KBR01
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Bengkayang
+    latitude: 0
+    longitude: 0
+
+  - code: KBR02
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Kapuas Hulu
+    latitude: 0
+    longitude: 0
+
+  - code: KBR03
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Kayong Utara
+    latitude: 0
+    longitude: 0
+
+  - code: KBR04
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Ketapang
+    latitude: 0
+    longitude: 0
+
+  - code: KBR05
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Kubu Raya
+    latitude: 0
+    longitude: 0
+
+  - code: KBR06
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Landak
+    latitude: 0
+    longitude: 0
+
+  - code: KBR07
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Melawi
+    latitude: 0
+    longitude: 0
+
+  - code: KBR08
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Mempawah
+    latitude: 0
+    longitude: 0
+
+  - code: KBR09
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Sambas
+    latitude: 0
+    longitude: 0
+
+  - code: KBR10
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Sanggau
+    latitude: 0
+    longitude: 0
+
+  - code: KBR11
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Sekadau
+    latitude: 0
+    longitude: 0
+
+  - code: KBR12
+    country: ID
+    state: Kalimantan Barat
+    location: Kab. Sintang
+    latitude: 0
+    longitude: 0
+
+  - code: KBR13
+    country: ID
+    state: Kalimantan Barat
+    location: Kota Pontianak
+    latitude: 0
+    longitude: 0
+
+  - code: KBR14
+    country: ID
+    state: Kalimantan Barat
+    location: Kota Singkawang
+    latitude: 0
+    longitude: 0
+
+  # Kalimantan Selatan
+  - code: KSL01
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Balangan
+    latitude: 0
+    longitude: 0
+
+  - code: KSL02
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Banjar
+    latitude: 0
+    longitude: 0
+
+  - code: KSL03
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Barito Kuala
+    latitude: 0
+    longitude: 0
+
+  - code: KSL04
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Hulu Sungai Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: KSL05
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Hulu Sungai Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: KSL06
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Hulu Sungai Utara
+    latitude: 0
+    longitude: 0
+
+  - code: KSL07
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Kotabaru
+    latitude: 0
+    longitude: 0
+
+  - code: KSL08
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Tabalong
+    latitude: 0
+    longitude: 0
+
+  - code: KSL09
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Tanah Bumbu
+    latitude: 0
+    longitude: 0
+
+  - code: KSL10
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Tanah Laut
+    latitude: 0
+    longitude: 0
+
+  - code: KSL11
+    country: ID
+    state: Kalimantan Selatan
+    location: Kab. Tapin
+    latitude: 0
+    longitude: 0
+
+  - code: KSL12
+    country: ID
+    state: Kalimantan Selatan
+    location: Kota Banjarbaru
+    latitude: 0
+    longitude: 0
+
+  - code: KSL13
+    country: ID
+    state: Kalimantan Selatan
+    location: Kota Banjarmasin
+    latitude: 0
+    longitude: 0
+
+  # Kalimantan Tengah
+  - code: KTG01
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Barito Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: KTG02
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Barito Timur
+    latitude: 0
+    longitude: 0
+
+  - code: KTG03
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Barito Utara
+    latitude: 0
+    longitude: 0
+
+  - code: KTG04
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Gunung Mas
+    latitude: 0
+    longitude: 0
+
+  - code: KTG05
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Kapuas
+    latitude: 0
+    longitude: 0
+
+  - code: KTG06
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Katingan
+    latitude: 0
+    longitude: 0
+
+  - code: KTG07
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Kotawaringin Barat
+    latitude: 0
+    longitude: 0
+
+  - code: KTG08
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Kotawaringin Timur
+    latitude: 0
+    longitude: 0
+
+  - code: KTG09
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Lamandau
+    latitude: 0
+    longitude: 0
+
+  - code: KTG10
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Murung Raya
+    latitude: 0
+    longitude: 0
+
+  - code: KTG11
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Pulang Pisau
+    latitude: 0
+    longitude: 0
+
+  - code: KTG12
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Seruyan
+    latitude: 0
+    longitude: 0
+
+  - code: KTG13
+    country: ID
+    state: Kalimantan Tengah
+    location: Kab. Sukamara
+    latitude: 0
+    longitude: 0
+
+  - code: KTG14
+    country: ID
+    state: Kalimantan Tengah
+    location: Kota Palangkaraya
+    latitude: 0
+    longitude: 0
+
+  # Kalimantan Timur
+  - code: KTM01
+    country: ID
+    state: Kalimantan Timur
+    location: Kab. Berau
+    latitude: 0
+    longitude: 0
+
+  - code: KTM02
+    country: ID
+    state: Kalimantan Timur
+    location: Kab. Kutai Barat
+    latitude: 0
+    longitude: 0
+
+  - code: KTM03
+    country: ID
+    state: Kalimantan Timur
+    location: Kab. Kutai Kartanegara
+    latitude: 0
+    longitude: 0
+
+  - code: KTM04
+    country: ID
+    state: Kalimantan Timur
+    location: Kab. Kutai Timur
+    latitude: 0
+    longitude: 0
+
+  - code: KTM05
+    country: ID
+    state: Kalimantan Timur
+    location: Kab. Mahakam ULU
+    latitude: 0
+    longitude: 0
+
+  - code: KTM06
+    country: ID
+    state: Kalimantan Timur
+    location: Kab. Paser
+    latitude: 0
+    longitude: 0
+
+  - code: KTM07
+    country: ID
+    state: Kalimantan Timur
+    location: Kab. Penajam Paser Utara
+    latitude: 0
+    longitude: 0
+
+  - code: KTM08
+    country: ID
+    state: Kalimantan Timur
+    location: Kota Balikpapan
+    latitude: 0
+    longitude: 0
+
+  - code: KTM09
+    country: ID
+    state: Kalimantan Timur
+    location: Kota Bontang
+    latitude: 0
+    longitude: 0
+
+  - code: KTM10
+    country: ID
+    state: Kalimantan Timur
+    location: Kota Samarinda
+    latitude: 0
+    longitude: 0
+
+  # Kalimantan Utara
+  - code: KUT01
+    country: ID
+    state: Kalimantan Utara
+    location: Kab. Bulungan
+    latitude: 0
+    longitude: 0
+
+  - code: KUT02
+    country: ID
+    state: Kalimantan Utara
+    location: Kab. Malinau
+    latitude: 0
+    longitude: 0
+
+  - code: KUT03
+    country: ID
+    state: Kalimantan Utara
+    location: Kab. Nunukan
+    latitude: 0
+    longitude: 0
+
+  - code: KUT04
+    country: ID
+    state: Kalimantan Utara
+    location: Kab. Tana Tidung
+    latitude: 0
+    longitude: 0
+
+  - code: KUT05
+    country: ID
+    state: Kalimantan Utara
+    location: Kota Tarakan
+    latitude: 0
+    longitude: 0
+
+  # Kepulauan Bangka Belitung
+  - code: KBB01
+    country: ID
+    state: Kepulauan Bangka Belitung
+    location: Kab. Bangka
+    latitude: 0
+    longitude: 0
+
+  - code: KBB02
+    country: ID
+    state: Kepulauan Bangka Belitung
+    location: Kab. Bangka Barat
+    latitude: 0
+    longitude: 0
+
+  - code: KBB03
+    country: ID
+    state: Kepulauan Bangka Belitung
+    location: Kab. Bangka Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: KBB04
+    country: ID
+    state: Kepulauan Bangka Belitung
+    location: Kab. Bangka Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: KBB05
+    country: ID
+    state: Kepulauan Bangka Belitung
+    location: Kab. Belitung
+    latitude: 0
+    longitude: 0
+
+  - code: KBB06
+    country: ID
+    state: Kepulauan Bangka Belitung
+    location: Kab. Belitung Timur
+    latitude: 0
+    longitude: 0
+
+  - code: KBB07
+    country: ID
+    state: Kepulauan Bangka Belitung
+    location: Kota Pangkal Pinang
+    latitude: 0
+    longitude: 0
+
+  # Kepulauan Riau
+  - code: KRI01
+    country: ID
+    state: Kepulauan Riau
+    location: Kab. Bintan
+    latitude: 0
+    longitude: 0
+
+  - code: KRI02
+    country: ID
+    state: Kepulauan Riau
+    location: Kab. Karimun
+    latitude: 0
+    longitude: 0
+
+  - code: KRI03
+    country: ID
+    state: Kepulauan Riau
+    location: Kab. Kepulauan Anambas
+    latitude: 0
+    longitude: 0
+
+  - code: KRI04
+    country: ID
+    state: Kepulauan Riau
+    location: Kab. Lingga
+    latitude: 0
+    longitude: 0
+
+  - code: KRI05
+    country: ID
+    state: Kepulauan Riau
+    location: Kab. Natuna
+    latitude: 0
+    longitude: 0
+
+  - code: KRI06
+    country: ID
+    state: Kepulauan Riau
+    location: Kota Batam
+    latitude: 0
+    longitude: 0
+
+  - code: KRI07
+    country: ID
+    state: Kepulauan Riau
+    location: Kota Tanjung Pinang
+    latitude: 0
+    longitude: 0
+
+  - code: KRI08
+    country: ID
+    state: Kepulauan Riau
+    location: Pekajang Kab. Lingga
+    latitude: 0
+    longitude: 0
+
+  - code: KRI09
+    country: ID
+    state: Kepulauan Riau
+    location: Pulau Laut Kab. Natuna
+    latitude: 0
+    longitude: 0
+
+  - code: KRI10
+    country: ID
+    state: Kepulauan Riau
+    location: Pulau Midai Kab. Natuna
+    latitude: 0
+    longitude: 0
+
+  - code: KRI11
+    country: ID
+    state: Kepulauan Riau
+    location: Pulau Serasan Kab. Natuna
+    latitude: 0
+    longitude: 0
+
+  - code: KRI12
+    country: ID
+    state: Kepulauan Riau
+    location: Pulau Tambelan Kab. Bintan
+    latitude: 0
+    longitude: 0
+
+  # Lampung
+  - code: LPG01
+    country: ID
+    state: Lampung
+    location: Kab. Lampung Barat
+    latitude: 0
+    longitude: 0
+
+  - code: LPG02
+    country: ID
+    state: Lampung
+    location: Kab. Lampung Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: LPG03
+    country: ID
+    state: Lampung
+    location: Kab. Lampung Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: LPG04
+    country: ID
+    state: Lampung
+    location: Kab. Lampung Timur
+    latitude: 0
+    longitude: 0
+
+  - code: LPG05
+    country: ID
+    state: Lampung
+    location: Kab. Lampung Utara
+    latitude: 0
+    longitude: 0
+
+  - code: LPG06
+    country: ID
+    state: Lampung
+    location: Kab. Mesuji
+    latitude: 0
+    longitude: 0
+
+  - code: LPG07
+    country: ID
+    state: Lampung
+    location: Kab. Pesawaran
+    latitude: 0
+    longitude: 0
+
+  - code: LPG08
+    country: ID
+    state: Lampung
+    location: Kab. Pesisir Barat
+    latitude: 0
+    longitude: 0
+
+  - code: LPG09
+    country: ID
+    state: Lampung
+    location: Kab. Pringsewu
+    latitude: 0
+    longitude: 0
+
+  - code: LPG10
+    country: ID
+    state: Lampung
+    location: Kab. Tanggamus
+    latitude: 0
+    longitude: 0
+
+  - code: LPG11
+    country: ID
+    state: Lampung
+    location: Kab. Tulang Bawang
+    latitude: 0
+    longitude: 0
+
+  - code: LPG12
+    country: ID
+    state: Lampung
+    location: Kab. Tulang Bawang Barat
+    latitude: 0
+    longitude: 0
+
+  - code: LPG13
+    country: ID
+    state: Lampung
+    location: Kab. Way Kanan
+    latitude: 0
+    longitude: 0
+
+  - code: LPG14
+    country: ID
+    state: Lampung
+    location: Kota Bandar Lampung
+    latitude: 0
+    longitude: 0
+
+  - code: LPG15
+    country: ID
+    state: Lampung
+    location: Kota Metro
+    latitude: 0
+    longitude: 0
+
+  # Maluku
+  - code: MLK01
+    country: ID
+    state: Maluku
+    location: Kab. Buru
+    latitude: 0
+    longitude: 0
+
+  - code: MLK02
+    country: ID
+    state: Maluku
+    location: Kab. Buru Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: MLK03
+    country: ID
+    state: Maluku
+    location: Kab. Kepulauan Aru
+    latitude: 0
+    longitude: 0
+
+  - code: MLK04
+    country: ID
+    state: Maluku
+    location: Kab. Maluku Barat Daya
+    latitude: 0
+    longitude: 0
+
+  - code: MLK05
+    country: ID
+    state: Maluku
+    location: Kab. Maluku Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: MLK06
+    country: ID
+    state: Maluku
+    location: Kab. Maluku Tenggara
+    latitude: 0
+    longitude: 0
+
+  - code: MLK07
+    country: ID
+    state: Maluku
+    location: Kab. Maluku Tenggara Barat
+    latitude: 0
+    longitude: 0
+
+  - code: MLK08
+    country: ID
+    state: Maluku
+    location: Kab. Seram Bagian Barat
+    latitude: 0
+    longitude: 0
+
+  - code: MLK09
+    country: ID
+    state: Maluku
+    location: Kab. Seram Bagian Timur
+    latitude: 0
+    longitude: 0
+
+  - code: MLK10
+    country: ID
+    state: Maluku
+    location: Kota Ambon
+    latitude: 0
+    longitude: 0
+
+  - code: MLK11
+    country: ID
+    state: Maluku
+    location: Kota Tual
+    latitude: 0
+    longitude: 0
+
+  # Maluku Utara
+  - code: MLU01
+    country: ID
+    state: Maluku Utara
+    location: Kab. Halmahera Barat
+    latitude: 0
+    longitude: 0
+
+  - code: MLU02
+    country: ID
+    state: Maluku Utara
+    location: Kab. Halmahera Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: MLU03
+    country: ID
+    state: Maluku Utara
+    location: Kab. Halmahera Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: MLU04
+    country: ID
+    state: Maluku Utara
+    location: Kab. Halmahera Timur
+    latitude: 0
+    longitude: 0
+
+  - code: MLU05
+    country: ID
+    state: Maluku Utara
+    location: Kab. Halmahera Utara
+    latitude: 0
+    longitude: 0
+
+  - code: MLU06
+    country: ID
+    state: Maluku Utara
+    location: Kab. Kepulauan Sula
+    latitude: 0
+    longitude: 0
+
+  - code: MLU07
+    country: ID
+    state: Maluku Utara
+    location: Kab. Pulau Morotai
+    latitude: 0
+    longitude: 0
+
+  - code: MLU08
+    country: ID
+    state: Maluku Utara
+    location: Kab. Pulau Taliabu
+    latitude: 0
+    longitude: 0
+
+  - code: MLU09
+    country: ID
+    state: Maluku Utara
+    location: Kota Sofifi
+    latitude: 0
+    longitude: 0
+
+  - code: MLU10
+    country: ID
+    state: Maluku Utara
+    location: Kota Ternate
+    latitude: 0
+    longitude: 0
+
+  - code: MLU11
+    country: ID
+    state: Maluku Utara
+    location: Kota Tidore Kepulauan
+    latitude: 0
+    longitude: 0
+
+  # Nusa Tenggara Barat
+  - code: NTB01
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Bima
+    latitude: 0
+    longitude: 0
+
+  - code: NTB02
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Dompu
+    latitude: 0
+    longitude: 0
+
+  - code: NTB03
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Lombok Barat
+    latitude: 0
+    longitude: 0
+
+  - code: NTB04
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Lombok Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: NTB05
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Lombok Timur
+    latitude: 0
+    longitude: 0
+
+  - code: NTB06
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Lombok Utara
+    latitude: 0
+    longitude: 0
+
+  - code: NTB07
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Sumbawa
+    latitude: 0
+    longitude: 0
+
+  - code: NTB08
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kab. Sumbawa Barat
+    latitude: 0
+    longitude: 0
+
+  - code: NTB09
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kota Bima
+    latitude: 0
+    longitude: 0
+
+  - code: NTB10
+    country: ID
+    state: Nusa Tenggara Barat
+    location: Kota Mataram
+    latitude: 0
+    longitude: 0
+
+  # Nusa Tenggara Timur
+  - code: NTT01
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Alor
+    latitude: 0
+    longitude: 0
+
+  - code: NTT02
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Belu
+    latitude: 0
+    longitude: 0
+
+  - code: NTT03
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Ende
+    latitude: 0
+    longitude: 0
+
+  - code: NTT04
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Flores Timur
+    latitude: 0
+    longitude: 0
+
+  - code: NTT05
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Kupang
+    latitude: 0
+    longitude: 0
+
+  - code: NTT06
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Lembata
+    latitude: 0
+    longitude: 0
+
+  - code: NTT07
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Malaka
+    latitude: 0
+    longitude: 0
+
+  - code: NTT08
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Manggarai
+    latitude: 0
+    longitude: 0
+
+  - code: NTT09
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Manggarai Barat
+    latitude: 0
+    longitude: 0
+
+  - code: NTT10
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Manggarai Timur
+    latitude: 0
+    longitude: 0
+
+  - code: NTT11
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Nagekeo
+    latitude: 0
+    longitude: 0
+
+  - code: NTT12
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Ngada
+    latitude: 0
+    longitude: 0
+
+  - code: NTT13
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Rote Ndao
+    latitude: 0
+    longitude: 0
+
+  - code: NTT14
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Sabu Raijua
+    latitude: 0
+    longitude: 0
+
+  - code: NTT15
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Sikka
+    latitude: 0
+    longitude: 0
+
+  - code: NTT16
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Sumba Barat
+    latitude: 0
+    longitude: 0
+
+  - code: NTT17
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Sumba Barat Daya
+    latitude: 0
+    longitude: 0
+
+  - code: NTT18
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Sumba Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: NTT19
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Sumba Timur
+    latitude: 0
+    longitude: 0
+
+  - code: NTT20
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Timor Tengah Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: NTT21
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kab. Timor Tengah Utara
+    latitude: 0
+    longitude: 0
+
+  - code: NTT22
+    country: ID
+    state: Nusa Tenggara Timur
+    location: Kota Kupang
+    latitude: 0
+    longitude: 0
+
+  # Papua
+  - code: PAP01
+    country: ID
+    state: Papua
+    location: Kab. Asmat
+    latitude: 0
+    longitude: 0
+
+  - code: PAP02
+    country: ID
+    state: Papua
+    location: Kab. Biak Numfor
+    latitude: 0
+    longitude: 0
+
+  - code: PAP03
+    country: ID
+    state: Papua
+    location: Kab. Boven Digoel
+    latitude: 0
+    longitude: 0
+
+  - code: PAP04
+    country: ID
+    state: Papua
+    location: Kab. Deiyai
+    latitude: 0
+    longitude: 0
+
+  - code: PAP05
+    country: ID
+    state: Papua
+    location: Kab. Dogiyai
+    latitude: 0
+    longitude: 0
+
+  - code: PAP06
+    country: ID
+    state: Papua
+    location: Kab. Intan Jaya
+    latitude: 0
+    longitude: 0
+
+  - code: PAP07
+    country: ID
+    state: Papua
+    location: Kab. Jayapura
+    latitude: 0
+    longitude: 0
+
+  - code: PAP08
+    country: ID
+    state: Papua
+    location: Kab. Jayawijaya
+    latitude: 0
+    longitude: 0
+
+  - code: PAP09
+    country: ID
+    state: Papua
+    location: Kab. Keerom
+    latitude: 0
+    longitude: 0
+
+  - code: PAP10
+    country: ID
+    state: Papua
+    location: Kab. Kepulauan Yapen
+    latitude: 0
+    longitude: 0
+
+  - code: PAP11
+    country: ID
+    state: Papua
+    location: Kab. Lanny Jaya
+    latitude: 0
+    longitude: 0
+
+  - code: PAP12
+    country: ID
+    state: Papua
+    location: Kab. Mamberamo Raya
+    latitude: 0
+    longitude: 0
+
+  - code: PAP13
+    country: ID
+    state: Papua
+    location: Kab. Mamberamo Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: PAP14
+    country: ID
+    state: Papua
+    location: Kab. Mappi
+    latitude: 0
+    longitude: 0
+
+  - code: PAP15
+    country: ID
+    state: Papua
+    location: Kab. Merauke
+    latitude: 0
+    longitude: 0
+
+  - code: PAP16
+    country: ID
+    state: Papua
+    location: Kab. Mimika
+    latitude: 0
+    longitude: 0
+
+  - code: PAP17
+    country: ID
+    state: Papua
+    location: Kab. Nabire
+    latitude: 0
+    longitude: 0
+
+  - code: PAP18
+    country: ID
+    state: Papua
+    location: Kab. Nduga
+    latitude: 0
+    longitude: 0
+
+  - code: PAP19
+    country: ID
+    state: Papua
+    location: Kab. Paniai
+    latitude: 0
+    longitude: 0
+
+  - code: PAP20
+    country: ID
+    state: Papua
+    location: Kab. Pegunungan Bintang
+    latitude: 0
+    longitude: 0
+
+  - code: PAP21
+    country: ID
+    state: Papua
+    location: Kab. Puncak
+    latitude: 0
+    longitude: 0
+
+  - code: PAP22
+    country: ID
+    state: Papua
+    location: Kab. Puncak Jaya
+    latitude: 0
+    longitude: 0
+
+  - code: PAP23
+    country: ID
+    state: Papua
+    location: Kab. Sarmi
+    latitude: 0
+    longitude: 0
+
+  - code: PAP24
+    country: ID
+    state: Papua
+    location: Kab. Supiori
+    latitude: 0
+    longitude: 0
+
+  - code: PAP25
+    country: ID
+    state: Papua
+    location: Kab. Tolikara
+    latitude: 0
+    longitude: 0
+
+  - code: PAP26
+    country: ID
+    state: Papua
+    location: Kab. Waropen
+    latitude: 0
+    longitude: 0
+
+  - code: PAP27
+    country: ID
+    state: Papua
+    location: Kab. Yahukimo
+    latitude: 0
+    longitude: 0
+
+  - code: PAP28
+    country: ID
+    state: Papua
+    location: Kab. Yalimo
+    latitude: 0
+    longitude: 0
+
+  - code: PAP29
+    country: ID
+    state: Papua
+    location: Kab. Yapen Waropen
+    latitude: 0
+    longitude: 0
+
+  - code: PAP30
+    country: ID
+    state: Papua
+    location: Kota Jayapura
+    latitude: 0
+    longitude: 0
+
+  # Papua Barat
+  - code: PBR01
+    country: ID
+    state: Papua Barat
+    location: Kab. Fakfak
+    latitude: 0
+    longitude: 0
+
+  - code: PBR02
+    country: ID
+    state: Papua Barat
+    location: Kab. Kaimana
+    latitude: 0
+    longitude: 0
+
+  - code: PBR03
+    country: ID
+    state: Papua Barat
+    location: Kab. Manokwari
+    latitude: 0
+    longitude: 0
+
+  - code: PBR04
+    country: ID
+    state: Papua Barat
+    location: Kab. Manokwari Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: PBR05
+    country: ID
+    state: Papua Barat
+    location: Kab. Maybrat
+    latitude: 0
+    longitude: 0
+
+  - code: PBR06
+    country: ID
+    state: Papua Barat
+    location: Kab. Pegunungan Arfak
+    latitude: 0
+    longitude: 0
+
+  - code: PBR07
+    country: ID
+    state: Papua Barat
+    location: Kab. Raja Ampat
+    latitude: 0
+    longitude: 0
+
+  - code: PBR08
+    country: ID
+    state: Papua Barat
+    location: Kab. Sorong
+    latitude: 0
+    longitude: 0
+
+  - code: PBR09
+    country: ID
+    state: Papua Barat
+    location: Kab. Sorong Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: PBR10
+    country: ID
+    state: Papua Barat
+    location: Kab. Tambrauw
+    latitude: 0
+    longitude: 0
+
+  - code: PBR11
+    country: ID
+    state: Papua Barat
+    location: Kab. Teluk Bintuni
+    latitude: 0
+    longitude: 0
+
+  - code: PBR12
+    country: ID
+    state: Papua Barat
+    location: Kab. Teluk Wondama
+    latitude: 0
+    longitude: 0
+
+  - code: PBR13
+    country: ID
+    state: Papua Barat
+    location: Kota Sorong
+    latitude: 0
+    longitude: 0
+
+  # Riau
+  - code: RIA01
+    country: ID
+    state: Riau
+    location: Kab. Bengkalis
+    latitude: 0
+    longitude: 0
+
+  - code: RIA02
+    country: ID
+    state: Riau
+    location: Kab. Indragiri Hilir
+    latitude: 0
+    longitude: 0
+
+  - code: RIA03
+    country: ID
+    state: Riau
+    location: Kab. Indragiri Hulu
+    latitude: 0
+    longitude: 0
+
+  - code: RIA04
+    country: ID
+    state: Riau
+    location: Kab. Kampar
+    latitude: 0
+    longitude: 0
+
+  - code: RIA05
+    country: ID
+    state: Riau
+    location: Kab. Kepulauan Meranti
+    latitude: 0
+    longitude: 0
+
+  - code: RIA06
+    country: ID
+    state: Riau
+    location: Kab. Kuantan Singingi
+    latitude: 0
+    longitude: 0
+
+  - code: RIA07
+    country: ID
+    state: Riau
+    location: Kab. Pelalawan
+    latitude: 0
+    longitude: 0
+
+  - code: RIA08
+    country: ID
+    state: Riau
+    location: Kab. Rokan Hilir
+    latitude: 0
+    longitude: 0
+
+  - code: RIA09
+    country: ID
+    state: Riau
+    location: Kab. Rokan Hulu
+    latitude: 0
+    longitude: 0
+
+  - code: RIA10
+    country: ID
+    state: Riau
+    location: Kab. Siak
+    latitude: 0
+    longitude: 0
+
+  - code: RIA11
+    country: ID
+    state: Riau
+    location: Kota Dumai
+    latitude: 0
+    longitude: 0
+
+  - code: RIA12
+    country: ID
+    state: Riau
+    location: Kota Pekanbaru
+    latitude: 0
+    longitude: 0
+
+  # Sulawesi Barat
+  - code: SBR01
+    country: ID
+    state: Sulawesi Barat
+    location: Kab. Majene
+    latitude: 0
+    longitude: 0
+
+  - code: SBR02
+    country: ID
+    state: Sulawesi Barat
+    location: Kab. Mamasa
+    latitude: 0
+    longitude: 0
+
+  - code: SBR03
+    country: ID
+    state: Sulawesi Barat
+    location: Kab. Mamuju
+    latitude: 0
+    longitude: 0
+
+  - code: SBR04
+    country: ID
+    state: Sulawesi Barat
+    location: Kab. Mamuju Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: SBR05
+    country: ID
+    state: Sulawesi Barat
+    location: Kab. Mamuju Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SBR06
+    country: ID
+    state: Sulawesi Barat
+    location: Kab. Polewali Mandar
+    latitude: 0
+    longitude: 0
+
+  # Sulawesi Selatan
+  - code: SSL01
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Bantaeng
+    latitude: 0
+    longitude: 0
+
+  - code: SSL02
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Barru
+    latitude: 0
+    longitude: 0
+
+  - code: SSL03
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Bone
+    latitude: 0
+    longitude: 0
+
+  - code: SSL04
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Bulukumba
+    latitude: 0
+    longitude: 0
+
+  - code: SSL05
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Enrekang
+    latitude: 0
+    longitude: 0
+
+  - code: SSL06
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Gowa
+    latitude: 0
+    longitude: 0
+
+  - code: SSL07
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Jeneponto
+    latitude: 0
+    longitude: 0
+
+  - code: SSL08
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Kepulauan Selayar
+    latitude: 0
+    longitude: 0
+
+  - code: SSL09
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Luwu
+    latitude: 0
+    longitude: 0
+
+  - code: SSL10
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Luwu Timur
+    latitude: 0
+    longitude: 0
+
+  - code: SSL11
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Luwu Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SSL12
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Maros
+    latitude: 0
+    longitude: 0
+
+  - code: SSL13
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Pangkajene Dan Kepulauan
+    latitude: 0
+    longitude: 0
+
+  - code: SSL14
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Pinrang
+    latitude: 0
+    longitude: 0
+
+  - code: SSL15
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Sidenreng Rappang
+    latitude: 0
+    longitude: 0
+
+  - code: SSL16
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Sinjai
+    latitude: 0
+    longitude: 0
+
+  - code: SSL17
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Soppeng
+    latitude: 0
+    longitude: 0
+
+  - code: SSL18
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Takalar
+    latitude: 0
+    longitude: 0
+
+  - code: SSL19
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Tana Toraja
+    latitude: 0
+    longitude: 0
+
+  - code: SSL20
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Toraja Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SSL21
+    country: ID
+    state: Sulawesi Selatan
+    location: Kab. Wajo
+    latitude: 0
+    longitude: 0
+
+  - code: SSL22
+    country: ID
+    state: Sulawesi Selatan
+    location: Kota Makassar
+    latitude: 0
+    longitude: 0
+
+  - code: SSL23
+    country: ID
+    state: Sulawesi Selatan
+    location: Kota Palopo
+    latitude: 0
+    longitude: 0
+
+  - code: SSL24
+    country: ID
+    state: Sulawesi Selatan
+    location: Kota Parepare
+    latitude: 0
+    longitude: 0
+
+  # Sulawesi Tengah
+  - code: STG01
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Banggai
+    latitude: 0
+    longitude: 0
+
+  - code: STG02
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Banggai Kepulauan
+    latitude: 0
+    longitude: 0
+
+  - code: STG03
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Banggai Laut
+    latitude: 0
+    longitude: 0
+
+  - code: STG04
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Buol
+    latitude: 0
+    longitude: 0
+
+  - code: STG05
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Donggala
+    latitude: 0
+    longitude: 0
+
+  - code: STG06
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Morowali
+    latitude: 0
+    longitude: 0
+
+  - code: STG07
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Morowali Utara
+    latitude: 0
+    longitude: 0
+
+  - code: STG08
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Parigi Moutong
+    latitude: 0
+    longitude: 0
+
+  - code: STG09
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Poso
+    latitude: 0
+    longitude: 0
+
+  - code: STG10
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Sigi
+    latitude: 0
+    longitude: 0
+
+  - code: STG11
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Tojo UNA-UNA
+    latitude: 0
+    longitude: 0
+
+  - code: STG12
+    country: ID
+    state: Sulawesi Tengah
+    location: Kab. Toli-Toli
+    latitude: 0
+    longitude: 0
+
+  - code: STG13
+    country: ID
+    state: Sulawesi Tengah
+    location: Kota Palu
+    latitude: 0
+    longitude: 0
+
+  # Sulawesi Tenggara
+  - code: STA01
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Bombana
+    latitude: 0
+    longitude: 0
+
+  - code: STA02
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Buton
+    latitude: 0
+    longitude: 0
+
+  - code: STA03
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Buton Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: STA04
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Buton Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: STA05
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Buton Utara
+    latitude: 0
+    longitude: 0
+
+  - code: STA06
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Kolaka
+    latitude: 0
+    longitude: 0
+
+  - code: STA07
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Kolaka Timur
+    latitude: 0
+    longitude: 0
+
+  - code: STA08
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Kolaka Utara
+    latitude: 0
+    longitude: 0
+
+  - code: STA09
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Konawe
+    latitude: 0
+    longitude: 0
+
+  - code: STA10
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Konawe Kepulauan
+    latitude: 0
+    longitude: 0
+
+  - code: STA11
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Konawe Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: STA12
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Konawe Utara
+    latitude: 0
+    longitude: 0
+
+  - code: STA13
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Muna
+    latitude: 0
+    longitude: 0
+
+  - code: STA14
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Muna Barat
+    latitude: 0
+    longitude: 0
+
+  - code: STA15
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kab. Wakatobi
+    latitude: 0
+    longitude: 0
+
+  - code: STA16
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kota Bau-Bau
+    latitude: 0
+    longitude: 0
+
+  - code: STA17
+    country: ID
+    state: Sulawesi Tenggara
+    location: Kota Kendari
+    latitude: 0
+    longitude: 0
+
+  # Sulawesi Utara
+  - code: SUT01
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Bolaang Mongondow
+    latitude: 0
+    longitude: 0
+
+  - code: SUT02
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Bolaang Mongondow Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SUT03
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Bolaang Mongondow Timur
+    latitude: 0
+    longitude: 0
+
+  - code: SUT04
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Bolaang Mongondow Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SUT05
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Kepulauan Sangihe
+    latitude: 0
+    longitude: 0
+
+  - code: SUT06
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Kepulauan Siau Tagulandang Biaro
+    latitude: 0
+    longitude: 0
+
+  - code: SUT07
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Kepulauan Talaud
+    latitude: 0
+    longitude: 0
+
+  - code: SUT08
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Minahasa
+    latitude: 0
+    longitude: 0
+
+  - code: SUT09
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Minahasa Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SUT10
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Minahasa Tenggara
+    latitude: 0
+    longitude: 0
+
+  - code: SUT11
+    country: ID
+    state: Sulawesi Utara
+    location: Kab. Minahasa Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SUT12
+    country: ID
+    state: Sulawesi Utara
+    location: Kota Bitung
+    latitude: 0
+    longitude: 0
+
+  - code: SUT13
+    country: ID
+    state: Sulawesi Utara
+    location: Kota Kotamobagu
+    latitude: 0
+    longitude: 0
+
+  - code: SUT14
+    country: ID
+    state: Sulawesi Utara
+    location: Kota Manado
+    latitude: 0
+    longitude: 0
+
+  - code: SUT15
+    country: ID
+    state: Sulawesi Utara
+    location: Kota Tomohon
+    latitude: 0
+    longitude: 0
+
+  # Sumatera Barat
+  - code: SMB01
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Agam
+    latitude: 0
+    longitude: 0
+
+  - code: SMB02
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Dharmasraya
+    latitude: 0
+    longitude: 0
+
+  - code: SMB03
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Kepulauan Mentawai
+    latitude: 0
+    longitude: 0
+
+  - code: SMB04
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Lima Puluh Kota
+    latitude: 0
+    longitude: 0
+
+  - code: SMB05
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Padang Pariaman
+    latitude: 0
+    longitude: 0
+
+  - code: SMB06
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Pasaman
+    latitude: 0
+    longitude: 0
+
+  - code: SMB07
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Pasaman Barat
+    latitude: 0
+    longitude: 0
+
+  - code: SMB08
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Pesisir Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SMB09
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Sijunjung
+    latitude: 0
+    longitude: 0
+
+  - code: SMB10
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Solok
+    latitude: 0
+    longitude: 0
+
+  - code: SMB11
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Solok Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SMB12
+    country: ID
+    state: Sumatera Barat
+    location: Kab. Tanah Datar
+    latitude: 0
+    longitude: 0
+
+  - code: SMB13
+    country: ID
+    state: Sumatera Barat
+    location: Kota Bukittinggi
+    latitude: 0
+    longitude: 0
+
+  - code: SMB14
+    country: ID
+    state: Sumatera Barat
+    location: Kota Padang
+    latitude: 0
+    longitude: 0
+
+  - code: SMB15
+    country: ID
+    state: Sumatera Barat
+    location: Kota Padangpanjang
+    latitude: 0
+    longitude: 0
+
+  - code: SMB16
+    country: ID
+    state: Sumatera Barat
+    location: Kota Pariaman
+    latitude: 0
+    longitude: 0
+
+  - code: SMB17
+    country: ID
+    state: Sumatera Barat
+    location: Kota Payakumbuh
+    latitude: 0
+    longitude: 0
+
+  - code: SMB18
+    country: ID
+    state: Sumatera Barat
+    location: Kota Sawahlunto
+    latitude: 0
+    longitude: 0
+
+  - code: SMB19
+    country: ID
+    state: Sumatera Barat
+    location: Kota Solok
+    latitude: 0
+    longitude: 0
+
+  # Sumatera Selatan
+  - code: SMS01
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Banyuasin
+    latitude: 0
+    longitude: 0
+
+  - code: SMS02
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Empat Lawang
+    latitude: 0
+    longitude: 0
+
+  - code: SMS03
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Lahat
+    latitude: 0
+    longitude: 0
+
+  - code: SMS04
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Muara Enim
+    latitude: 0
+    longitude: 0
+
+  - code: SMS05
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Musi Banyuasin
+    latitude: 0
+    longitude: 0
+
+  - code: SMS06
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Musi Rawas
+    latitude: 0
+    longitude: 0
+
+  - code: SMS07
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Musi Rawas Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SMS08
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Ogan ILIR
+    latitude: 0
+    longitude: 0
+
+  - code: SMS09
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Ogan Komering ILIR
+    latitude: 0
+    longitude: 0
+
+  - code: SMS10
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Ogan Komering ULU
+    latitude: 0
+    longitude: 0
+
+  - code: SMS11
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Ogan Komering ULU Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SMS12
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Ogan Komering ULU Timur
+    latitude: 0
+    longitude: 0
+
+  - code: SMS13
+    country: ID
+    state: Sumatera Selatan
+    location: Kab. Penukal Abab Lematang ILIR
+    latitude: 0
+    longitude: 0
+
+  - code: SMS14
+    country: ID
+    state: Sumatera Selatan
+    location: Kota Lubuklinggau
+    latitude: 0
+    longitude: 0
+
+  - code: SMS15
+    country: ID
+    state: Sumatera Selatan
+    location: Kota Pagar Alam
+    latitude: 0
+    longitude: 0
+
+  - code: SMS16
+    country: ID
+    state: Sumatera Selatan
+    location: Kota Palembang
+    latitude: 0
+    longitude: 0
+
+  - code: SMS17
+    country: ID
+    state: Sumatera Selatan
+    location: Kota Prabumulih
+    latitude: 0
+    longitude: 0
+
+  # Sumatera Utara
+  - code: SMU01
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Asahan
+    latitude: 0
+    longitude: 0
+
+  - code: SMU02
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Batu Bara
+    latitude: 0
+    longitude: 0
+
+  - code: SMU03
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Dairi
+    latitude: 0
+    longitude: 0
+
+  - code: SMU04
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Deli Serdang
+    latitude: 0
+    longitude: 0
+
+  - code: SMU05
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Humbang Hasundutan
+    latitude: 0
+    longitude: 0
+
+  - code: SMU06
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Karo
+    latitude: 0
+    longitude: 0
+
+  - code: SMU07
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Labuhanbatu
+    latitude: 0
+    longitude: 0
+
+  - code: SMU08
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Labuhanbatu Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SMU09
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Labuhanbatu Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SMU10
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Langkat
+    latitude: 0
+    longitude: 0
+
+  - code: SMU11
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Mandailing Natal
+    latitude: 0
+    longitude: 0
+
+  - code: SMU12
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Nias
+    latitude: 0
+    longitude: 0
+
+  - code: SMU13
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Nias Barat
+    latitude: 0
+    longitude: 0
+
+  - code: SMU14
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Nias Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SMU15
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Nias Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SMU16
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Padang Lawas
+    latitude: 0
+    longitude: 0
+
+  - code: SMU17
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Padang Lawas Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SMU18
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Pakpak Bharat
+    latitude: 0
+    longitude: 0
+
+  - code: SMU19
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Samosir
+    latitude: 0
+    longitude: 0
+
+  - code: SMU20
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Serdang Bedagai
+    latitude: 0
+    longitude: 0
+
+  - code: SMU21
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Simalungun
+    latitude: 0
+    longitude: 0
+
+  - code: SMU22
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Tapanuli Selatan
+    latitude: 0
+    longitude: 0
+
+  - code: SMU23
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Tapanuli Tengah
+    latitude: 0
+    longitude: 0
+
+  - code: SMU24
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Tapanuli Utara
+    latitude: 0
+    longitude: 0
+
+  - code: SMU25
+    country: ID
+    state: Sumatera Utara
+    location: Kab. Toba Samosir
+    latitude: 0
+    longitude: 0
+
+  - code: SMU26
+    country: ID
+    state: Sumatera Utara
+    location: Kota Binjai
+    latitude: 0
+    longitude: 0
+
+  - code: SMU27
+    country: ID
+    state: Sumatera Utara
+    location: Kota Gunungsitoli
+    latitude: 0
+    longitude: 0
+
+  - code: SMU28
+    country: ID
+    state: Sumatera Utara
+    location: Kota Medan
+    latitude: 0
+    longitude: 0
+
+  - code: SMU29
+    country: ID
+    state: Sumatera Utara
+    location: Kota Padangsidempuan
+    latitude: 0
+    longitude: 0
+
+  - code: SMU30
+    country: ID
+    state: Sumatera Utara
+    location: Kota Pematangsiantar
+    latitude: 0
+    longitude: 0
+
+  - code: SMU31
+    country: ID
+    state: Sumatera Utara
+    location: Kota Sibolga
+    latitude: 0
+    longitude: 0
+
+  - code: SMU32
+    country: ID
+    state: Sumatera Utara
+    location: Kota Tanjungbalai
+    latitude: 0
+    longitude: 0
+
+  - code: SMU33
+    country: ID
+    state: Sumatera Utara
+    location: Kota Tebing Tinggi
+    latitude: 0
+    longitude: 0

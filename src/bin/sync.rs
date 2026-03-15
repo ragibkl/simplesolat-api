@@ -21,15 +21,22 @@ async fn main() {
             println!("Sync prayer times data from MUIS");
             service::prayer_times::sync_prayer_times_from_muis(&mut conn).await;
         }
+        Some("equran") => {
+            println!("Sync prayer times data from EQuran.id");
+            service::prayer_times::sync_prayer_times_from_equran(&mut conn).await;
+        }
         None => {
             println!("Sync prayer times data from Jakim");
             service::prayer_times::sync_prayer_times_from_jakim(&mut conn).await;
 
             println!("Sync prayer times data from MUIS");
             service::prayer_times::sync_prayer_times_from_muis(&mut conn).await;
+
+            println!("Sync prayer times data from EQuran.id");
+            service::prayer_times::sync_prayer_times_from_equran(&mut conn).await;
         }
         Some(other) => {
-            eprintln!("Unknown source: {}. Use 'jakim', 'muis', or omit for all.", other);
+            eprintln!("Unknown source: {}. Use 'jakim', 'muis', 'equran', or omit for all.", other);
             std::process::exit(1);
         }
     }

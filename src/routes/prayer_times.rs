@@ -6,20 +6,16 @@ use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    models::prayer_times::{SelectPrayerTime, select_prayer_times_for_zone},
+    models::{
+        prayer_times::{SelectPrayerTime, select_prayer_times_for_zone},
+        zones::select_zone_by_code,
+    },
     routes::{AppError, AppState},
 };
 
-fn datetime_to_timestamp(date: NaiveDate, time: NaiveTime) -> i64 {
-    // Combine date + time
+fn datetime_to_timestamp(date: NaiveDate, time: NaiveTime, tz: chrono_tz::Tz) -> i64 {
     let naive_datetime = NaiveDateTime::new(date, time);
-
-    // Convert to timezone-aware datetime
-    let dt = naive_datetime
-        .and_local_timezone(chrono_tz::Asia::Kuala_Lumpur)
-        .unwrap();
-
-    // Get Unix timestamp
+    let dt = naive_datetime.and_local_timezone(tz).unwrap();
     dt.timestamp()
 }
 
@@ -37,18 +33,18 @@ pub struct WaktuSolat {
     pub isha: i64,    // Unix timestamp
 }
 
-impl From<&SelectPrayerTime> for WaktuSolat {
-    fn from(value: &SelectPrayerTime) -> Self {
+impl WaktuSolat {
+    fn from_prayer_time(value: &SelectPrayerTime, tz: chrono_tz::Tz) -> Self {
         Self {
             date: value.date,
             zone: value.zone_code.to_string(),
-            imsak: datetime_to_timestamp(value.date, value.imsak),
-            fajr: datetime_to_timestamp(value.date, value.fajr),
-            syuruk: datetime_to_timestamp(value.date, value.syuruk),
-            dhuhr: datetime_to_timestamp(value.date, value.dhuhr),
-            asr: datetime_to_timestamp(value.date, value.asr),
-            maghrib: datetime_to_timestamp(value.date, value.maghrib),
-            isha: datetime_to_timestamp(value.date, value.isha),
+            imsak: datetime_to_timestamp(value.date, value.imsak, tz),
+            fajr: datetime_to_timestamp(value.date, value.fajr, tz),
+            syuruk: datetime_to_timestamp(value.date, value.syuruk, tz),
+            dhuhr: datetime_to_timestamp(value.date, value.dhuhr, tz),
+            asr: datetime_to_timestamp(value.date, value.asr, tz),
+            maghrib: datetime_to_timestamp(value.date, value.maghrib, tz),
+            isha: datetime_to_timestamp(value.date, value.isha, tz),
         }
     }
 }
@@ -82,9 +78,16 @@ pub async fn get_prayer_times(
         message: format!("Failed to get database connection: {}", e),
     })?;
 
+    // Look up zone to determine timezone
+    let zone_info = select_zone_by_code(&mut conn, &zone);
+    let tz = match zone_info {
+        Some(ref z) => z.timezone(),
+        None => chrono_tz::Asia::Kuala_Lumpur,
+    };
+
     let pts = select_prayer_times_for_zone(&mut conn, &zone, params.from, params.to);
     let response = WaktuSolatResponse {
-        data: pts.iter().map(|pt| pt.into()).collect(),
+        data: pts.iter().map(|pt| WaktuSolat::from_prayer_time(pt, tz)).collect(),
     };
 
     Ok(Json(response))
