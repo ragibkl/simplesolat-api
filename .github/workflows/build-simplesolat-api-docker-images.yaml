@@ -3,7 +3,7 @@ name: build-simplesolat-api-docker-images
 on:
   push:
     branches:
-      - "**"
+      - "master"
     tags:
       - "v*.*.*"
   pull_request:

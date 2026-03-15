@@ -5,6 +5,7 @@ use diesel::prelude::*;
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct UpsertZone {
     pub zone_code: String,
+    pub country: String,
     pub state: String,
     pub location: String,
 }
@@ -25,6 +26,17 @@ pub fn select_zones(conn: &mut PgConnection) -> Vec<UpsertZone> {
     use crate::schema::zones;
 
     zones::table
+        .select(UpsertZone::as_select())
+        .order(zones::zone_code.asc())
+        .load(conn)
+        .unwrap()
+}
+
+pub fn select_zones_by_country(conn: &mut PgConnection, country: &str) -> Vec<UpsertZone> {
+    use crate::schema::zones;
+
+    zones::table
+        .filter(zones::country.eq(country))
         .select(UpsertZone::as_select())
         .order(zones::zone_code.asc())
         .load(conn)
