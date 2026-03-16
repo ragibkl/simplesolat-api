@@ -6,7 +6,7 @@ use diesel::PgConnection;
 use tokio::time::sleep;
 
 use crate::{
-    api::{equran, jakim, muis},
+    api::{equran, jakim, kheu, muis},
     models::{
         prayer_times::{UpsertPrayerTime, select_last_prayer_time_for_zone, upsert_prayer_times},
         zones::select_zones_by_country,
@@ -250,4 +250,148 @@ pub async fn sync_prayer_times_from_equran(conn: &mut PgConnection) {
     }
 
     println!("[sync_prayer_times_from_equran] Done");
+}
+
+/// Parse KHEU time string (dot-separated, 12-hour without AM/PM) to NaiveTime.
+/// KHEU returns times like "5.04" for Imsak (5:04 AM), "3.50" for Asar (3:50 PM).
+/// Suboh & Syuruk & Imsak are AM; Zohor, Asar, Maghrib, Isyak are PM.
+fn parse_kheu_time(time_str: &str, is_pm: bool) -> Option<NaiveTime> {
+    let normalized = time_str.replace('.', ":");
+    let t = NaiveTime::parse_from_str(&normalized, "%H:%M")
+        .or_else(|_| NaiveTime::parse_from_str(&normalized, "%-H:%M"))
+        .ok()?;
+    if is_pm && t.hour() < 12 {
+        Some(t + chrono::Duration::hours(12))
+    } else {
+        Some(t)
+    }
+}
+
+/// Returns the minute offset for a Brunei zone.
+/// KHEU base times are for Brunei-Muara. Offsets:
+/// - BRN01 (Brunei-Muara): 0 min
+/// - BRN02 (Tutong): +1 min
+/// - BRN03 (Belait): +3 min
+/// - BRN04 (Temburong): 0 min
+fn brunei_zone_offset(zone_code: &str) -> i64 {
+    match zone_code {
+        "BRN02" => 1,
+        "BRN03" => 3,
+        _ => 0,
+    }
+}
+
+fn apply_offset(time: NaiveTime, offset_minutes: i64) -> NaiveTime {
+    if offset_minutes == 0 {
+        return time;
+    }
+    time + chrono::Duration::minutes(offset_minutes)
+}
+
+pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
+    let zones = select_zones_by_country(conn, "BN");
+    let current_date = Utc::now().with_timezone(&Kuala_Lumpur).date_naive();
+    let current_year = current_date.year();
+
+    // Check base zone (BRN01) to determine which months need syncing
+    let last_base = select_last_prayer_time_for_zone(conn, "BRN01");
+
+    println!(
+        "[sync_prayer_times_from_kheu] Syncing {} zones for years {} and {}",
+        zones.len(),
+        current_year,
+        current_year + 1
+    );
+
+    // Fetch base times once per month, then apply offsets per zone
+    for year in [current_year, current_year + 1] {
+        let year_end = NaiveDate::from_ymd_opt(year, 12, 31).unwrap();
+
+        // Skip this year entirely if base zone is already fully synced
+        if let Some(ref last) = last_base {
+            if last.date >= year_end {
+                println!(
+                    "[sync_prayer_times_from_kheu] Skip year {} (already synced)",
+                    year
+                );
+                continue;
+            }
+        }
+
+        // Start from the month after the last synced data
+        let start_month = if let Some(ref last) = last_base {
+            if last.date.year() == year {
+                last.date.month()
+            } else {
+                1
+            }
+        } else {
+            1
+        };
+
+        for month in start_month..=12u32 {
+            println!(
+                "[sync_prayer_times_from_kheu] Fetch {}-{:02}",
+                year, month
+            );
+
+            let records = match kheu::fetch_kheu_prayer_times(year, month).await {
+                Ok(r) => r,
+                Err(e) => {
+                    println!(
+                        "[sync_prayer_times_from_kheu] Error for {}-{:02}: {:?}",
+                        year, month, e
+                    );
+                    continue;
+                }
+            };
+
+            for zone in zones.iter() {
+                let offset = brunei_zone_offset(&zone.zone_code);
+                let last_prayer_time = select_last_prayer_time_for_zone(conn, &zone.zone_code);
+
+                let prayer_times: Vec<UpsertPrayerTime> = records
+                    .iter()
+                    .filter_map(|r| {
+                        // KHEU date is ISO with UTC offset: "2026-03-01T16:00:00Z" = midnight BN time
+                        let date = NaiveDate::parse_from_str(&r.date[..10], "%Y-%m-%d")
+                            .ok()?
+                            .checked_add_days(Days::new(1))?;
+
+                        // Skip dates we already have
+                        if let Some(ref last) = last_prayer_time {
+                            if date <= last.date {
+                                return None;
+                            }
+                        }
+
+                        Some(UpsertPrayerTime {
+                            zone_code: zone.zone_code.to_string(),
+                            date,
+                            imsak: apply_offset(parse_kheu_time(&r.imsak, false)?, offset),
+                            fajr: apply_offset(parse_kheu_time(&r.suboh, false)?, offset),
+                            syuruk: apply_offset(parse_kheu_time(&r.syuruk, false)?, offset),
+                            dhuhr: apply_offset(parse_kheu_time(&r.zohor, true)?, offset),
+                            asr: apply_offset(parse_kheu_time(&r.asar, true)?, offset),
+                            maghrib: apply_offset(parse_kheu_time(&r.maghrib, true)?, offset),
+                            isha: apply_offset(parse_kheu_time(&r.isyak, true)?, offset),
+                        })
+                    })
+                    .collect();
+
+                if !prayer_times.is_empty() {
+                    println!(
+                        "[sync_prayer_times_from_kheu] Upserting {} records for {}",
+                        prayer_times.len(),
+                        zone.zone_code
+                    );
+                    upsert_prayer_times(conn, &prayer_times);
+                }
+            }
+
+            sleep(Duration::from_millis(500)).await;
+        }
+    }
+
+    println!("[sync_prayer_times_from_kheu] Done");
 }

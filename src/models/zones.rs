@@ -49,7 +49,7 @@ impl UpsertZone {
                 // WITA (UTC+8) — default for remaining provinces
                 _ => chrono_tz::Asia::Makassar,
             },
-            _ => chrono_tz::Asia::Kuala_Lumpur, // MY, SG are both UTC+8
+            _ => chrono_tz::Asia::Kuala_Lumpur, // MY, SG, BN are all UTC+8
         }
     }
 }

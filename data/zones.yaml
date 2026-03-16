@@ -4094,3 +4094,32 @@ zones:
     location: Kota Tebing Tinggi
     latitude: 0
     longitude: 0
+
+  # Brunei (4 zones)
+  - code: BRN01
+    country: BN
+    state: Brunei-Muara
+    location: Daerah Brunei-Muara
+    latitude: 4.9403
+    longitude: 114.9481
+
+  - code: BRN02
+    country: BN
+    state: Tutong
+    location: Daerah Tutong
+    latitude: 4.8029
+    longitude: 114.6490
+
+  - code: BRN03
+    country: BN
+    state: Belait
+    location: Daerah Belait
+    latitude: 4.5839
+    longitude: 114.2319
+
+  - code: BRN04
+    country: BN
+    state: Temburong
+    location: Daerah Temburong
+    latitude: 4.5478
+    longitude: 115.1571
