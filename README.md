@@ -1,32 +1,41 @@
 # Simplesolat API
 
-> REST API for Malaysian prayer times using official Jakim data
+> REST API for prayer times — Malaysia, Singapore, Indonesia, and Brunei
 
 **Live API:** https://api.simplesolat.com
-
-A simple, reliable API that serves accurate prayer times for all 80 Malaysian prayer zones using data from JAKIM e-Solat.
 
 ---
 
 ## Features
 
-- ✅ **Official Jakim Data** - Accurate prayer times from JAKIM e-Solat
-- ✅ **Complete Malaysia Coverage** - All JAKIM prayer zones
-- ✅ **7 Prayer Times** - Imsak, Fajr, Syuruk, Dhuhr, Asr, Maghrib, Isha
-- ✅ **Flexible Date Ranges** - Query any date range
-- ✅ **Unix Timestamps** - Easy to use in mobile apps
-- ✅ **Fast & Reliable** - Built with Rust + PostgreSQL
-- ✅ **Auto-Sync** - Syncs prayer times from Jakim automatically
+- **581 zones** across 4 countries (MY, SG, ID, BN)
+- **7 prayer times** — Imsak, Fajr, Syuruk, Dhuhr, Asr, Maghrib, Isha
+- **Unix timestamps** — timezone-aware (UTC+7/+8/+9)
+- **Auto-sync** — daily/weekly sync from official sources
+- Built with **Rust + Axum + PostgreSQL**
+
+## Data Sources
+
+| Country | Source | Zones |
+|---------|--------|-------|
+| Malaysia | [JAKIM e-Solat](https://www.e-solat.gov.my) | 60 zones |
+| Singapore | [MUIS via data.gov.sg](https://data.gov.sg) | 1 zone |
+| Indonesia | [EQuran.id](https://equran.id) (wraps Kemenag) | 517 zones |
+| Brunei | [KHEU / MORA](https://www.mora.gov.bn) | 4 zones (with minute offsets) |
 
 ---
 
 ## Quick Start
 
-### Get Prayer Times by zone
-
 ```bash
-# Get prayer times for specific zone and date range
+# Get prayer times for a zone
 curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2026-01-01&to=2026-01-31"
+
+# List all zones
+curl "https://api.simplesolat.com/zones"
+
+# Health check
+curl "https://api.simplesolat.com/health"
 ```
 
 ### Response
@@ -45,275 +54,136 @@ curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2026-01-01&to=
       "maghrib": 1735740540,
       "isha": 1735745040
     }
-    // ... more days
   ]
 }
 ```
 
+All times are Unix timestamps (seconds) in the zone's local timezone.
+
 ---
 
-## API Documentation
+## API Endpoints
 
-### Endpoint
-
-```
-GET /prayer-times/by-zone/:zone
-```
-
-### Parameters
+### `GET /prayer-times/by-zone/:zone`
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `zone` | string | Yes | Malaysian prayer zone code (e.g., `SGR01`, `WLY01`) |
-| `from` | date | Yes | Start date (format: `YYYY-MM-DD`) |
-| `to` | date | Yes | End date (format: `YYYY-MM-DD`) |
+| `zone` | path | Yes | Zone code (e.g. `SGR01`, `SGP01`, `ACH01`, `BRN01`) |
+| `from` | query | Yes | Start date (`YYYY-MM-DD`) |
+| `to` | query | Yes | End date (`YYYY-MM-DD`) |
+
+### `GET /zones`
+
+Returns all zones with `zone`, `country`, `state`, and `location` fields.
+
+### `GET /health`
+
+Returns `{"service": "simplesolat-api", "status": "ok"}`.
 
 ### Zone Codes
 
-All JAKIM prayer zones are supported. Examples:
+- **Malaysia** — 3-letter state + 2-digit: `SGR01`, `WLY01`, `JHR02`
+- **Singapore** — `SGP01`
+- **Indonesia** — 3-letter province + 2-digit: `ACH01` (Aceh), `JTM38` (Jawa Timur), `DKI02` (Jakarta)
+- **Brunei** — `BRN01` (Brunei-Muara), `BRN02` (Tutong), `BRN03` (Belait), `BRN04` (Temburong)
 
-- `WLY01` - W.P. Kuala Lumpur
-- `SGR01` - Selangor (Gombak, Petaling, Sepang, etc.)
-- `JHR01` - Johor (Pulau Aur, Pemanggil)
-- `PNG01` - Pulau Pinang
-- `SBH07` - Sabah (Kota Kinabalu, Ranau, etc.)
-- `SWK08` - Sarawak (Kuching, Bau, Lundu)
-
-[Full zone list](./data/zones.yaml)
-
-### Response Format
-
-```typescript
-{
-  data: Array<{
-    date: string;        // ISO date (YYYY-MM-DD)
-    zone: string;        // Zone code
-    imsak: number;       // Unix timestamp (seconds)
-    fajr: number;        // Unix timestamp (seconds)
-    syuruk: number;      // Unix timestamp (seconds)
-    dhuhr: number;       // Unix timestamp (seconds)
-    asr: number;         // Unix timestamp (seconds)
-    maghrib: number;     // Unix timestamp (seconds)
-    isha: number;        // Unix timestamp (seconds)
-  }>
-}
-```
-
-All times are Unix timestamps (seconds since epoch) in Malaysia timezone (UTC+8).
-
-### Examples
-
-**Single Day:**
-```bash
-curl "https://api.simplesolat.com/prayer-times/by-zone/WLY01?from=2026-01-01&to=2026-01-01"
-```
-
-**Month:**
-```bash
-curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2026-01-01&to=2026-01-31"
-```
-
-**Year Transition:**
-```bash
-curl "https://api.simplesolat.com/prayer-times/by-zone/JHR01?from=2025-12-15&to=2026-01-15"
-```
-
-**Next 90 Days:**
-```bash
-# From today
-curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2025-11-13&to=2026-02-11"
-```
+Full zone list: [data/zones.yaml](./data/zones.yaml)
 
 ---
 
-## Tech Stack
+## Self-Hosting with Docker Compose
 
-- **Rust** - Fast, safe, reliable
-- **Axum** - Modern web framework
-- **PostgreSQL** - Database
-- **Diesel** - ORM
-- **Docker** - Containerization
-- **Jakim e-Solat API** - Data source
+```yaml
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: simplesolat_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
----
+  simplesolat-api:
+    image: ghcr.io/ragibkl/simplesolat-api:latest
+    environment:
+      DATABASE_URL: postgres://user:password@postgres/simplesolat_db
+      # MUIS_API_KEY: <optional, for Singapore data>
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
 
-## Architecture
+  simplesolat-sync:
+    image: ghcr.io/ragibkl/simplesolat-api:latest
+    command: ["simplesolat-api", "sync", "--loop", "6h"]
+    environment:
+      DATABASE_URL: postgres://user:password@postgres/simplesolat_db
+      # MUIS_API_KEY: <optional, for Singapore data>
+    depends_on:
+      - postgres
 
+volumes:
+  pgdata:
 ```
-┌─────────────┐
-│ Mobile App  │
-└──────┬──────┘
-       │ HTTPS
-       ▼
-┌─────────────┐      ┌──────────────┐
-│ Axum API    │◄────►│ PostgreSQL   │
-└──────┬──────┘      └──────────────┘
-       │
-       │ Daily Sync
-       ▼
-┌─────────────┐
-│ Jakim API   │
-└─────────────┘
+
+### CLI Usage
+
+```bash
+# Start API server (default)
+simplesolat-api
+simplesolat-api serve
+
+# Sync all sources (one-shot)
+simplesolat-api sync
+
+# Sync specific source
+simplesolat-api sync jakim
+simplesolat-api sync muis
+simplesolat-api sync equran
+simplesolat-api sync kheu
+
+# Sync in loop mode (for docker-compose)
+simplesolat-api sync --loop 6h
+simplesolat-api sync jakim --loop 1d
 ```
 
-### Data Flow
+### Environment Variables
 
-1. **Sync Job** - Runs daily to fetch prayer times from Jakim
-2. **Database** - Stores prayer times for all zones
-3. **API** - Serves data to mobile apps
-4. **Cache** - Fast responses (in-memory caching planned)
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `DATABASE_URL` | Yes | — | PostgreSQL connection string |
+| `PORT` | No | `3000` | API server port |
+| `RUST_LOG` | No | `info` | Log level |
+| `MUIS_API_KEY` | No | — | data.gov.sg API key (for higher rate limits) |
 
 ---
 
 ## Development
 
-### Prerequisites
-
-- Rust 1.75+
-- PostgreSQL 14+
-- Docker (optional)
-
-### Setup
-
-1. **Clone the repository**
 ```bash
-git clone https://github.com/ragibkl/simplesolat-api.git
-cd simplesolat-api
-```
+# Start postgres
+docker-compose up -d postgres
 
-2. **Start PostgreSQL**
-```bash
-docker-compose up -d
-```
+# Copy env
+cp sample.env .env
+# Edit .env with your values
 
-3. **Set environment variables**
-```bash
-cp .env.example .env
-# Edit .env with your database credentials
-```
+# Run sync
+cargo run -- sync jakim
 
-4. **Run database migrations**
-```bash
-diesel migration run
-```
-
-5. **Sync prayer times data**
-```bash
-cargo run --bin sync
-```
-
-6. **Start the API server**
-```bash
+# Start API
 cargo run
 ```
-
-The API will be available at `http://localhost:8080`
-
-### Project Structure
-
-```
-simplesolat-api/
-├── src/
-│   ├── main.rs           # API server (Axum)
-│   ├── lib.rs            # Shared library code
-│   ├── db.rs             # Database queries
-│   └── models.rs         # Data models
-├── migrations/           # Diesel migrations
-├── docker-compose.yml    # PostgreSQL setup
-├── Cargo.toml            # Rust dependencies
-├── zones.yaml            # All Jakim prayer zones
-└── README.md
-```
-
-### Running Tests
-
-```bash
-cargo test
-```
-
-### Building for Production
-
-```bash
-cargo build --release
-./target/release/simplesolat-api
-```
-
----
-
-## Deployment
-
-### Docker
-
-```bash
-# Build image
-docker build -t simplesolat-api .
-
-# Run container
-docker run -p 8080:8080 \
-  -e DATABASE_URL=postgresql://user:pass@host/db \
-  simplesolat-api
-```
-
-### Environment Variables
-
-```bash
-DATABASE_URL=postgresql://user:pass@host:5432/prayer_times
-PORT=8080
-RUST_LOG=info
-```
-
----
-
-## Data Source
-
-Prayer times are sourced from **JAKIM e-Solat** (Jabatan Kemajuan Islam Malaysia):
-- Official API: https://www.e-solat.gov.my
-- Method: Egyptian General Authority of Survey
-- Timezone: Malaysia (UTC+8)
-- Updates: Daily automatic sync
-
----
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
 ## Related Projects
 
-- **Simplesolat Mobile App** - React Native app for Android to display prayer times on app and on home screen widget (coming soon)
+- [simplesolat](https://github.com/ragibkl/simplesolat) — Android app on Google Play Store
 
 ---
 
-## Support
+## License
 
-- **Issues:** [GitHub Issues](https://github.com/ragibkl/simplesolat-api/issues)
-- **Email:** [your-email@example.com]
-- **Website:** https://simplesolat.com (coming soon)
-
----
-
-## Acknowledgments
-
-- **JAKIM** - For providing official prayer times data
-- **Rust Community** - For excellent tools and libraries
-- **Malaysian Muslim Community** - For feedback and testing
-
----
-
-Built with ❤️ for the Malaysian Muslim community
-
-**"Prayer times that just work."**
+MIT
