@@ -50,36 +50,36 @@ async fn run_sync(source: &Option<String>, conn: &mut diesel::PgConnection) {
 
     match source.as_deref() {
         Some("jakim") => {
-            println!("Sync prayer times data from Jakim");
+            tracing::info!("Sync prayer times data from Jakim");
             service::prayer_times::sync_prayer_times_from_jakim(conn).await;
         }
         Some("muis") => {
-            println!("Sync prayer times data from MUIS");
+            tracing::info!("Sync prayer times data from MUIS");
             service::prayer_times::sync_prayer_times_from_muis(conn).await;
         }
         Some("equran") => {
-            println!("Sync prayer times data from EQuran.id");
+            tracing::info!("Sync prayer times data from EQuran.id");
             service::prayer_times::sync_prayer_times_from_equran(conn).await;
         }
         Some("kheu") => {
-            println!("Sync prayer times data from KHEU");
+            tracing::info!("Sync prayer times data from KHEU");
             service::prayer_times::sync_prayer_times_from_kheu(conn).await;
         }
         None => {
-            println!("Sync prayer times data from Jakim");
+            tracing::info!("Sync prayer times data from Jakim");
             service::prayer_times::sync_prayer_times_from_jakim(conn).await;
 
-            println!("Sync prayer times data from MUIS");
+            tracing::info!("Sync prayer times data from MUIS");
             service::prayer_times::sync_prayer_times_from_muis(conn).await;
 
-            println!("Sync prayer times data from EQuran.id");
+            tracing::info!("Sync prayer times data from EQuran.id");
             service::prayer_times::sync_prayer_times_from_equran(conn).await;
 
-            println!("Sync prayer times data from KHEU");
+            tracing::info!("Sync prayer times data from KHEU");
             service::prayer_times::sync_prayer_times_from_kheu(conn).await;
         }
         Some(other) => {
-            eprintln!(
+            tracing::error!(
                 "Unknown source: {}. Use 'jakim', 'muis', 'equran', 'kheu', or omit for all.",
                 other
             );
@@ -125,13 +125,13 @@ async fn main() {
             match r#loop {
                 Some(interval_str) => {
                     let interval = parse_duration(interval_str).unwrap_or_else(|e| {
-                        eprintln!("Invalid loop interval: {}", e);
+                        tracing::error!("Invalid loop interval: {}", e);
                         std::process::exit(1);
                     });
-                    println!("Running sync in loop mode (interval: {}s)", interval.as_secs());
+                    tracing::info!("Running sync in loop mode (interval: {}s)", interval.as_secs());
                     loop {
                         run_sync(source, &mut conn).await;
-                        println!("Sleeping for {}s until next sync...", interval.as_secs());
+                        tracing::info!("Sleeping for {}s until next sync...", interval.as_secs());
                         tokio::time::sleep(interval).await;
                     }
                 }

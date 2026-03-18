@@ -66,6 +66,19 @@ pub async fn get_prayer_times(
     Query(params): Query<PrayerQuery>,
     State(state): State<AppState>,
 ) -> Result<Json<WaktuSolatResponse>, AppError> {
+    // Validate date range
+    if params.from > params.to {
+        return Err(AppError {
+            message: "'from' date must be before or equal to 'to' date".to_string(),
+        });
+    }
+    let max_days = 750; // >2 years
+    if (params.to - params.from).num_days() > max_days {
+        return Err(AppError {
+            message: format!("Date range cannot exceed {} days", max_days),
+        });
+    }
+
     tracing::info!(
         "Fetching prayer times for zone: {}, from: {}, to: {}",
         zone,
