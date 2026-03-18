@@ -13,10 +13,20 @@ services:
 
   simplesolat-api:
     build: .
+    command: ["serve"]
     environment:
       DATABASE_URL: postgres://user:password@postgres/simplesolat_db
     ports:
       - 3000:3000
+    depends_on:
+      - postgres
+
+  simplesolat-sync:
+    build: .
+    command: ["sync", "--loop", "6h"]
+    environment:
+      DATABASE_URL: postgres://user:password@postgres/simplesolat_db
+      MUIS_API_KEY: ${MUIS_API_KEY:-}
     depends_on:
       - postgres
 
