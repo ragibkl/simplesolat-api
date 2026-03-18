@@ -64,7 +64,7 @@ pub async fn fetch_jakim_prayer_times(
 
     // Create HTTP client
     let client = reqwest::Client::builder()
-        .timeout(std::time::Duration::from_secs(10))
+        .timeout(std::time::Duration::from_secs(30))
         .build()?;
 
     // Make POST request

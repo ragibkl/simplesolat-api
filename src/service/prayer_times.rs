@@ -25,7 +25,7 @@ pub async fn sync_prayer_times_for_zone(
         None => date_start,
         Some(pt) => {
             if pt.date >= date_end {
-                println!(
+                tracing::info!(
                     "[sync_prayer_times_for_zone] skip for zone: {}, date_start: {}, date_end: {}",
                     zone_code, date_start, date_end
                 );
@@ -40,13 +40,13 @@ pub async fn sync_prayer_times_for_zone(
         }
     };
 
-    println!(
+    tracing::info!(
         "[sync_prayer_times_from_jakim] Fetch for zone: {}, date_start: {}, date_end: {}",
         zone_code, date_start, date_end
     );
     let response = jakim::fetch_jakim_prayer_times(zone_code, date_start, date_end).await;
     let Ok(pts) = response else {
-        println!(
+        tracing::info!(
             "[sync_prayer_times_from_jakim] Error for zone: {}, date_start: {}, date_end: {}",
             zone_code, date_start, date_end
         );
@@ -103,11 +103,11 @@ fn parse_muis_time(time_str: &str, is_pm: bool) -> Option<NaiveTime> {
 pub async fn sync_prayer_times_from_muis(conn: &mut PgConnection) {
     let zone_code = "SGP01";
 
-    println!("[sync_prayer_times_from_muis] Fetching MUIS prayer times");
+    tracing::info!("[sync_prayer_times_from_muis] Fetching MUIS prayer times");
     let records = match muis::fetch_muis_prayer_times().await {
         Ok(r) => r,
         Err(e) => {
-            println!("[sync_prayer_times_from_muis] Error: {:?}", e);
+            tracing::info!("[sync_prayer_times_from_muis] Error: {:?}", e);
             return;
         }
     };
@@ -145,7 +145,7 @@ pub async fn sync_prayer_times_from_muis(conn: &mut PgConnection) {
         })
         .collect();
 
-    println!(
+    tracing::info!(
         "[sync_prayer_times_from_muis] Upserting {} prayer times for {}",
         prayer_times.len(),
         zone_code
@@ -158,7 +158,7 @@ pub async fn sync_prayer_times_from_equran(conn: &mut PgConnection) {
     let current_date = Utc::now().with_timezone(&chrono_tz::Asia::Jakarta).date_naive();
     let current_year = current_date.year();
 
-    println!(
+    tracing::info!(
         "[sync_prayer_times_from_equran] Syncing {} zones for years {} and {}",
         zones.len(),
         current_year,
@@ -190,7 +190,7 @@ pub async fn sync_prayer_times_from_equran(conn: &mut PgConnection) {
             };
 
             for month in start_month..=12 {
-                println!(
+                tracing::info!(
                     "[sync_prayer_times_from_equran] Fetch zone: {}, {}-{:02}",
                     zone.zone_code, year, month
                 );
@@ -205,7 +205,7 @@ pub async fn sync_prayer_times_from_equran(conn: &mut PgConnection) {
                 {
                     Ok(r) => r,
                     Err(e) => {
-                        println!(
+                        tracing::info!(
                             "[sync_prayer_times_from_equran] Error for zone: {}, {}-{:02}: {:?}",
                             zone.zone_code, year, month, e
                         );
@@ -249,7 +249,7 @@ pub async fn sync_prayer_times_from_equran(conn: &mut PgConnection) {
         }
     }
 
-    println!("[sync_prayer_times_from_equran] Done");
+    tracing::info!("[sync_prayer_times_from_equran] Done");
 }
 
 /// Parse KHEU time string (dot-separated, 12-hour without AM/PM) to NaiveTime.
@@ -296,7 +296,7 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
     // Check base zone (BRN01) to determine which months need syncing
     let last_base = select_last_prayer_time_for_zone(conn, "BRN01");
 
-    println!(
+    tracing::info!(
         "[sync_prayer_times_from_kheu] Syncing {} zones for years {} and {}",
         zones.len(),
         current_year,
@@ -310,7 +310,7 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
         // Skip this year entirely if base zone is already fully synced
         if let Some(ref last) = last_base {
             if last.date >= year_end {
-                println!(
+                tracing::info!(
                     "[sync_prayer_times_from_kheu] Skip year {} (already synced)",
                     year
                 );
@@ -330,7 +330,7 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
         };
 
         for month in start_month..=12u32 {
-            println!(
+            tracing::info!(
                 "[sync_prayer_times_from_kheu] Fetch {}-{:02}",
                 year, month
             );
@@ -338,7 +338,7 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
             let records = match kheu::fetch_kheu_prayer_times(year, month).await {
                 Ok(r) => r,
                 Err(e) => {
-                    println!(
+                    tracing::info!(
                         "[sync_prayer_times_from_kheu] Error for {}-{:02}: {:?}",
                         year, month, e
                     );
@@ -380,7 +380,7 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
                     .collect();
 
                 if !prayer_times.is_empty() {
-                    println!(
+                    tracing::info!(
                         "[sync_prayer_times_from_kheu] Upserting {} records for {}",
                         prayer_times.len(),
                         zone.zone_code
@@ -393,5 +393,156 @@ pub async fn sync_prayer_times_from_kheu(conn: &mut PgConnection) {
         }
     }
 
-    println!("[sync_prayer_times_from_kheu] Done");
+    tracing::info!("[sync_prayer_times_from_kheu] Done");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::NaiveTime;
+
+    // -- parse_muis_time tests (real upstream samples from data.gov.sg) --
+
+    #[test]
+    fn test_parse_muis_time_subuh_am() {
+        // Subuh "05:44" -> 05:44 (AM, no adjustment)
+        let t = parse_muis_time("05:44", false).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(5, 44, 0).unwrap());
+    }
+
+    #[test]
+    fn test_parse_muis_time_zohor_pm_low_hour() {
+        // Zohor "01:00" -> 13:00 (PM, add 12)
+        let t = parse_muis_time("01:00", true).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(13, 0, 0).unwrap());
+    }
+
+    #[test]
+    fn test_parse_muis_time_zohor_pm_noon() {
+        // Zohor "12:59" -> 12:59 (PM but hour already 12, no adjustment)
+        let t = parse_muis_time("12:59", true).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(12, 59, 0).unwrap());
+    }
+
+    #[test]
+    fn test_parse_muis_time_isyak_pm() {
+        // Isyak "08:02" -> 20:02
+        let t = parse_muis_time("08:02", true).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(20, 2, 0).unwrap());
+    }
+
+    // -- parse_kheu_time tests (real upstream samples from mora.gov.bn) --
+
+    #[test]
+    fn test_parse_kheu_time_imsak_am() {
+        // Imsak "5.04" -> 05:04
+        let t = parse_kheu_time("5.04", false).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(5, 4, 0).unwrap());
+    }
+
+    #[test]
+    fn test_parse_kheu_time_asar_pm() {
+        // Asar "3.50" -> 15:50
+        let t = parse_kheu_time("3.50", true).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(15, 50, 0).unwrap());
+    }
+
+    #[test]
+    fn test_parse_kheu_time_zohor_pm_noon() {
+        // Zohor "12.25" -> 12:25 (PM but hour already 12)
+        let t = parse_kheu_time("12.25", true).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(12, 25, 0).unwrap());
+    }
+
+    #[test]
+    fn test_parse_kheu_time_maghrib_pm() {
+        // Maghrib "6.33" -> 18:33
+        let t = parse_kheu_time("6.33", true).unwrap();
+        assert_eq!(t, NaiveTime::from_hms_opt(18, 33, 0).unwrap());
+    }
+
+    // -- brunei_zone_offset tests --
+
+    #[test]
+    fn test_brunei_zone_offsets() {
+        assert_eq!(brunei_zone_offset("BRN01"), 0);
+        assert_eq!(brunei_zone_offset("BRN02"), 1);
+        assert_eq!(brunei_zone_offset("BRN03"), 3);
+        assert_eq!(brunei_zone_offset("BRN04"), 0);
+    }
+
+    // -- apply_offset tests --
+
+    #[test]
+    fn test_apply_offset_zero() {
+        let t = NaiveTime::from_hms_opt(5, 4, 0).unwrap();
+        assert_eq!(apply_offset(t, 0), t);
+    }
+
+    #[test]
+    fn test_apply_offset_one_minute() {
+        let t = NaiveTime::from_hms_opt(5, 4, 0).unwrap();
+        assert_eq!(
+            apply_offset(t, 1),
+            NaiveTime::from_hms_opt(5, 5, 0).unwrap()
+        );
+    }
+
+    #[test]
+    fn test_apply_offset_three_minutes() {
+        let t = NaiveTime::from_hms_opt(18, 33, 0).unwrap();
+        assert_eq!(
+            apply_offset(t, 3),
+            NaiveTime::from_hms_opt(18, 36, 0).unwrap()
+        );
+    }
+}
+
+#[cfg(test)]
+mod timezone_tests {
+    use crate::models::zones::UpsertZone;
+
+    fn zone(country: &str, state: &str) -> UpsertZone {
+        UpsertZone {
+            zone_code: "TEST01".to_string(),
+            country: country.to_string(),
+            state: state.to_string(),
+            location: "Test".to_string(),
+        }
+    }
+
+    #[test]
+    fn test_malaysia_timezone() {
+        assert_eq!(zone("MY", "Selangor").timezone(), chrono_tz::Asia::Kuala_Lumpur);
+    }
+
+    #[test]
+    fn test_singapore_timezone() {
+        assert_eq!(zone("SG", "Singapore").timezone(), chrono_tz::Asia::Kuala_Lumpur);
+    }
+
+    #[test]
+    fn test_brunei_timezone() {
+        assert_eq!(zone("BN", "Brunei-Muara").timezone(), chrono_tz::Asia::Kuala_Lumpur);
+    }
+
+    #[test]
+    fn test_indonesia_wib() {
+        assert_eq!(zone("ID", "Aceh").timezone(), chrono_tz::Asia::Jakarta);
+        assert_eq!(zone("ID", "DKI Jakarta").timezone(), chrono_tz::Asia::Jakarta);
+        assert_eq!(zone("ID", "Jawa Barat").timezone(), chrono_tz::Asia::Jakarta);
+    }
+
+    #[test]
+    fn test_indonesia_wita() {
+        assert_eq!(zone("ID", "Bali").timezone(), chrono_tz::Asia::Makassar);
+        assert_eq!(zone("ID", "Sulawesi Selatan").timezone(), chrono_tz::Asia::Makassar);
+        assert_eq!(zone("ID", "Kalimantan Timur").timezone(), chrono_tz::Asia::Makassar);
+    }
+
+    #[test]
+    fn test_indonesia_wit() {
+        assert_eq!(zone("ID", "Papua").timezone(), chrono_tz::Asia::Jayapura);
+        assert_eq!(zone("ID", "Maluku").timezone(), chrono_tz::Asia::Jayapura);
+    }
 }
