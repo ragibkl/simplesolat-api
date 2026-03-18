@@ -28,9 +28,7 @@ COPY /src/ ./src/
 
 # build code
 RUN touch ./src/main.rs
-RUN touch ./src/bin/sync.rs
 RUN cargo build --release
-RUN ls target/*
 
 
 ## runtime
@@ -49,7 +47,6 @@ COPY data /app/data
 
 # copy binary
 COPY --from=builder /code/simplesolat-api/target/release/simplesolat-api /usr/local/bin/simplesolat-api
-COPY --from=builder /code/simplesolat-api/target/release/sync /usr/local/bin/sync
 
 # set entrypoint
 ENTRYPOINT ["/usr/local/bin/simplesolat-api"]
