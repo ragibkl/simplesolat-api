@@ -32,14 +32,12 @@ pub struct ZonesResponse {
 }
 
 pub async fn get_zones(State(state): State<AppState>) -> Result<Json<ZonesResponse>, AppError> {
-    tracing::info!("Fetching zones");
+    tracing::info!("fetching zones");
 
     // Get a connection from the pool
-    let mut conn = state.db_pool.get().map_err(|e| AppError {
-        message: format!("Failed to get database connection: {}", e),
-    })?;
+    let mut conn = state.db_pool.get()?;
 
-    let zones = select_zones(&mut conn);
+    let zones = select_zones(&mut conn)?;
     let response = ZonesResponse {
         data: zones.iter().map(|pt| pt.into()).collect(),
     };
