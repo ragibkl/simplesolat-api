@@ -32,10 +32,74 @@ pub struct UpsertPrayerTime {
     pub isha: NaiveTime,
 }
 
+impl From<&crate::api::jakim::JakimPrayerTime> for UpsertPrayerTime {
+    fn from(r: &crate::api::jakim::JakimPrayerTime) -> Self {
+        Self {
+            zone_code: r.zone_code.to_string(),
+            date: r.date,
+            imsak: r.imsak,
+            fajr: r.fajr,
+            syuruk: r.syuruk,
+            dhuhr: r.dhuhr,
+            asr: r.asr,
+            maghrib: r.maghrib,
+            isha: r.isha,
+        }
+    }
+}
+
+impl From<&crate::api::muis::MuisPrayerTime> for UpsertPrayerTime {
+    fn from(r: &crate::api::muis::MuisPrayerTime) -> Self {
+        Self {
+            zone_code: r.zone_code.to_string(),
+            date: r.date,
+            imsak: r.imsak,
+            fajr: r.subuh,
+            syuruk: r.syuruk,
+            dhuhr: r.zohor,
+            asr: r.asar,
+            maghrib: r.maghrib,
+            isha: r.isyak,
+        }
+    }
+}
+
+impl From<&crate::api::equran::EquranPrayerTime> for UpsertPrayerTime {
+    fn from(r: &crate::api::equran::EquranPrayerTime) -> Self {
+        Self {
+            zone_code: r.zone_code.to_string(),
+            date: r.tanggal_lengkap,
+            imsak: r.imsak,
+            fajr: r.subuh,
+            syuruk: r.terbit,
+            dhuhr: r.dzuhur,
+            asr: r.ashar,
+            maghrib: r.maghrib,
+            isha: r.isya,
+        }
+    }
+}
+
+impl From<&crate::api::kheu::KheuPrayerTime> for UpsertPrayerTime {
+    fn from(r: &crate::api::kheu::KheuPrayerTime) -> Self {
+        Self {
+            zone_code: r.zone_code.to_string(),
+            date: r.date,
+            imsak: r.imsak,
+            fajr: r.suboh,
+            syuruk: r.syuruk,
+            dhuhr: r.zohor,
+            asr: r.asar,
+            maghrib: r.maghrib,
+            isha: r.isyak,
+        }
+    }
+}
+
 pub fn select_last_prayer_time_for_zone(
     conn: &mut PgConnection,
     zone_code: &str,
-) -> Option<SelectPrayerTime> {
+) -> Result<Option<SelectPrayerTime>, diesel::result::Error> {
     use crate::schema::prayer_times;
 
     prayer_times::table
@@ -44,18 +108,20 @@ pub fn select_last_prayer_time_for_zone(
         .order(prayer_times::date.desc())
         .first(conn)
         .optional()
-        .unwrap()
 }
 
-pub fn upsert_prayer_times(conn: &mut PgConnection, prayer_times: &[UpsertPrayerTime]) {
+pub fn upsert_prayer_times(
+    conn: &mut PgConnection,
+    prayer_times: &[UpsertPrayerTime],
+) -> Result<(), diesel::result::Error> {
     use crate::schema::prayer_times;
 
     diesel::insert_into(prayer_times::table)
         .values(prayer_times)
         .on_conflict((prayer_times::zone_code, prayer_times::date))
         .do_nothing()
-        .execute(conn)
-        .unwrap();
+        .execute(conn)?;
+    Ok(())
 }
 
 pub fn select_prayer_times_for_zone(
@@ -63,7 +129,7 @@ pub fn select_prayer_times_for_zone(
     zone_code: &str,
     from: NaiveDate,
     to: NaiveDate,
-) -> Vec<SelectPrayerTime> {
+) -> Result<Vec<SelectPrayerTime>, diesel::result::Error> {
     use crate::schema::prayer_times;
 
     prayer_times::table
@@ -73,5 +139,4 @@ pub fn select_prayer_times_for_zone(
         .select(SelectPrayerTime::as_select())
         .order(prayer_times::date.asc())
         .load(conn)
-        .unwrap()
 }

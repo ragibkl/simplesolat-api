@@ -68,37 +68,35 @@ pub async fn get_prayer_times(
 ) -> Result<Json<WaktuSolatResponse>, AppError> {
     // Validate date range
     if params.from > params.to {
-        return Err(AppError {
-            message: "'from' date must be before or equal to 'to' date".to_string(),
-        });
+        return Err(AppError::BadRequest(
+            "'from' date must be before or equal to 'to' date".to_string(),
+        ));
     }
     let max_days = 750; // >2 years
     if (params.to - params.from).num_days() > max_days {
-        return Err(AppError {
-            message: format!("Date range cannot exceed {} days", max_days),
-        });
+        return Err(AppError::BadRequest(
+            format!("Date range cannot exceed {} days", max_days),
+        ));
     }
 
     tracing::info!(
-        "Fetching prayer times for zone: {}, from: {}, to: {}",
+        "fetching prayer times for zone {}, from {} to {}",
         zone,
         params.from,
         params.to
     );
 
     // Get a connection from the pool
-    let mut conn = state.db_pool.get().map_err(|e| AppError {
-        message: format!("Failed to get database connection: {}", e),
-    })?;
+    let mut conn = state.db_pool.get()?;
 
     // Look up zone to determine timezone
-    let zone_info = select_zone_by_code(&mut conn, &zone);
-    let tz = match zone_info {
-        Some(ref z) => z.timezone(),
-        None => chrono_tz::Asia::Kuala_Lumpur,
-    };
+    let zone_info = select_zone_by_code(&mut conn, &zone)?;
+    let zone_info = zone_info.ok_or_else(|| AppError::NotFound(
+        format!("Zone '{}' not found", zone),
+    ))?;
+    let tz = zone_info.timezone();
 
-    let pts = select_prayer_times_for_zone(&mut conn, &zone, params.from, params.to);
+    let pts = select_prayer_times_for_zone(&mut conn, &zone, params.from, params.to)?;
     let response = WaktuSolatResponse {
         data: pts.iter().map(|pt| WaktuSolat::from_prayer_time(pt, tz)).collect(),
     };

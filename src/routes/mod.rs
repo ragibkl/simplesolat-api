@@ -16,7 +16,7 @@ pub struct AppState {
 }
 
 pub async fn create_app_router() -> Router {
-    tracing::info!("Connecting to database...");
+    tracing::info!("connecting to database");
     let db_pool = connect_db();
 
     // Initialize app state
@@ -33,17 +33,22 @@ pub async fn create_app_router() -> Router {
 
 // Error handling
 #[derive(Debug)]
-pub struct AppError {
-    message: String,
+pub enum AppError {
+    NotFound(String),
+    BadRequest(String),
+    Internal(String),
 }
 
 impl IntoResponse for AppError {
     fn into_response(self) -> axum::response::Response {
+        let (status, message) = match self {
+            AppError::NotFound(msg) => (StatusCode::NOT_FOUND, msg),
+            AppError::BadRequest(msg) => (StatusCode::BAD_REQUEST, msg),
+            AppError::Internal(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg),
+        };
         (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({
-                "error": self.message
-            })),
+            status,
+            Json(serde_json::json!({ "error": message })),
         )
             .into_response()
     }
@@ -54,8 +59,6 @@ where
     E: std::error::Error,
 {
     fn from(err: E) -> Self {
-        AppError {
-            message: err.to_string(),
-        }
+        AppError::Internal(err.to_string())
     }
 }

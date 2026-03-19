@@ -51,32 +51,32 @@ async fn run_sync(source: &Option<String>, conn: &mut diesel::PgConnection) {
     match source.as_deref() {
         Some("jakim") => {
             tracing::info!("Sync prayer times data from Jakim");
-            service::prayer_times::sync_prayer_times_from_jakim(conn).await;
+            service::sync_jakim::sync(conn).await;
         }
         Some("muis") => {
             tracing::info!("Sync prayer times data from MUIS");
-            service::prayer_times::sync_prayer_times_from_muis(conn).await;
+            service::sync_muis::sync(conn).await;
         }
         Some("equran") => {
             tracing::info!("Sync prayer times data from EQuran.id");
-            service::prayer_times::sync_prayer_times_from_equran(conn).await;
+            service::sync_equran::sync(conn).await;
         }
         Some("kheu") => {
             tracing::info!("Sync prayer times data from KHEU");
-            service::prayer_times::sync_prayer_times_from_kheu(conn).await;
+            service::sync_kheu::sync(conn).await;
         }
         None => {
             tracing::info!("Sync prayer times data from Jakim");
-            service::prayer_times::sync_prayer_times_from_jakim(conn).await;
+            service::sync_jakim::sync(conn).await;
 
             tracing::info!("Sync prayer times data from MUIS");
-            service::prayer_times::sync_prayer_times_from_muis(conn).await;
+            service::sync_muis::sync(conn).await;
 
             tracing::info!("Sync prayer times data from EQuran.id");
-            service::prayer_times::sync_prayer_times_from_equran(conn).await;
+            service::sync_equran::sync(conn).await;
 
             tracing::info!("Sync prayer times data from KHEU");
-            service::prayer_times::sync_prayer_times_from_kheu(conn).await;
+            service::sync_kheu::sync(conn).await;
         }
         Some(other) => {
             tracing::error!(

@@ -1,21 +1,24 @@
+use chrono::{NaiveDate, NaiveTime};
 use serde::Deserialize;
 
-/// Represents a single day's prayer times from EQuran.id
+/// Parsed EQuran.id prayer times, deserialized directly from upstream JSON.
 #[derive(Debug, Deserialize)]
-pub struct EquranSchedule {
-    pub tanggal_lengkap: String, // "YYYY-MM-DD"
-    pub imsak: String,           // "HH:MM" 24-hour
-    pub subuh: String,
-    pub terbit: String,
-    pub dzuhur: String,
-    pub ashar: String,
-    pub maghrib: String,
-    pub isya: String,
+pub struct EquranPrayerTime {
+    #[serde(skip)]
+    pub zone_code: String,
+    pub tanggal_lengkap: NaiveDate,
+    pub imsak: NaiveTime,
+    pub subuh: NaiveTime,
+    pub terbit: NaiveTime,
+    pub dzuhur: NaiveTime,
+    pub ashar: NaiveTime,
+    pub maghrib: NaiveTime,
+    pub isya: NaiveTime,
 }
 
 #[derive(Debug, Deserialize)]
 struct EquranData {
-    jadwal: Vec<EquranSchedule>,
+    jadwal: Vec<EquranPrayerTime>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -32,13 +35,13 @@ struct EquranRequest {
     tahun: i32,
 }
 
-/// Fetches monthly prayer times from EQuran.id for a given province/city.
 pub async fn fetch_equran_prayer_times(
+    zone_code: &str,
     provinsi: &str,
     kabkota: &str,
     bulan: i32,
     tahun: i32,
-) -> Result<Vec<EquranSchedule>, Box<dyn std::error::Error>> {
+) -> Result<Vec<EquranPrayerTime>, Box<dyn std::error::Error>> {
     let url = "https://equran.id/api/v2/shalat";
 
     let client = reqwest::Client::builder()
@@ -66,5 +69,9 @@ pub async fn fetch_equran_prayer_times(
         return Err(format!("EQuran.id returned code: {}", equran.code).into());
     }
 
-    Ok(equran.data.jadwal)
+    let mut prayer_times = equran.data.jadwal;
+    for pt in &mut prayer_times {
+        pt.zone_code = zone_code.to_string();
+    }
+    Ok(prayer_times)
 }
