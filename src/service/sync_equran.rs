@@ -53,7 +53,7 @@ pub async fn sync(conn: &mut PgConnection) {
 
             tracing::info!("[sync_equran] fetching zone {}, {}-{:02}", zone.zone_code, year, month);
 
-            let records = match crate::service::retry::with_retries(2, || {
+            let records = match crate::service::retry::with_retries(5, || {
                 equran::fetch_equran_prayer_times(
                     &zone.zone_code,
                     &zone.state,
