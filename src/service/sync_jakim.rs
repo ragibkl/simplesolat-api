@@ -44,7 +44,9 @@ async fn sync_zone(
     };
 
     tracing::info!("[sync_jakim] fetching zone {}, {} to {}", zone_code, date_start, date_end);
-    let records = match jakim::fetch_jakim_prayer_times(zone_code, date_start, date_end).await {
+    let records = match crate::service::retry::with_retries(2, || {
+        jakim::fetch_jakim_prayer_times(zone_code, date_start, date_end)
+    }).await {
         Ok(r) => r,
         Err(e) => {
             tracing::error!("[sync_jakim] fetch error for zone {}: {:?}", zone_code, e);
