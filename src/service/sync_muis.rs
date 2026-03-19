@@ -9,7 +9,9 @@ pub async fn sync(conn: &mut PgConnection) {
     let zone_code = "SGP01";
 
     tracing::info!("[sync_muis] fetching prayer times");
-    let records = match muis::fetch_muis_prayer_times().await {
+    let records = match crate::service::retry::with_retries(2, || {
+        muis::fetch_muis_prayer_times()
+    }).await {
         Ok(r) => r,
         Err(e) => {
             tracing::error!("[sync_muis] fetch error: {:?}", e);

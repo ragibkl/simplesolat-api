@@ -31,7 +31,9 @@ pub async fn sync(conn: &mut PgConnection) {
 
     tracing::info!("[sync_kheu] fetching {} to {}", date_start, date_end);
 
-    let records = match kheu::fetch_kheu_prayer_times(date_start, date_end).await {
+    let records = match crate::service::retry::with_retries(2, || {
+        kheu::fetch_kheu_prayer_times(date_start, date_end)
+    }).await {
         Ok(r) => r,
         Err(e) => {
             tracing::error!("[sync_kheu] fetch error: {:?}", e);
