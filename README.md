@@ -8,7 +8,7 @@
 
 ## Features
 
-- **581 zones** across 4 countries (MY, SG, ID, BN)
+- **582 zones** across 4 countries (MY, SG, ID, BN)
 - **7 prayer times** — Imsak, Fajr, Syuruk, Dhuhr, Asr, Maghrib, Isha
 - **Unix timestamps** — timezone-aware (UTC+7/+8/+9)
 - **Auto-sync** — daily/weekly sync from official sources
@@ -78,7 +78,7 @@ Returns all zones with `zone`, `country`, `state`, and `location` fields.
 
 ### `GET /health`
 
-Returns `{"service": "simplesolat-api", "status": "ok"}`.
+Returns `{"service": "simplesolat-api", "status": "ok", "db": "connected"}`. Returns HTTP 503 if the database is unavailable.
 
 ### Zone Codes
 
@@ -103,29 +103,38 @@ services:
       POSTGRES_DB: simplesolat_db
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d simplesolat_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   simplesolat-api:
     image: ghcr.io/ragibkl/simplesolat-api:latest
     environment:
       DATABASE_URL: postgres://user:password@postgres/simplesolat_db
-      # MUIS_API_KEY: <optional, for Singapore data>
+      # MUIS_API_KEY: <optional, get one at https://data.gov.sg for Singapore data>
     ports:
       - 3000:3000
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   simplesolat-sync:
     image: ghcr.io/ragibkl/simplesolat-api:latest
     command: ["simplesolat-api", "sync", "--loop", "6h"]
     environment:
       DATABASE_URL: postgres://user:password@postgres/simplesolat_db
-      # MUIS_API_KEY: <optional, for Singapore data>
+      # MUIS_API_KEY: <optional, get one at https://data.gov.sg for Singapore data>
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   pgdata:
 ```
+
+> **Note:** The first sync fetches data from all 4 upstream sources. JAKIM, MUIS, and KHEU complete in a few minutes, but EQuran (517 Indonesian zones) takes ~20 minutes. You can sync individual sources if needed: `simplesolat-api sync jakim`.
 
 ### CLI Usage
 
