@@ -187,6 +187,69 @@ cargo run
 
 ---
 
+## Data Source Coverage
+
+### Integrated (official data, served via API)
+
+| Country | Authority | Source | Zones | Sync |
+|---------|-----------|--------|-------|------|
+| Malaysia | JAKIM | [e-solat.gov.my](https://www.e-solat.gov.my) | 60 | Daily 3 AM |
+| Singapore | MUIS | [data.gov.sg](https://data.gov.sg) CKAN API | 1 | Daily 4 AM |
+| Indonesia | Kemenag | [equran.id](https://equran.id) (wrapper) | 517 | Weekly Mon 5 AM |
+| Brunei | KHEU / MORA | [mora.gov.bn](https://www.mora.gov.bn) SharePoint | 4 | Daily 5 AM |
+
+### Official sources to investigate (potential future integration)
+
+| Country | Authority | Source | Notes |
+|---------|-----------|--------|-------|
+| Bangladesh | Islamic Foundation | [islamicfoundation.gov.bd](https://islamicfoundation.gov.bd) | Publishes district-level schedules, check if scrapeable |
+| Turkey | Diyanet | [awqatsalah.diyanet.gov.tr](https://awqatsalah.diyanet.gov.tr) | Has REST API, heavily rate-limited. Currently calculated on mobile. |
+| UAE | IACAD | [iacad.gov.ae](https://www.iacad.gov.ae/en/open-data/prayer-time-open-data) | Open data portal. Currently calculated on mobile. |
+| Morocco | Habous Ministry | [habous.gov.ma](https://habous.gov.ma) | Unofficial GitHub scraper exists |
+
+### Worldwide coverage (calculation on mobile via adhan-js)
+
+For countries without official API sources, the [mobile app](https://github.com/ragibkl/simplesolat) calculates prayer times client-side using [adhan-js](https://github.com/batoulapps/adhan-js) with region-appropriate methods.
+
+**High confidence** — well-defined official method, supported by adhan-js:
+
+| Country | Method | Fajr / Isha | Notes |
+|---------|--------|-------------|-------|
+| Saudi Arabia | Umm Al-Qura University | 18.5° / 90min | Official govt standard, used by Haramain |
+| Egypt | Egyptian General Authority of Survey | 19.5° / 17.5° | Widely used across Africa |
+| Qatar | Qatar | 18° / 90min | |
+| Kuwait | Kuwait | 18° / 17.5° | |
+| Iran | Geophysics Institute Tehran | 17.7° / 14° | |
+| US / Canada | ISNA | 15° / 15° | |
+
+**Moderate confidence** — named method, not verified against local authority:
+
+| Country | Method | Fajr / Isha | Notes |
+|---------|--------|-------------|-------|
+| Turkey | Diyanet | 18° / 17° | Pending official API integration |
+| UAE | Dubai | 18.2° / 18.2° | Pending official API integration |
+| Jordan | Jordan | 18° / 18° | |
+| Algeria | Algerian Ministry | 18° / 17° | |
+| Tunisia | Tunisia | 18° / 18° | |
+| France | UOIF | 12° / 12° | |
+| Pakistan | Karachi | 18° / 18° | Multiple methods used regionally |
+| Russia | Russia | 16° / 15° | Regional variation |
+
+**Low confidence** — no documented official method, best guess:
+
+| Country | Best guess | Notes |
+|---------|-----------|-------|
+| Thailand | MWL or JAKIM-like (20°/18°) | CICOT is official body but method undocumented |
+| Philippines | MWL (18°/17°) | NCMF announces Ramadan dates but no prayer times method |
+| India | Karachi or MWL | No single authority, varies by region |
+| Bangladesh | Karachi (assumed) | Islamic Foundation publishes times but angles undocumented |
+| Oman, Bahrain, Yemen, Iraq | MWL (assumed) | Gulf states, no documented methods found |
+| Libya, Sudan, Somalia | Egyptian or MWL (assumed) | No documented methods found |
+| Maldives | MWL (assumed) | No documented method |
+| All other countries | Muslim World League | Default fallback |
+
+---
+
 ## Related Projects
 
 - [simplesolat](https://github.com/ragibkl/simplesolat) — Android app on Google Play Store
