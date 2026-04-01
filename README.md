@@ -8,7 +8,7 @@
 
 ## Features
 
-- **582 zones** across 4 countries (MY, SG, ID, BN)
+- **594 zones** across 5 countries (MY, SG, ID, BN, LK)
 - **7 prayer times** — Imsak, Fajr, Syuruk, Dhuhr, Asr, Maghrib, Isha
 - **Unix timestamps** — timezone-aware (UTC+7/+8/+9)
 - **Auto-sync** — daily/weekly sync from official sources
@@ -22,6 +22,7 @@
 | Singapore | [MUIS via data.gov.sg](https://data.gov.sg) | 1 zone |
 | Indonesia | [EQuran.id](https://equran.id) (wraps Kemenag) | 517 zones |
 | Brunei | [KHEU / MORA](https://www.mora.gov.bn) | 4 zones (with minute offsets) |
+| Sri Lanka | [ACJU](https://www.acju.lk) (static data) | 13 zones |
 
 ---
 
@@ -86,6 +87,7 @@ Returns `{"service": "simplesolat-api", "status": "ok", "db": "connected"}`. Ret
 - **Singapore** — `SGP01`
 - **Indonesia** — 3-letter province + 2-digit: `ACH01` (Aceh), `JTM38` (Jawa Timur), `DKI02` (Jakarta)
 - **Brunei** — `BRN01` (Brunei-Muara), `BRN02` (Tutong), `BRN03` (Belait), `BRN04` (Temburong)
+- **Sri Lanka** — `LK01`-`LK13` (ACJU official zones, e.g. LK01 = Colombo/Gampaha/Kalutara)
 
 Full zone list: [data/zones.yaml](./data/zones.yaml)
 
@@ -151,6 +153,7 @@ simplesolat-api sync jakim
 simplesolat-api sync muis
 simplesolat-api sync equran
 simplesolat-api sync kheu
+simplesolat-api sync acju
 
 # Sync in loop mode (for docker-compose)
 simplesolat-api sync --loop 6h
@@ -197,6 +200,7 @@ cargo run
 | Singapore | MUIS | [data.gov.sg](https://data.gov.sg) CKAN API | 1 | Daily 4 AM |
 | Indonesia | Kemenag | [equran.id](https://equran.id) (wrapper) | 517 | Weekly Mon 5 AM |
 | Brunei | KHEU / MORA | [mora.gov.bn](https://www.mora.gov.bn) SharePoint | 4 | Daily 5 AM |
+| Sri Lanka | ACJU | Static JSON from [thani-sh/prayer-time-lk](https://github.com/thani-sh/prayer-time-lk) (MIT) | 13 | Daily 6 AM |
 
 ### Official sources to investigate (potential future integration)
 

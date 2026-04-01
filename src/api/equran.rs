@@ -60,6 +60,10 @@ pub async fn fetch_equran_prayer_times(
         .send()
         .await?;
 
+    if response.status() == reqwest::StatusCode::NOT_FOUND {
+        // 404 means no data for this month/year — not a transient error, return empty
+        return Ok(Vec::new());
+    }
     if !response.status().is_success() {
         return Err(format!("EQuran.id API returned status: {}", response.status()).into());
     }
