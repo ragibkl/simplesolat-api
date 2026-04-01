@@ -74,6 +74,12 @@ pub async fn sync(conn: &mut PgConnection) {
                 }
             };
 
+            // Empty month means no more data available (e.g. 2027 not published yet)
+            if records.is_empty() {
+                tracing::info!("[sync_equran] no data for zone {}, {}-{:02}, stopping", zone.zone_code, year, month);
+                break;
+            }
+
             let prayer_times: Vec<UpsertPrayerTime> = records
                 .iter()
                 .filter(|r| {

@@ -51,6 +51,7 @@ impl UpsertZone {
                 // WITA (UTC+8): Kalimantan, Sulawesi, Bali, Nusa Tenggara, Gorontalo
                 _ => chrono_tz::Asia::Makassar,
             },
+            "LK" => chrono_tz::Asia::Colombo, // UTC+5:30
             _ => chrono_tz::Asia::Kuala_Lumpur, // MY, SG, BN are all UTC+8
         }
     }

@@ -2959,3 +2959,69 @@ zones:
     country: BN
     state: Temburong
     location: Daerah Temburong
+
+  # Sri Lanka (13 zones, matching ACJU official zones)
+  - code: LK01
+    country: LK
+    state: Western
+    location: Colombo, Gampaha, Kalutara
+
+  - code: LK02
+    country: LK
+    state: Northern
+    location: Jaffna, Nallur
+
+  - code: LK03
+    country: LK
+    state: Northern
+    location: Mullaitivu, Kilinochchi, Vavuniya
+
+  - code: LK04
+    country: LK
+    state: Northern
+    location: Mannar, Puttalam
+
+  - code: LK05
+    country: LK
+    state: North Central
+    location: Anuradhapura, Polonnaruwa
+
+  - code: LK06
+    country: LK
+    state: North Western
+    location: Kurunegala
+
+  - code: LK07
+    country: LK
+    state: Central
+    location: Kandy, Matale, Nuwara Eliya
+
+  - code: LK08
+    country: LK
+    state: Eastern
+    location: Batticaloa, Ampara
+
+  - code: LK09
+    country: LK
+    state: Eastern
+    location: Trincomalee
+
+  - code: LK10
+    country: LK
+    state: Uva
+    location: Badulla, Monaragala
+
+  - code: LK11
+    country: LK
+    state: Sabaragamuwa
+    location: Ratnapura, Kegalle
+
+  - code: LK12
+    country: LK
+    state: Southern
+    location: Galle, Matara
+
+  - code: LK13
+    country: LK
+    state: Southern
+    location: Hambantota

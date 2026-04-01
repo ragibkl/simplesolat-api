@@ -21,7 +21,7 @@ enum Commands {
     Serve,
     /// Sync prayer times data from upstream sources
     Sync {
-        /// Source to sync: jakim, muis, equran, kheu (omit for all)
+        /// Source to sync: jakim, muis, equran, kheu, acju (omit for all)
         source: Option<String>,
         /// Run sync in a loop with the given interval (e.g. 6h, 30m, 1d)
         #[arg(long)]
@@ -65,6 +65,10 @@ async fn run_sync(source: &Option<String>, conn: &mut diesel::PgConnection) {
             tracing::info!("Sync prayer times data from KHEU");
             service::sync_kheu::sync(conn).await;
         }
+        Some("acju") => {
+            tracing::info!("Sync prayer times data from ACJU (Sri Lanka)");
+            service::sync_acju::sync(conn).await;
+        }
         None => {
             tracing::info!("Sync prayer times data from Jakim");
             service::sync_jakim::sync(conn).await;
@@ -77,10 +81,13 @@ async fn run_sync(source: &Option<String>, conn: &mut diesel::PgConnection) {
 
             tracing::info!("Sync prayer times data from KHEU");
             service::sync_kheu::sync(conn).await;
+
+            tracing::info!("Sync prayer times data from ACJU (Sri Lanka)");
+            service::sync_acju::sync(conn).await;
         }
         Some(other) => {
             tracing::error!(
-                "Unknown source: {}. Use 'jakim', 'muis', 'equran', 'kheu', or omit for all.",
+                "Unknown source: {}. Use 'jakim', 'muis', 'equran', 'kheu', 'acju', or omit for all.",
                 other
             );
             std::process::exit(1);
