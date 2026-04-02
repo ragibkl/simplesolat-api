@@ -34,7 +34,7 @@ async fn sync_zones(
 }
 
 /// Sync prayer times for a single zone from the data repo.
-/// Fetches all needed months in parallel, then upserts sequentially.
+/// Sequential month-by-month fetch. Stops on first empty month (no more data available).
 async fn sync_zone_prayer_times(
     client: &reqwest::Client,
     conn: &mut PgConnection,
@@ -51,7 +51,7 @@ async fn sync_zone_prayer_times(
     };
 
     let now = Utc::now().date_naive();
-    let cursor = match last {
+    let mut cursor = match last {
         Some(ref last) => {
             let next = last.date + chrono::Duration::days(1);
             NaiveDate::from_ymd_opt(next.year(), next.month(), 1)
@@ -61,80 +61,58 @@ async fn sync_zone_prayer_times(
             .expect("invalid current year start"),
     };
 
-    if cursor > end {
-        return;
-    }
+    while cursor <= end {
+        let year = cursor.year();
+        let month = cursor.month();
 
-    // Collect all months to fetch
-    let mut months_to_fetch = Vec::new();
-    let mut c = cursor;
-    while c <= end {
-        months_to_fetch.push((c.year(), c.month()));
-        c = add_month(c);
-    }
-
-    // Fetch all months in parallel
-    let mut handles = Vec::new();
-    for (year, month) in &months_to_fetch {
-        let client = client.clone();
-        let country = country_code.to_string();
-        let zone_code = zone.zone_code.clone();
-        let y = *year;
-        let m = *month;
-        handles.push(tokio::spawn(async move {
-            let result = data_repo::fetch_prayer_times(&client, &country, &zone_code, y, m).await;
-            (y, m, result)
-        }));
-    }
-
-    // Collect results in order
-    let mut all_records = Vec::new();
-    for handle in handles {
-        let (year, month, result) = match handle.await {
+        let records = match data_repo::fetch_prayer_times(
+            client,
+            country_code,
+            &zone.zone_code,
+            year,
+            month,
+        )
+        .await
+        {
             Ok(r) => r,
-            Err(e) => {
-                tracing::error!("[sync] task error for {}: {:?}", zone.zone_code, e);
-                continue;
-            }
-        };
-        match result {
-            Ok(records) if records.is_empty() => {
-                // No data for this month — expected for future months
-            }
-            Ok(records) => {
-                all_records.extend(records);
-            }
             Err(e) => {
                 tracing::error!(
                     "[sync] fetch error for {} {}-{:02}: {:?}",
                     zone.zone_code, year, month, e
                 );
+                break;
+            }
+        };
+
+        // Empty month means no more data available
+        if records.is_empty() {
+            break;
+        }
+
+        let prayer_times: Vec<prayer_times::UpsertPrayerTime> = records
+            .iter()
+            .filter(|r| {
+                if let Some(ref last) = last {
+                    r.date > last.date
+                } else {
+                    true
+                }
+            })
+            .map(|r| prayer_times::to_upsert(&zone.zone_code, r))
+            .collect();
+
+        if !prayer_times.is_empty() {
+            tracing::info!(
+                "[sync] upserting {} records for {}",
+                prayer_times.len(),
+                zone.zone_code
+            );
+            if let Err(e) = upsert_prayer_times(conn, &prayer_times) {
+                tracing::error!("[sync] db error upserting for {}: {}", zone.zone_code, e);
             }
         }
-    }
 
-    // Filter and upsert
-    let prayer_times: Vec<prayer_times::UpsertPrayerTime> = all_records
-        .iter()
-        .filter(|r| {
-            if let Some(ref last) = last {
-                r.date > last.date
-            } else {
-                true
-            }
-        })
-        .map(|r| prayer_times::to_upsert(&zone.zone_code, r))
-        .collect();
-
-    if !prayer_times.is_empty() {
-        tracing::info!(
-            "[sync] upserting {} records for {}",
-            prayer_times.len(),
-            zone.zone_code
-        );
-        if let Err(e) = upsert_prayer_times(conn, &prayer_times) {
-            tracing::error!("[sync] db error upserting for {}: {}", zone.zone_code, e);
-        }
+        cursor = add_month(cursor);
     }
 }
 
