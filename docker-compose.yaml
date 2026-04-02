@@ -21,14 +21,13 @@ services:
     depends_on:
       - postgres
 
-  simplesolat-sync:
-    build: .
-    command: ["sync", "--loop", "6h"]
-    environment:
-      DATABASE_URL: postgres://user:password@postgres/simplesolat_db
-      MUIS_API_KEY: ${MUIS_API_KEY:-}
-    depends_on:
-      - postgres
+  # simplesolat-sync:
+  #   build: .
+  #   command: ["sync", "--loop", "6h"]
+  #   environment:
+  #     DATABASE_URL: postgres://user:password@postgres/simplesolat_db
+  #   depends_on:
+  #     - postgres
 
 volumes:
   postgres_data:

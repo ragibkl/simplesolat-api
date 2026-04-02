@@ -42,9 +42,6 @@ RUN apk add openssl libgcc libstdc++ libpq
 # set default logging, can be overridden
 ENV RUST_LOG=info
 
-# copy data
-COPY data /app/data
-
 # copy binary
 COPY --from=builder /code/simplesolat-api/target/release/simplesolat-api /usr/local/bin/simplesolat-api
 
