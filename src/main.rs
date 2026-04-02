@@ -19,10 +19,11 @@ struct Cli {
 enum Commands {
     /// Start the API server
     Serve,
-    /// Sync prayer times data from upstream sources
+    /// Sync prayer times data from simplesolat-data repo
     Sync {
-        /// Source to sync: jakim, muis, equran, kheu, acju (omit for all)
-        source: Option<String>,
+        /// Country code to sync (e.g. MY, SG, ID, BN, LK). Omit for all.
+        #[arg(long)]
+        country: Option<String>,
         /// Run sync in a loop with the given interval (e.g. 6h, 30m, 1d)
         #[arg(long)]
         r#loop: Option<String>,
@@ -45,52 +46,15 @@ fn parse_duration(s: &str) -> Result<Duration, String> {
     }
 }
 
-async fn run_sync(source: &Option<String>, conn: &mut diesel::PgConnection) {
-    service::zones::upsert_zones_from_data(conn);
-
-    match source.as_deref() {
-        Some("jakim") => {
-            tracing::info!("Sync prayer times data from Jakim");
-            service::sync_jakim::sync(conn).await;
-        }
-        Some("muis") => {
-            tracing::info!("Sync prayer times data from MUIS");
-            service::sync_muis::sync(conn).await;
-        }
-        Some("equran") => {
-            tracing::info!("Sync prayer times data from EQuran.id");
-            service::sync_equran::sync(conn).await;
-        }
-        Some("kheu") => {
-            tracing::info!("Sync prayer times data from KHEU");
-            service::sync_kheu::sync(conn).await;
-        }
-        Some("acju") => {
-            tracing::info!("Sync prayer times data from ACJU (Sri Lanka)");
-            service::sync_acju::sync(conn).await;
+async fn run_sync(country: &Option<String>, conn: &mut diesel::PgConnection) {
+    match country {
+        Some(code) => {
+            tracing::info!("syncing country: {}", code);
+            service::sync::sync_country(conn, code).await;
         }
         None => {
-            tracing::info!("Sync prayer times data from Jakim");
-            service::sync_jakim::sync(conn).await;
-
-            tracing::info!("Sync prayer times data from MUIS");
-            service::sync_muis::sync(conn).await;
-
-            tracing::info!("Sync prayer times data from EQuran.id");
-            service::sync_equran::sync(conn).await;
-
-            tracing::info!("Sync prayer times data from KHEU");
-            service::sync_kheu::sync(conn).await;
-
-            tracing::info!("Sync prayer times data from ACJU (Sri Lanka)");
-            service::sync_acju::sync(conn).await;
-        }
-        Some(other) => {
-            tracing::error!(
-                "Unknown source: {}. Use 'jakim', 'muis', 'equran', 'kheu', 'acju', or omit for all.",
-                other
-            );
-            std::process::exit(1);
+            tracing::info!("syncing all countries");
+            service::sync::sync_all(conn).await;
         }
     }
 }
@@ -117,13 +81,13 @@ async fn main() {
                 .expect("PORT must be a valid number");
 
             let addr = SocketAddr::from(([0, 0, 0, 0], port));
-            tracing::info!("Starting server on {}", addr);
+            tracing::info!("starting server on {}", addr);
 
             let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
             axum::serve(listener, router).await.unwrap();
         }
         Some(Commands::Sync {
-            ref source,
+            ref country,
             ref r#loop,
         }) => {
             let db_pool = connect_db();
@@ -132,18 +96,18 @@ async fn main() {
             match r#loop {
                 Some(interval_str) => {
                     let interval = parse_duration(interval_str).unwrap_or_else(|e| {
-                        tracing::error!("Invalid loop interval: {}", e);
+                        tracing::error!("invalid loop interval: {}", e);
                         std::process::exit(1);
                     });
-                    tracing::info!("Running sync in loop mode (interval: {}s)", interval.as_secs());
+                    tracing::info!("running sync in loop mode (interval: {}s)", interval.as_secs());
                     loop {
-                        run_sync(source, &mut conn).await;
-                        tracing::info!("Sleeping for {}s until next sync...", interval.as_secs());
+                        run_sync(country, &mut conn).await;
+                        tracing::info!("sleeping for {}s until next sync...", interval.as_secs());
                         tokio::time::sleep(interval).await;
                     }
                 }
                 None => {
-                    run_sync(source, &mut conn).await;
+                    run_sync(country, &mut conn).await;
                 }
             }
         }

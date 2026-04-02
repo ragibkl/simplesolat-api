@@ -32,193 +32,19 @@ pub struct UpsertPrayerTime {
     pub isha: NaiveTime,
 }
 
-impl From<&crate::api::jakim::JakimPrayerTime> for UpsertPrayerTime {
-    fn from(r: &crate::api::jakim::JakimPrayerTime) -> Self {
-        Self {
-            zone_code: r.zone_code.to_string(),
-            date: r.date,
-            imsak: r.imsak,
-            fajr: r.fajr,
-            syuruk: r.syuruk,
-            dhuhr: r.dhuhr,
-            asr: r.asr,
-            maghrib: r.maghrib,
-            isha: r.isha,
-        }
-    }
-}
-
-impl From<&crate::api::muis::MuisPrayerTime> for UpsertPrayerTime {
-    fn from(r: &crate::api::muis::MuisPrayerTime) -> Self {
-        Self {
-            zone_code: r.zone_code.to_string(),
-            date: r.date,
-            imsak: r.imsak,
-            fajr: r.subuh,
-            syuruk: r.syuruk,
-            dhuhr: r.zohor,
-            asr: r.asar,
-            maghrib: r.maghrib,
-            isha: r.isyak,
-        }
-    }
-}
-
-impl From<&crate::api::equran::EquranPrayerTime> for UpsertPrayerTime {
-    fn from(r: &crate::api::equran::EquranPrayerTime) -> Self {
-        Self {
-            zone_code: r.zone_code.to_string(),
-            date: r.tanggal_lengkap,
-            imsak: r.imsak,
-            fajr: r.subuh,
-            syuruk: r.terbit,
-            dhuhr: r.dzuhur,
-            asr: r.ashar,
-            maghrib: r.maghrib,
-            isha: r.isya,
-        }
-    }
-}
-
-impl From<&crate::api::acju::AcjuPrayerTime> for UpsertPrayerTime {
-    fn from(r: &crate::api::acju::AcjuPrayerTime) -> Self {
-        Self {
-            zone_code: r.zone_code.to_string(),
-            date: r.date,
-            imsak: r.imsak,
-            fajr: r.fajr,
-            syuruk: r.sunrise,
-            dhuhr: r.dhuhr,
-            asr: r.asr,
-            maghrib: r.maghrib,
-            isha: r.isha,
-        }
-    }
-}
-
-impl From<&crate::api::kheu::KheuPrayerTime> for UpsertPrayerTime {
-    fn from(r: &crate::api::kheu::KheuPrayerTime) -> Self {
-        Self {
-            zone_code: r.zone_code.to_string(),
-            date: r.date,
-            imsak: r.imsak,
-            fajr: r.suboh,
-            syuruk: r.syuruk,
-            dhuhr: r.zohor,
-            asr: r.asar,
-            maghrib: r.maghrib,
-            isha: r.isyak,
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use chrono::NaiveTime;
-
-    fn time(h: u32, m: u32) -> NaiveTime {
-        NaiveTime::from_hms_opt(h, m, 0).unwrap()
-    }
-
-    fn date() -> NaiveDate {
-        NaiveDate::from_ymd_opt(2026, 3, 19).unwrap()
-    }
-
-    #[test]
-    fn test_from_jakim() {
-        use crate::api::jakim::JakimPrayerTime;
-        let src = JakimPrayerTime {
-            zone_code: "SGR01".to_string(),
-            date: date(),
-            imsak: time(6, 0), fajr: time(6, 10), syuruk: time(7, 16),
-            dhuhr: time(13, 24), asr: time(16, 29), maghrib: time(19, 26), isha: time(20, 35),
-        };
-        let dst = UpsertPrayerTime::from(&src);
-        assert_eq!(dst.zone_code, "SGR01");
-        assert_eq!(dst.date, date());
-        assert_eq!(dst.imsak, time(6, 0));
-        assert_eq!(dst.fajr, time(6, 10));
-        assert_eq!(dst.syuruk, time(7, 16));
-        assert_eq!(dst.dhuhr, time(13, 24));
-        assert_eq!(dst.asr, time(16, 29));
-        assert_eq!(dst.maghrib, time(19, 26));
-        assert_eq!(dst.isha, time(20, 35));
-    }
-
-    #[test]
-    fn test_from_muis() {
-        use crate::api::muis::MuisPrayerTime;
-        let src = MuisPrayerTime {
-            zone_code: "SGP01".to_string(),
-            date: date(),
-            imsak: time(5, 34), subuh: time(5, 44), syuruk: time(7, 7),
-            zohor: time(13, 10), asar: time(16, 34), maghrib: time(19, 10), isyak: time(20, 25),
-        };
-        let dst = UpsertPrayerTime::from(&src);
-        assert_eq!(dst.zone_code, "SGP01");
-        assert_eq!(dst.fajr, time(5, 44));   // subuh -> fajr
-        assert_eq!(dst.dhuhr, time(13, 10));  // zohor -> dhuhr
-        assert_eq!(dst.asr, time(16, 34));    // asar -> asr
-        assert_eq!(dst.isha, time(20, 25));   // isyak -> isha
-    }
-
-    #[test]
-    fn test_from_equran() {
-        use crate::api::equran::EquranPrayerTime;
-        let src = EquranPrayerTime {
-            zone_code: "ACH01".to_string(),
-            tanggal_lengkap: date(),
-            imsak: time(5, 24), subuh: time(5, 34), terbit: time(6, 46),
-            dzuhur: time(12, 53), ashar: time(16, 10), maghrib: time(18, 54), isya: time(20, 2),
-        };
-        let dst = UpsertPrayerTime::from(&src);
-        assert_eq!(dst.zone_code, "ACH01");
-        assert_eq!(dst.date, date());         // tanggal_lengkap -> date
-        assert_eq!(dst.fajr, time(5, 34));    // subuh -> fajr
-        assert_eq!(dst.syuruk, time(6, 46));  // terbit -> syuruk
-        assert_eq!(dst.dhuhr, time(12, 53));  // dzuhur -> dhuhr
-        assert_eq!(dst.asr, time(16, 10));    // ashar -> asr
-        assert_eq!(dst.isha, time(20, 2));    // isya -> isha
-    }
-
-    #[test]
-    fn test_from_acju() {
-        use crate::api::acju::AcjuPrayerTime;
-        // Values from acju.colombo.json Jan 1: [300, 382, 735, 937, 1087, 1161]
-        // 300min=5:00, 382min=6:22, 735min=12:15, 937min=15:37, 1087min=18:07, 1161min=19:21
-        let src = AcjuPrayerTime {
-            zone_code: "LK01".to_string(),
-            date: NaiveDate::from_ymd_opt(2026, 1, 1).unwrap(),
-            imsak: time(4, 50), fajr: time(5, 0), sunrise: time(6, 22),
-            dhuhr: time(12, 15), asr: time(15, 37), maghrib: time(18, 7), isha: time(19, 21),
-        };
-        let dst = UpsertPrayerTime::from(&src);
-        assert_eq!(dst.zone_code, "LK01");
-        assert_eq!(dst.fajr, time(5, 0));
-        assert_eq!(dst.syuruk, time(6, 22));  // sunrise -> syuruk
-        assert_eq!(dst.dhuhr, time(12, 15));
-        assert_eq!(dst.asr, time(15, 37));
-        assert_eq!(dst.maghrib, time(18, 7));
-        assert_eq!(dst.isha, time(19, 21));
-        assert_eq!(dst.imsak, time(4, 50));   // fajr - 10 min
-    }
-
-    #[test]
-    fn test_from_kheu() {
-        use crate::api::kheu::KheuPrayerTime;
-        let src = KheuPrayerTime {
-            zone_code: "BRN01".to_string(),
-            date: date(),
-            imsak: time(5, 4), suboh: time(5, 14), syuruk: time(6, 32),
-            zohor: time(12, 34), asar: time(15, 50), maghrib: time(18, 33), isyak: time(19, 43),
-        };
-        let dst = UpsertPrayerTime::from(&src);
-        assert_eq!(dst.zone_code, "BRN01");
-        assert_eq!(dst.fajr, time(5, 14));    // suboh -> fajr
-        assert_eq!(dst.dhuhr, time(12, 34));  // zohor -> dhuhr
-        assert_eq!(dst.asr, time(15, 50));    // asar -> asr
-        assert_eq!(dst.isha, time(19, 43));   // isyak -> isha
+/// Convert data repo prayer time record to DB upsert format.
+/// Zone code is not in the record — must be provided separately.
+pub fn to_upsert(zone_code: &str, r: &crate::api::data_repo::PrayerTimeRecord) -> UpsertPrayerTime {
+    UpsertPrayerTime {
+        zone_code: zone_code.to_string(),
+        date: r.date,
+        imsak: r.imsak,
+        fajr: r.fajr,
+        syuruk: r.syuruk,
+        dhuhr: r.dhuhr,
+        asr: r.asr,
+        maghrib: r.maghrib,
+        isha: r.isha,
     }
 }
 
@@ -265,4 +91,29 @@ pub fn select_prayer_times_for_zone(
         .select(SelectPrayerTime::as_select())
         .order(prayer_times::date.asc())
         .load(conn)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_to_upsert() {
+        use crate::api::data_repo::PrayerTimeRecord;
+        let record = PrayerTimeRecord {
+            date: NaiveDate::from_ymd_opt(2026, 4, 1).unwrap(),
+            imsak: NaiveTime::from_hms_opt(5, 55, 0).unwrap(),
+            fajr: NaiveTime::from_hms_opt(6, 5, 0).unwrap(),
+            syuruk: NaiveTime::from_hms_opt(7, 12, 0).unwrap(),
+            dhuhr: NaiveTime::from_hms_opt(13, 20, 0).unwrap(),
+            asr: NaiveTime::from_hms_opt(16, 22, 0).unwrap(),
+            maghrib: NaiveTime::from_hms_opt(19, 23, 0).unwrap(),
+            isha: NaiveTime::from_hms_opt(20, 33, 0).unwrap(),
+        };
+        let upsert = to_upsert("SGR01", &record);
+        assert_eq!(upsert.zone_code, "SGR01");
+        assert_eq!(upsert.date, record.date);
+        assert_eq!(upsert.fajr, record.fajr);
+        assert_eq!(upsert.maghrib, record.maghrib);
+    }
 }

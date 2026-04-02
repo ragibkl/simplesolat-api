@@ -27,6 +27,8 @@ diesel::table! {
         created_at -> Timestamp,
         #[max_length = 2]
         country -> Varchar,
+        #[max_length = 40]
+        timezone -> Varchar,
     }
 }
 

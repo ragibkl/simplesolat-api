@@ -1,3 +1,4 @@
+pub mod countries;
 pub mod health;
 pub mod prayer_times;
 pub mod zones;
@@ -7,7 +8,12 @@ use tower_http::cors::CorsLayer;
 
 use crate::{
     models::db::{DbPool, connect_db},
-    routes::{health::health_check, prayer_times::get_prayer_times, zones::get_zones},
+    routes::{
+        countries::get_countries,
+        health::health_check,
+        prayer_times::get_prayer_times,
+        zones::get_zones,
+    },
 };
 
 #[derive(Clone)]
@@ -25,9 +31,10 @@ pub async fn create_app_router() -> Router {
     // Build the router
     Router::new()
         .route("/health", get(health_check))
+        .route("/countries", get(get_countries))
         .route("/prayer-times/by-zone/{zone}", get(get_prayer_times))
         .route("/zones", get(get_zones))
-        .layer(CorsLayer::permissive()) // TODO: Configure CORS properly for production
+        .layer(CorsLayer::permissive())
         .with_state(state)
 }
 
