@@ -1,22 +1,27 @@
-use axum::Json;
+use axum::{Json, extract::State};
 use serde::Serialize;
 
-use crate::api::data_repo;
+use crate::{
+    models::countries::{UpsertCountry, select_countries},
+    routes::{AppError, AppState},
+};
 
 #[derive(Debug, Serialize)]
 pub struct Country {
     pub code: String,
     pub name: String,
+    pub source: String,
     pub geojson: String,
     pub mapping: String,
     pub shape_property: String,
 }
 
-impl From<&data_repo::Country> for Country {
-    fn from(c: &data_repo::Country) -> Self {
+impl From<&UpsertCountry> for Country {
+    fn from(c: &UpsertCountry) -> Self {
         Self {
             code: c.code.clone(),
             name: c.name.clone(),
+            source: c.source.clone(),
             geojson: c.geojson.clone(),
             mapping: c.mapping.clone(),
             shape_property: c.shape_property.clone(),
@@ -29,16 +34,14 @@ pub struct CountriesResponse {
     pub data: Vec<Country>,
 }
 
-pub async fn get_countries() -> Result<Json<CountriesResponse>, crate::routes::AppError> {
-    let client = reqwest::Client::builder()
-        .timeout(std::time::Duration::from_secs(10))
-        .build()
-        .map_err(|e| crate::routes::AppError::Internal(e.to_string()))?;
+pub async fn get_countries(
+    State(state): State<AppState>,
+) -> Result<Json<CountriesResponse>, AppError> {
+    tracing::info!("fetching countries");
 
-    let countries = data_repo::fetch_countries(&client)
-        .await
-        .map_err(|e| crate::routes::AppError::Internal(format!("failed to fetch countries: {}", e)))?;
+    let mut conn = state.db_pool.get()?;
 
+    let countries = select_countries(&mut conn)?;
     let response = CountriesResponse {
         data: countries.iter().map(|c| c.into()).collect(),
     };
