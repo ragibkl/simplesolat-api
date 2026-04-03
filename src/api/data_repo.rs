@@ -1,7 +1,7 @@
 use chrono::{NaiveDate, NaiveTime};
 use serde::{self, Deserialize, Deserializer};
 
-const BASE_URL: &str = "https://ragibkl.github.io/simplesolat-data";
+const BASE_URL: &str = "https://simplesolat-data.netlify.app";
 
 /// Deserialize HH:MM or HH:MM:SS time strings.
 fn deserialize_time<'de, D>(deserializer: D) -> Result<NaiveTime, D::Error>
@@ -19,6 +19,7 @@ where
 pub struct Country {
     pub code: String,
     pub name: String,
+    pub source: String,
     pub geojson: String,
     pub mapping: String,
     pub shape_property: String,

@@ -4,6 +4,7 @@ use diesel::PgConnection;
 use crate::{
     api::data_repo,
     models::{
+        countries,
         prayer_times::{self, select_last_prayer_time_for_zone, upsert_prayer_times},
         zones::{self, UpsertZone},
     },
@@ -161,6 +162,13 @@ pub async fn sync_all(conn: &mut PgConnection) {
     };
 
     tracing::info!("[sync] found {} countries", countries.len());
+
+    // Upsert countries to DB
+    for country in &countries {
+        if let Err(e) = countries::upsert_country(conn, country.into()) {
+            tracing::error!("[sync] db error upserting country {}: {}", country.code, e);
+        }
+    }
 
     for country in &countries {
         sync_country(conn, &country.code).await;
