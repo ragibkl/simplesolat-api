@@ -2,21 +2,26 @@ use axum::{
     Json,
     extract::{Path, Query, State},
 };
-use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
+use chrono::{NaiveDate, NaiveDateTime, TimeDelta, TimeZone};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    models::{
-        prayer_times::{SelectPrayerTime, select_prayer_times_for_zone},
-        zones::select_zone_by_code,
-    },
+    api::data_repo::PrayerTimeRecord,
     routes::{AppError, AppState},
 };
 
-fn datetime_to_timestamp(date: NaiveDate, time: NaiveTime, tz: chrono_tz::Tz) -> i64 {
+fn datetime_to_timestamp(date: NaiveDate, time: chrono::NaiveTime, tz: chrono_tz::Tz) -> i64 {
     let naive_datetime = NaiveDateTime::new(date, time);
-    let dt = naive_datetime.and_local_timezone(tz).unwrap();
-    dt.timestamp()
+    // Ambiguous (DST fall-back): take the earlier instant. Nonexistent (DST
+    // spring-forward gap): shift forward by an hour, as clocks do.
+    tz.from_local_datetime(&naive_datetime)
+        .earliest()
+        .or_else(|| {
+            tz.from_local_datetime(&(naive_datetime + TimeDelta::hours(1)))
+                .earliest()
+        })
+        .expect("local time exists after skipping a DST gap")
+        .timestamp()
 }
 
 // Types matching your mobile app's expected format
@@ -34,10 +39,10 @@ pub struct WaktuSolat {
 }
 
 impl WaktuSolat {
-    fn from_prayer_time(value: &SelectPrayerTime, tz: chrono_tz::Tz) -> Self {
+    fn from_record(value: &PrayerTimeRecord, zone: &str, tz: chrono_tz::Tz) -> Self {
         Self {
             date: value.date,
-            zone: value.zone_code.to_string(),
+            zone: zone.to_string(),
             imsak: datetime_to_timestamp(value.date, value.imsak, tz),
             fajr: datetime_to_timestamp(value.date, value.fajr, tz),
             syuruk: datetime_to_timestamp(value.date, value.syuruk, tz),
@@ -86,20 +91,66 @@ pub async fn get_prayer_times(
         params.to
     );
 
-    // Get a connection from the pool
-    let mut conn = state.db_pool.get()?;
-
-    // Look up zone to determine timezone
-    let zone_info = select_zone_by_code(&mut conn, &zone)?;
-    let zone_info = zone_info.ok_or_else(|| AppError::NotFound(
+    // Look up zone to determine country and timezone
+    let index = state.index().await?;
+    let zone_info = index.zone(&zone).ok_or_else(|| AppError::NotFound(
         format!("Zone '{}' not found", zone),
     ))?;
-    let tz = zone_info.timezone();
+    let tz = zone_info.tz();
 
-    let pts = select_prayer_times_for_zone(&mut conn, &zone, params.from, params.to)?;
+    let records = state
+        .store
+        .prayer_times(zone_info, params.from, params.to)
+        .await
+        .map_err(|e| {
+            tracing::error!("fetching prayer times for zone {} failed: {}", zone, e);
+            AppError::BadGateway("failed to fetch prayer times from data source".to_string())
+        })?;
+
     let response = WaktuSolatResponse {
-        data: pts.iter().map(|pt| WaktuSolat::from_prayer_time(pt, tz)).collect(),
+        data: records
+            .iter()
+            .map(|r| WaktuSolat::from_record(r, &zone_info.code, tz))
+            .collect(),
     };
 
     Ok(Json(response))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::NaiveTime;
+
+    fn date(y: i32, m: u32, d: u32) -> NaiveDate {
+        NaiveDate::from_ymd_opt(y, m, d).unwrap()
+    }
+
+    fn time(h: u32, m: u32) -> NaiveTime {
+        NaiveTime::from_hms_opt(h, m, 0).unwrap()
+    }
+
+    #[test]
+    fn test_timestamp_kuala_lumpur() {
+        // 2026-09-27 05:54 MYT (UTC+8) = 2026-09-26 21:54 UTC
+        let ts = datetime_to_timestamp(date(2026, 9, 27), time(5, 54), chrono_tz::Asia::Kuala_Lumpur);
+        assert_eq!(ts, 1790459640);
+    }
+
+    #[test]
+    fn test_timestamp_dst_gap_shifts_forward() {
+        // Europe/Sarajevo skips 02:00-03:00 on 2026-03-29.
+        let tz = chrono_tz::Europe::Sarajevo;
+        assert_eq!(
+            datetime_to_timestamp(date(2026, 3, 29), time(2, 30), tz),
+            datetime_to_timestamp(date(2026, 3, 29), time(3, 30), tz),
+        );
+    }
+
+    #[test]
+    fn test_timestamp_dst_overlap_takes_earlier() {
+        // Europe/Sarajevo repeats 02:00-03:00 on 2026-10-25; the first 02:30 is CEST (UTC+2).
+        let ts = datetime_to_timestamp(date(2026, 10, 25), time(2, 30), chrono_tz::Europe::Sarajevo);
+        assert_eq!(ts, 1792888200);
+    }
 }

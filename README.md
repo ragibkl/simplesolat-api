@@ -1,22 +1,27 @@
 # Simplesolat API
 
-> REST API for prayer times — Malaysia, Singapore, Indonesia, Brunei, and Sri Lanka
+> REST API for prayer times, served from the [simplesolat-data](https://github.com/ragibkl/simplesolat-data) CDN
 
 **Live API:** https://api.simplesolat.com
+
+The simplesolat app reads the CDN directly since 1.1.0. This API stays up for
+1.0.x installs, which call `/prayer-times/by-zone/:zone`. It has no database:
+it fetches the CDN's static files on demand and caches them in memory. The
+Postgres-backed version with sync workers is tagged `v1-postgres`.
 
 ---
 
 ## Features
 
-- **594 zones** across 5 countries (MY, SG, ID, BN, LK)
+- **Every zone in simplesolat-data** (9 countries, 1,658 zones as of 2026-09)
 - **7 prayer times** — Imsak, Fajr, Syuruk, Dhuhr, Asr, Maghrib, Isha
-- **Unix timestamps** — timezone-aware (UTC+5:30 to UTC+9)
-- **Auto-sync** — syncs from [simplesolat-data](https://github.com/ragibkl/simplesolat-data) repo
-- Built with **Rust + Axum + PostgreSQL**
+- **Unix timestamps** — timezone-aware, per zone
+- **Stateless** — reads the CDN on demand, no database or sync jobs
+- Built with **Rust + Axum**
 
 ## Data Source
 
-Prayer times are sourced from [simplesolat-data](https://github.com/ragibkl/simplesolat-data), a centralized data repo that aggregates official prayer times from:
+Prayer times are sourced from [simplesolat-data](https://github.com/ragibkl/simplesolat-data), a centralized data repo that aggregates official prayer times, including from:
 
 | Country | Authority | Zones |
 |---------|-----------|-------|
@@ -95,7 +100,16 @@ Returns supported countries with geojson and mapping file URLs (for mobile zone 
 
 ### `GET /health`
 
-Returns `{"service": "simplesolat-api", "status": "ok", "db": "connected"}`. Returns HTTP 503 if the database is unavailable.
+Returns `{"service": "simplesolat-api", "status": "ok"}`. Liveness only: it doesn't touch the CDN, so probes never cause fetches.
+
+### Caching
+
+Everything is fetched on demand by the request that needs it; there are no background fetches.
+
+- **Zones and countries** (`countries.yaml`, `zones/*.yaml`): cached for `ZONES_CACHE_TTL`.
+- **Prayer times**: one cache entry per month file. Published months are cached for `PRAYER_TIMES_CACHE_TTL`; months not published yet (404) for the shorter `PRAYER_TIMES_MISSING_CACHE_TTL`, so new months show up sooner.
+- **CDN failures** are never cached. If a refetch fails, the last good copy is served (zones indefinitely, months for up to 30 days); only data that was never fetched returns a 502.
+- Concurrent requests for the same file share one fetch, and a request fetches all the months it needs in parallel.
 
 ### Zone Codes
 
@@ -113,44 +127,11 @@ Zone definitions are managed in [simplesolat-data](https://github.com/ragibkl/si
 
 ```yaml
 services:
-  postgres:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: simplesolat_db
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d simplesolat_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   simplesolat-api:
     image: ghcr.io/ragibkl/simplesolat-api:latest
-    environment:
-      DATABASE_URL: postgres://user:password@postgres/simplesolat_db
     ports:
       - 3000:3000
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  simplesolat-sync:
-    image: ghcr.io/ragibkl/simplesolat-api:latest
-    command: ["simplesolat-api", "sync", "--loop", "6h"]
-    environment:
-      DATABASE_URL: postgres://user:password@postgres/simplesolat_db
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-volumes:
-  pgdata:
 ```
-
-> **Note:** The first sync fetches all prayer times from GitHub Pages (~8 minutes for all 594 zones). Subsequent syncs are fast — only new data is fetched.
 
 ### CLI Usage
 
@@ -158,42 +139,34 @@ volumes:
 # Start API server (default)
 simplesolat-api
 simplesolat-api serve
-
-# Sync all countries (one-shot)
-simplesolat-api sync
-
-# Sync a specific country
-simplesolat-api sync --country MY
-
-# Sync in loop mode (for docker-compose)
-simplesolat-api sync --loop 6h
 ```
 
 ### Environment Variables
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `DATABASE_URL` | Yes | — | PostgreSQL connection string |
+| `DATA_BASE_URL` | No | `https://simplesolat-data.netlify.app` | simplesolat-data CDN |
+| `ZONES_CACHE_TTL` | No | `1d` | Cache time for zones and countries |
+| `PRAYER_TIMES_CACHE_TTL` | No | `1d` | Cache time for a published month |
+| `PRAYER_TIMES_MISSING_CACHE_TTL` | No | `1h` | Cache time for a month not published yet |
 | `PORT` | No | `3000` | API server port |
 | `RUST_LOG` | No | `info` | Log level |
+
+Durations take `s`, `m`, `h` or `d` (e.g. `30m`).
 
 ---
 
 ## Development
 
 ```bash
-# Start postgres
-docker-compose up -d postgres
-
-# Copy env
-cp sample.env .env
-# Edit .env with your values
-
-# Run sync
-cargo run -- sync
-
 # Start API
 cargo run
+
+# Unit tests (the data_repo ones hit the live CDN)
+cargo test --lib
+
+# E2E tests, against the API running on localhost:3000
+cargo test --test e2e
 ```
 
 ---

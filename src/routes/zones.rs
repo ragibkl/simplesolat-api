@@ -2,7 +2,7 @@ use axum::{Json, extract::{Query, State}};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    models::zones::{UpsertZone, select_zones, select_zones_by_country},
+    api::data_repo,
     routes::{AppError, AppState},
 };
 
@@ -15,14 +15,14 @@ pub struct Zone {
     pub timezone: String,
 }
 
-impl From<&UpsertZone> for Zone {
-    fn from(value: &UpsertZone) -> Self {
+impl From<&data_repo::Zone> for Zone {
+    fn from(value: &data_repo::Zone) -> Self {
         Self {
-            zone: value.zone_code.to_string(),
-            country: value.country.to_string(),
-            state: value.state.to_string(),
-            location: value.location.to_string(),
-            timezone: value.timezone.to_string(),
+            zone: value.code.clone(),
+            country: value.country.clone(),
+            state: value.state.clone(),
+            location: value.location.clone(),
+            timezone: value.timezone.clone(),
         }
     }
 }
@@ -43,16 +43,13 @@ pub async fn get_zones(
 ) -> Result<Json<ZonesResponse>, AppError> {
     tracing::info!("fetching zones");
 
-    let mut conn = state.db_pool.get()?;
+    let index = state.index().await?;
+    let data = index
+        .zones
+        .iter()
+        .filter(|z| params.country.as_ref().is_none_or(|c| &z.country == c))
+        .map(|z| z.into())
+        .collect();
 
-    let zones = match params.country {
-        Some(ref country) => select_zones_by_country(&mut conn, country)?,
-        None => select_zones(&mut conn)?,
-    };
-
-    let response = ZonesResponse {
-        data: zones.iter().map(|z| z.into()).collect(),
-    };
-
-    Ok(Json(response))
+    Ok(Json(ZonesResponse { data }))
 }

@@ -6,12 +6,6 @@ WORKDIR /code/simplesolat-api
 # install system dependencies
 RUN apk add build-base \
     cargo \
-    clang \
-    clang-dev \
-    clang-libs \
-    linux-headers \
-    libpq \
-    libpq-dev \
     openssl \
     openssl-dev \
     rust
@@ -23,7 +17,6 @@ RUN cargo build --release
 RUN rm -rf ./src/
 
 # copy code files
-COPY /migrations/ ./migrations/
 COPY /src/ ./src/
 
 # build code
@@ -37,7 +30,7 @@ FROM alpine:3.22 AS prod
 WORKDIR /app
 
 # install runtime dependencies
-RUN apk add openssl libgcc libstdc++ libpq
+RUN apk add ca-certificates openssl libgcc libstdc++
 
 # set default logging, can be overridden
 ENV RUST_LOG=info

@@ -1,15 +1,16 @@
 use std::net::SocketAddr;
+use std::sync::Arc;
 use std::time::Duration;
 
 use clap::{Parser, Subcommand};
-use simplesolat_api::models::db::connect_db;
+use simplesolat_api::api::data_repo::DEFAULT_BASE_URL;
 use simplesolat_api::routes::create_app_router;
-use simplesolat_api::service;
+use simplesolat_api::store::DataStore;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Parser)]
 #[command(name = "simplesolat-api")]
-#[command(about = "SimpleSolat prayer times API and sync tool")]
+#[command(about = "SimpleSolat prayer times API, served from the simplesolat-data CDN")]
 struct Cli {
     #[command(subcommand)]
     command: Option<Commands>,
@@ -17,17 +18,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Start the API server
+    /// Start the API server (the default)
     Serve,
-    /// Sync prayer times data from simplesolat-data repo
-    Sync {
-        /// Country code to sync (e.g. MY, SG, ID, BN, LK). Omit for all.
-        #[arg(long)]
-        country: Option<String>,
-        /// Run sync in a loop with the given interval (e.g. 6h, 30m, 1d)
-        #[arg(long)]
-        r#loop: Option<String>,
-    },
 }
 
 fn parse_duration(s: &str) -> Result<Duration, String> {
@@ -46,17 +38,9 @@ fn parse_duration(s: &str) -> Result<Duration, String> {
     }
 }
 
-async fn run_sync(country: &Option<String>, conn: &mut diesel::PgConnection) {
-    match country {
-        Some(code) => {
-            tracing::info!("syncing country: {}", code);
-            service::sync::sync_country(conn, code).await;
-        }
-        None => {
-            tracing::info!("syncing all countries");
-            service::sync::sync_all(conn).await;
-        }
-    }
+fn env_duration(name: &str, default: &str) -> Duration {
+    let value = std::env::var(name).unwrap_or_else(|_| default.to_string());
+    parse_duration(&value).unwrap_or_else(|e| panic!("{} must be a duration like 1h: {}", name, e))
 }
 
 #[tokio::main]
@@ -73,7 +57,20 @@ async fn main() {
 
     match cli.command {
         None | Some(Commands::Serve) => {
-            let router = create_app_router().await;
+            let base_url =
+                std::env::var("DATA_BASE_URL").unwrap_or_else(|_| DEFAULT_BASE_URL.to_string());
+            let index_ttl = env_duration("ZONES_CACHE_TTL", "1d");
+            let month_ttl = env_duration("PRAYER_TIMES_CACHE_TTL", "1d");
+            let missing_ttl = env_duration("PRAYER_TIMES_MISSING_CACHE_TTL", "1h");
+            tracing::info!(
+                "data source {} (cached: zones {}s, prayer times {}s, unpublished months {}s)",
+                base_url,
+                index_ttl.as_secs(),
+                month_ttl.as_secs(),
+                missing_ttl.as_secs()
+            );
+            let store = Arc::new(DataStore::new(base_url, index_ttl, month_ttl, missing_ttl));
+            let router = create_app_router(store);
 
             let port = std::env::var("PORT")
                 .unwrap_or_else(|_| "3000".to_string())
@@ -85,31 +82,6 @@ async fn main() {
 
             let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
             axum::serve(listener, router).await.unwrap();
-        }
-        Some(Commands::Sync {
-            ref country,
-            ref r#loop,
-        }) => {
-            let db_pool = connect_db();
-            let mut conn = db_pool.get().unwrap();
-
-            match r#loop {
-                Some(interval_str) => {
-                    let interval = parse_duration(interval_str).unwrap_or_else(|e| {
-                        tracing::error!("invalid loop interval: {}", e);
-                        std::process::exit(1);
-                    });
-                    tracing::info!("running sync in loop mode (interval: {}s)", interval.as_secs());
-                    loop {
-                        run_sync(country, &mut conn).await;
-                        tracing::info!("sleeping for {}s until next sync...", interval.as_secs());
-                        tokio::time::sleep(interval).await;
-                    }
-                }
-                None => {
-                    run_sync(country, &mut conn).await;
-                }
-            }
         }
     }
 }

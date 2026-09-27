@@ -1,1 +1,0 @@
-ALTER TABLE zones ADD COLUMN timezone VARCHAR(40) NOT NULL DEFAULT 'Asia/Kuala_Lumpur';
