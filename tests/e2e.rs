@@ -1,9 +1,8 @@
 //! E2E tests for the simplesolat API.
 //!
-//! These tests require a running instance of the API at localhost:3000
-//! with synced data. Run with:
-//!   docker compose up -d
-//!   docker compose exec simplesolat-api sync
+//! These tests require a running instance of the API at localhost:3000,
+//! which reads from the live simplesolat-data CDN. Run with:
+//!   docker compose up -d --build   (or: cargo run)
 //!   cargo test --test e2e
 
 use serde::Deserialize;
@@ -176,7 +175,7 @@ async fn test_prayer_times_sgp01_date_range() {
 }
 
 #[tokio::test]
-async fn test_prayer_times_unknown_zone_returns_empty() {
+async fn test_prayer_times_unknown_zone_returns_404() {
     let resp = reqwest::get(format!(
         "{}/prayer-times/by-zone/FAKE99?from=2026-01-01&to=2026-01-01",
         BASE_URL
@@ -184,7 +183,19 @@ async fn test_prayer_times_unknown_zone_returns_empty() {
     .await
     .expect("Failed to connect to API");
 
+    assert_eq!(resp.status(), reqwest::StatusCode::NOT_FOUND);
+}
+
+#[tokio::test]
+async fn test_prayer_times_unpublished_months_return_empty() {
+    let resp = reqwest::get(format!(
+        "{}/prayer-times/by-zone/SGR01?from=2099-01-01&to=2099-01-31",
+        BASE_URL
+    ))
+    .await
+    .expect("Failed to connect to API");
+
     assert!(resp.status().is_success());
     let body: WaktuSolatResponse = resp.json().await.unwrap();
-    assert!(body.data.is_empty(), "Unknown zone should return empty data");
+    assert!(body.data.is_empty(), "Months not published yet should return empty data");
 }

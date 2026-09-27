@@ -1,7 +1,9 @@
 use chrono::{NaiveDate, NaiveTime};
-use serde::{self, Deserialize, Deserializer};
+use serde::{self, Deserialize, Deserializer, Serialize};
 
-const BASE_URL: &str = "https://simplesolat-data.netlify.app";
+pub const DEFAULT_BASE_URL: &str = "https://simplesolat-data.netlify.app";
+
+pub type Error = Box<dyn std::error::Error + Send + Sync>;
 
 /// Deserialize HH:MM or HH:MM:SS time strings.
 fn deserialize_time<'de, D>(deserializer: D) -> Result<NaiveTime, D::Error>
@@ -15,7 +17,7 @@ where
 }
 
 /// Country definition from countries.yaml
-#[derive(Debug, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Country {
     pub code: String,
     pub name: String,
@@ -40,13 +42,20 @@ pub struct Zone {
     pub timezone: String,
 }
 
+impl Zone {
+    /// Returns the IANA timezone for this zone.
+    pub fn tz(&self) -> chrono_tz::Tz {
+        self.timezone.parse().unwrap_or(chrono_tz::Asia::Kuala_Lumpur)
+    }
+}
+
 #[derive(Debug, Deserialize)]
 struct ZonesConfig {
     zones: Vec<Zone>,
 }
 
 /// Prayer time record from prayer-times/{CC}/{zone}/{year}-{month}.json
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct PrayerTimeRecord {
     pub date: NaiveDate,
     #[serde(deserialize_with = "deserialize_time")]
@@ -68,8 +77,9 @@ pub struct PrayerTimeRecord {
 /// Fetches countries.yaml from the data repo.
 pub async fn fetch_countries(
     client: &reqwest::Client,
-) -> Result<Vec<Country>, Box<dyn std::error::Error>> {
-    let url = format!("{}/countries.yaml", BASE_URL);
+    base_url: &str,
+) -> Result<Vec<Country>, Error> {
+    let url = format!("{}/countries.yaml", base_url);
     let text = client
         .get(&url)
         .send()
@@ -84,9 +94,10 @@ pub async fn fetch_countries(
 /// Fetches zones/{CC}.yaml from the data repo.
 pub async fn fetch_zones(
     client: &reqwest::Client,
+    base_url: &str,
     country_code: &str,
-) -> Result<Vec<Zone>, Box<dyn std::error::Error>> {
-    let url = format!("{}/zones/{}.yaml", BASE_URL, country_code);
+) -> Result<Vec<Zone>, Error> {
+    let url = format!("{}/zones/{}.yaml", base_url, country_code);
     let response = client.get(&url).send().await?;
     if response.status() == reqwest::StatusCode::NOT_FOUND {
         return Ok(Vec::new());
@@ -100,14 +111,15 @@ pub async fn fetch_zones(
 /// Returns empty vec on 404 (data not available yet).
 pub async fn fetch_prayer_times(
     client: &reqwest::Client,
+    base_url: &str,
     country_code: &str,
     zone_code: &str,
     year: i32,
     month: u32,
-) -> Result<Vec<PrayerTimeRecord>, Box<dyn std::error::Error + Send + Sync>> {
+) -> Result<Vec<PrayerTimeRecord>, Error> {
     let url = format!(
         "{}/prayer-times/{}/{}/{}-{:02}.json",
-        BASE_URL, country_code, zone_code, year, month
+        base_url, country_code, zone_code, year, month
     );
     let response = client.get(&url).send().await?;
     if response.status() == reqwest::StatusCode::NOT_FOUND {
@@ -121,6 +133,8 @@ pub async fn fetch_prayer_times(
 mod tests {
     use super::*;
 
+    const BASE_URL: &str = DEFAULT_BASE_URL;
+
     fn client() -> reqwest::Client {
         reqwest::Client::builder()
             .timeout(std::time::Duration::from_secs(30))
@@ -130,7 +144,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_fetch_countries() {
-        let countries = fetch_countries(&client()).await.unwrap();
+        let countries = fetch_countries(&client(), BASE_URL).await.unwrap();
         assert!(countries.len() >= 5);
         let my = countries.iter().find(|c| c.code == "MY").unwrap();
         assert_eq!(my.name, "Malaysia");
@@ -139,7 +153,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_fetch_zones() {
-        let zones = fetch_zones(&client(), "MY").await.unwrap();
+        let zones = fetch_zones(&client(), BASE_URL, "MY").await.unwrap();
         assert!(zones.len() >= 59);
         let sgr01 = zones.iter().find(|z| z.code == "SGR01").unwrap();
         assert_eq!(sgr01.timezone, "Asia/Kuala_Lumpur");
@@ -147,7 +161,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_fetch_prayer_times() {
-        let records = fetch_prayer_times(&client(), "MY", "SGR01", 2026, 4).await.unwrap();
+        let records = fetch_prayer_times(&client(), BASE_URL, "MY", "SGR01", 2026, 4)
+            .await
+            .unwrap();
         assert_eq!(records.len(), 30); // April has 30 days
         assert_eq!(records[0].date, NaiveDate::from_ymd_opt(2026, 4, 1).unwrap());
         assert!(records[0].fajr < records[0].syuruk);
@@ -156,13 +172,15 @@ mod tests {
 
     #[tokio::test]
     async fn test_fetch_prayer_times_404() {
-        let records = fetch_prayer_times(&client(), "MY", "SGR01", 2099, 1).await.unwrap();
+        let records = fetch_prayer_times(&client(), BASE_URL, "MY", "SGR01", 2099, 1)
+            .await
+            .unwrap();
         assert!(records.is_empty());
     }
 
     #[tokio::test]
     async fn test_fetch_zones_unknown_country() {
-        let zones = fetch_zones(&client(), "XX").await.unwrap();
+        let zones = fetch_zones(&client(), BASE_URL, "XX").await.unwrap();
         assert!(zones.is_empty());
     }
 }
