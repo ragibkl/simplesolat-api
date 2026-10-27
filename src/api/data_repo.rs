@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use chrono::{NaiveDate, NaiveTime};
 use serde::{self, Deserialize, Deserializer, Serialize};
 
@@ -14,6 +16,20 @@ where
     NaiveTime::parse_from_str(&s, "%H:%M")
         .or_else(|_| NaiveTime::parse_from_str(&s, "%H:%M:%S"))
         .map_err(serde::de::Error::custom)
+}
+
+/// Deserialize an optional HH:MM time (absent, null or a time string).
+fn deserialize_opt_time<'de, D>(deserializer: D) -> Result<Option<NaiveTime>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s: Option<String> = Option::deserialize(deserializer)?;
+    s.map(|s| {
+        NaiveTime::parse_from_str(&s, "%H:%M")
+            .or_else(|_| NaiveTime::parse_from_str(&s, "%H:%M:%S"))
+            .map_err(serde::de::Error::custom)
+    })
+    .transpose()
 }
 
 /// Country definition from countries.yaml
@@ -64,6 +80,9 @@ pub struct PrayerTimeRecord {
     pub fajr: NaiveTime,
     #[serde(deserialize_with = "deserialize_time")]
     pub syuruk: NaiveTime,
+    /// Only where the authority publishes it (JAKIM, KHEU, Kemenag).
+    #[serde(default, deserialize_with = "deserialize_opt_time")]
+    pub dhuha: Option<NaiveTime>,
     #[serde(deserialize_with = "deserialize_time")]
     pub dhuhr: NaiveTime,
     #[serde(deserialize_with = "deserialize_time")]
@@ -127,6 +146,31 @@ pub async fn fetch_prayer_times(
     }
     let records: Vec<PrayerTimeRecord> = response.error_for_status()?.json().await?;
     Ok(records)
+}
+
+/// One entry of mappings/{CC}-*.json: a district's zone.
+#[derive(Debug, Deserialize, Clone)]
+pub struct MappingEntry {
+    pub zone: String,
+    pub state: String,
+}
+
+/// Fetches a country's GeoJSON map (the URL from countries.yaml).
+pub async fn fetch_geojson(
+    client: &reqwest::Client,
+    url: &str,
+) -> Result<crate::geo::FeatureCollection, Error> {
+    let bytes = client.get(url).send().await?.error_for_status()?.bytes().await?;
+    Ok(serde_json::from_slice(&bytes)?)
+}
+
+/// Fetches a country's mapping from district (shape property) to zone.
+pub async fn fetch_mapping(
+    client: &reqwest::Client,
+    url: &str,
+) -> Result<HashMap<String, MappingEntry>, Error> {
+    let mapping = client.get(url).send().await?.error_for_status()?.json().await?;
+    Ok(mapping)
 }
 
 #[cfg(test)]

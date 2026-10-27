@@ -1,6 +1,7 @@
 pub mod countries;
 pub mod health;
 pub mod prayer_times;
+pub mod v2;
 pub mod zones;
 
 use std::sync::Arc;
@@ -40,6 +41,7 @@ pub fn create_app_router(store: Arc<DataStore>) -> Router {
         .route("/countries", get(get_countries))
         .route("/prayer-times/by-zone/{zone}", get(get_prayer_times))
         .route("/zones", get(get_zones))
+        .nest("/v2", v2::router())
         .layer(CorsLayer::permissive())
         .with_state(state)
 }
