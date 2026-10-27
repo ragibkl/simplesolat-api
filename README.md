@@ -1,129 +1,169 @@
 # Simplesolat API
 
-> REST API for prayer times, served from the [simplesolat-data](https://github.com/ragibkl/simplesolat-data) CDN
+> Free REST API for official prayer times, served from the open [simplesolat-data](https://github.com/ragibkl/simplesolat-data) dataset
 
 **Live API:** https://api.simplesolat.com
 
-The simplesolat app reads the CDN directly since 1.1.0. This API stays up for
-1.0.x installs, which call `/prayer-times/by-zone/:zone`. It has no database:
-it fetches the CDN's static files on demand and caches them in memory. The
-Postgres-backed version with sync workers is tagged `v1-postgres`.
+Find the prayer zone for a GPS location, then get its official timetable for a
+day, a month or a year. Times are local (`"HH:MM"`, in the zone's timezone),
+straight from each country's religious authority. No key, no sign-up. Use it,
+or run your own copy (below): it's MIT licensed and has no database.
 
 ---
 
-## Features
-
-- **Every zone in simplesolat-data** (9 countries, 1,658 zones as of 2026-09)
-- **7 prayer times** — Imsak, Fajr, Syuruk, Dhuhr, Asr, Maghrib, Isha
-- **Unix timestamps** — timezone-aware, per zone
-- **Stateless** — reads the CDN on demand, no database or sync jobs
-- Built with **Rust + Axum**
-
-## Data Source
-
-Prayer times are sourced from [simplesolat-data](https://github.com/ragibkl/simplesolat-data), a centralized data repo that aggregates official prayer times, including from:
-
-| Country | Authority | Zones |
-|---------|-----------|-------|
-| Malaysia | [JAKIM e-Solat](https://www.e-solat.gov.my) | 60 |
-| Singapore | [MUIS](https://data.gov.sg) | 1 |
-| Indonesia | [Kemenag](https://equran.id) | 517 |
-| Brunei | [KHEU / MORA](https://www.mora.gov.bn) | 4 |
-| Sri Lanka | [ACJU](https://www.acju.lk) | 13 |
-
----
-
-## Quick Start
+## Quick start
 
 ```bash
-# Get prayer times for a zone
-curl "https://api.simplesolat.com/prayer-times/by-zone/SGR01?from=2026-01-01&to=2026-01-31"
+# 1. Which zone am I in?
+curl -X POST https://api.simplesolat.com/v2/zones/by-location \
+  -H "Content-Type: application/json" -d '{"lat": 3.139, "lng": 101.687}'
 
-# List all zones
-curl "https://api.simplesolat.com/zones"
-
-# List zones for a specific country
-curl "https://api.simplesolat.com/zones?country=LK"
-
-# List supported countries
-curl "https://api.simplesolat.com/countries"
-
-# Health check
-curl "https://api.simplesolat.com/health"
+# 2. Today's prayer times for that zone
+curl https://api.simplesolat.com/v2/zones/WLY01/prayer-times/day/2026-10-27
 ```
-
-### Response
 
 ```json
 {
-  "data": [
-    {
-      "date": "2026-01-01",
-      "zone": "SGR01",
-      "imsak": 1735689480,
-      "fajr": 1735689540,
-      "syuruk": 1735693740,
-      "dhuhr": 1735715340,
-      "asr": 1735729740,
-      "maghrib": 1735740540,
-      "isha": 1735745040
-    }
-  ]
+  "zone": "WLY01",
+  "timezone": "Asia/Kuala_Lumpur",
+  "authority": "JAKIM",
+  "data": {
+    "date": "2026-10-27",
+    "imsak": "05:38",
+    "fajr": "05:48",
+    "syuruk": "06:56",
+    "dhuha": "07:21",
+    "dhuhr": "13:00",
+    "asr": "16:19",
+    "maghrib": "18:59",
+    "isha": "20:09"
+  }
 }
 ```
 
-All times are Unix timestamps (seconds) in the zone's local timezone.
+---
+
+## Countries
+
+| Country | Code | Authority | Zones |
+|---------|------|-----------|-------|
+| Malaysia | `MY` | [JAKIM e-Solat](https://www.e-solat.gov.my) | 60 |
+| Singapore | `SG` | [MUIS](https://data.gov.sg) | 1 |
+| Indonesia | `ID` | [Kemenag](https://equran.id) | 517 |
+| Brunei | `BN` | [KHEU / MORA](https://www.mora.gov.bn) | 4 |
+| Sri Lanka | `LK` | [ACJU](https://www.acju.lk) | 13 |
+| United Arab Emirates | `AE` | [AWQAF](https://www.awqaf.gov.ae) | 60 |
+| Turkey | `TR` | [Diyanet](https://namazvakitleri.diyanet.gov.tr) | 865 |
+| Bosnia and Herzegovina | `BA` | [Islamic Community in BiH (Vaktija)](https://vaktija.ba) | 118 |
+| Albania | `AL` | KMSH (Diyanet) | 20 |
+
+`GET /v2/countries` always has the current list. Outside these countries there
+is no official zone (`no_official_zone`); apps usually calculate times locally
+instead (e.g. with [adhan](https://github.com/batoulapps/adhan-js)).
 
 ---
 
-## API Endpoints
+## API v2
 
-### `GET /prayer-times/by-zone/:zone`
+One URL per kind of request, no optional query parameters. All responses are
+JSON; lists come as `{"data": [...]}`, single items as `{"data": {...}}`.
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `zone` | path | Yes | Zone code (e.g. `SGR01`, `SGP01`, `ACH01`, `BRN01`, `LK01`) |
-| `from` | query | Yes | Start date (`YYYY-MM-DD`) |
-| `to` | query | Yes | End date (`YYYY-MM-DD`) |
+### Find the zone for a location
 
-### `GET /zones`
+`POST /v2/zones/by-location` with `{"lat": <-90..90>, "lng": <-180..180>}`
 
-Returns all zones with `zone`, `country`, `state`, `location`, and `timezone` fields.
+```json
+{
+  "data": {
+    "zone": "WLY01",
+    "country": "MY",
+    "state": "W.P. Kuala Lumpur",
+    "location": "Kuala Lumpur, Putrajaya",
+    "timezone": "Asia/Kuala_Lumpur",
+    "authority": "JAKIM",
+    "district": "Kuala Lumpur"
+  }
+}
+```
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `country` | query | No | Filter by country code (e.g. `MY`, `LK`) |
+It's a POST so the location stays out of URLs, caches and logs; the API
+doesn't log it. Lookups use the same district maps as the simplesolat app. The
+first lookup after a restart loads the maps and takes a few seconds.
 
-### `GET /countries`
+### Prayer times for a zone
 
-Returns supported countries with geojson and mapping file URLs (for mobile zone resolution).
+| Endpoint | `data` |
+|----------|--------|
+| `GET /v2/zones/{zone}/prayer-times/day/{YYYY-MM-DD}` | one day (object) |
+| `GET /v2/zones/{zone}/prayer-times/month/{YYYY-MM}` | every day of the month (list) |
+| `GET /v2/zones/{zone}/prayer-times/year/{YYYY}` | every day of the year (list) |
 
-### `GET /health`
+Each day has `date`, `imsak`, `fajr`, `syuruk`, `dhuhr`, `asr`, `maghrib` and
+`isha`, plus `dhuha` where the authority publishes it (Malaysia, Brunei,
+Indonesia). Times are `"HH:MM"`, 24-hour, local to the zone's `timezone`. Days
+the authority hasn't published yet are left out; if none are published the
+response is `no_prayer_times` (404).
 
-Returns `{"service": "simplesolat-api", "status": "ok"}`. Liveness only: it doesn't touch the CDN, so probes never cause fetches.
+### Zones and countries
+
+| Endpoint | Returns |
+|----------|---------|
+| `GET /v2/zones` | every zone |
+| `GET /v2/zones/{zone}` | one zone |
+| `GET /v2/countries` | every country (`code`, `name`, `authority`) |
+| `GET /v2/countries/{country}` | one country |
+| `GET /v2/countries/{country}/zones` | that country's zones |
+
+A zone has `zone`, `country`, `state`, `location`, `timezone` and `authority`.
+Zone codes are unique across countries (`WLY01`, `SGP01`, `DKI02`, `BRN01`...).
+
+### Errors
+
+```json
+{"error": {"code": "zone_not_found", "message": "no zone 'XYZ01'; see /v2/zones"}}
+```
+
+| Code | Status |
+|------|--------|
+| `invalid_date`, `invalid_month`, `invalid_year`, `invalid_location` | 400 |
+| `zone_not_found`, `country_not_found`, `no_official_zone`, `no_prayer_times` | 404 |
+| `data_source_unavailable` | 502: simplesolat-data couldn't be reached; try again |
 
 ### Caching
 
-Everything is fetched on demand by the request that needs it; there are no background fetches.
+Everything is fetched from the simplesolat-data CDN on demand and kept in
+memory; there are no background jobs.
 
-- **Zones and countries** (`countries.yaml`, `zones/*.yaml`): cached for `ZONES_CACHE_TTL`.
-- **Prayer times**: one cache entry per month file. Published months are cached for `PRAYER_TIMES_CACHE_TTL`; months not published yet (404) for the shorter `PRAYER_TIMES_MISSING_CACHE_TTL`, so new months show up sooner.
-- **CDN failures** are never cached. If a refetch fails, the last good copy is served (zones indefinitely, months for up to 30 days); only data that was never fetched returns a 502.
-- Concurrent requests for the same file share one fetch, and a request fetches all the months it needs in parallel.
-
-### Zone Codes
-
-- **Malaysia** — 3-letter state + 2-digit: `SGR01`, `WLY01`, `JHR02`
-- **Singapore** — `SGP01`
-- **Indonesia** — 3-letter province + 2-digit: `ACH01` (Aceh), `JTM38` (Jawa Timur), `DKI02` (Jakarta)
-- **Brunei** — `BRN01` (Brunei-Muara), `BRN02` (Tutong), `BRN03` (Belait), `BRN04` (Temburong)
-- **Sri Lanka** — `LK01`-`LK13` (ACJU official zones, e.g. LK01 = Colombo/Gampaha/Kalutara)
-
-Zone definitions are managed in [simplesolat-data](https://github.com/ragibkl/simplesolat-data).
+- **Zones and countries**: cached for `ZONES_CACHE_TTL`.
+- **District maps** (for `by-location`): loaded together on the first lookup,
+  cached for `ZONES_CACHE_TTL`.
+- **Prayer times**: one cache entry per month file. Published months are cached
+  for `PRAYER_TIMES_CACHE_TTL`; months not published yet for the shorter
+  `PRAYER_TIMES_MISSING_CACHE_TTL`, so new months show up sooner.
+- **CDN failures** are never cached. If a refetch fails, the last good copy is
+  served (zones and maps indefinitely, months for up to 30 days).
 
 ---
 
-## Self-Hosting with Docker Compose
+## API v1 (legacy)
+
+Kept for simplesolat app 1.0.x installs. New code should use v2.
+
+| Endpoint | Returns |
+|----------|---------|
+| `GET /prayer-times/by-zone/{zone}?from=YYYY-MM-DD&to=YYYY-MM-DD` | times as Unix timestamps, up to 750 days |
+| `GET /zones?country=MY` | zones |
+| `GET /countries` | countries with GeoJSON and mapping URLs |
+| `GET /health` | `{"service": "simplesolat-api", "status": "ok"}` (doesn't touch the CDN) |
+
+---
+
+## Run your own copy
+
+The API has no database: it reads the public simplesolat-data CDN (or your own
+copy of it, via `DATA_BASE_URL`). It uses roughly 110 MB of memory with the maps loaded.
+
+### Docker Compose
 
 ```yaml
 services:
@@ -174,7 +214,11 @@ cargo test --test e2e
 ## Related Projects
 
 - [simplesolat-data](https://github.com/ragibkl/simplesolat-data) — Centralized prayer times data repo (zones, mappings, GeoJSON)
-- [simplesolat](https://github.com/ragibkl/simplesolat) — Android app on Google Play Store
+- [simplesolat](https://github.com/ragibkl/simplesolat) — the app (Android and iPhone), [simplesolat.com](https://simplesolat.com)
+
+Found a wrong time or zone? Please open an issue or pull request on
+[simplesolat-data](https://github.com/ragibkl/simplesolat-data): the API only
+serves what's there.
 
 ---
 

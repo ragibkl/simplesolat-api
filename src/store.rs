@@ -11,6 +11,10 @@
 //!   shorter `missing_ttl`, so newly published months show up sooner. Errors
 //!   are never cached: if a refetch fails, the last good copy (kept for
 //!   `STALE_RETENTION`) is served instead.
+//! - Maps (each country's GeoJSON + mapping, for finding the zone of a GPS
+//!   location): loaded together on the first location lookup, kept like the
+//!   zone index (`index_ttl`, last good copy on failure). About 28 MB of
+//!   GeoJSON in all; Turkey's is the largest.
 
 use std::{
     collections::HashMap,
@@ -23,7 +27,8 @@ use futures::{StreamExt, future, stream};
 use moka::{Expiry, future::Cache};
 use tokio::sync::RwLock;
 
-use crate::api::data_repo::{self, Country, Error, PrayerTimeRecord, Zone};
+use crate::api::data_repo::{self, Country, Error, MappingEntry, PrayerTimeRecord, Zone};
+use crate::geo::Shapes;
 
 /// How long a month's last good copy is kept to serve when refetching fails.
 const STALE_RETENTION: Duration = Duration::from_secs(30 * 86400);
@@ -61,6 +66,43 @@ impl Index {
     }
 }
 
+/// One country's map and its district-to-zone mapping.
+struct CountryMap {
+    code: String,
+    shape_property: String,
+    shapes: Shapes,
+    mapping: HashMap<String, MappingEntry>,
+}
+
+pub struct Maps {
+    countries: Vec<CountryMap>,
+}
+
+/// The zone found for a location.
+pub struct Located {
+    pub country: String,
+    pub zone: String,
+    pub state: String,
+    /// The district the point is in (the map's shapeName).
+    pub district: Option<String>,
+}
+
+impl Maps {
+    /// The official zone containing the point, if any.
+    pub fn locate(&self, lat: f64, lng: f64) -> Option<Located> {
+        self.countries.iter().find_map(|c| {
+            let shape = c.shapes.find(lng, lat)?;
+            let entry = c.mapping.get(shape.property(&c.shape_property)?)?;
+            Some(Located {
+                country: c.code.clone(),
+                zone: entry.zone.clone(),
+                state: entry.state.clone(),
+                district: shape.property("shapeName").map(str::to_string),
+            })
+        })
+    }
+}
+
 type MonthKey = (String, String, i32, u32);
 type Month = Arc<Vec<PrayerTimeRecord>>;
 
@@ -81,6 +123,8 @@ pub struct DataStore {
     base_url: String,
     index: Cache<(), Arc<Index>>,
     last_index: RwLock<Option<Arc<Index>>>,
+    maps: Cache<(), Arc<Maps>>,
+    last_maps: RwLock<Option<Arc<Maps>>>,
     months: Cache<MonthKey, Month>,
     stale_months: Cache<MonthKey, Month>,
 }
@@ -102,6 +146,8 @@ impl DataStore {
             base_url: base_url.into().trim_end_matches('/').to_string(),
             index: Cache::builder().max_capacity(1).time_to_live(index_ttl).build(),
             last_index: RwLock::new(None),
+            maps: Cache::builder().max_capacity(1).time_to_live(index_ttl).build(),
+            last_maps: RwLock::new(None),
             months: Cache::builder()
                 .max_capacity(MONTH_CACHE_CAPACITY)
                 .expire_after(MonthExpiry {
@@ -163,6 +209,55 @@ impl DataStore {
             zones.len()
         );
         Ok(Arc::new(Index::new(countries, zones)))
+    }
+
+    /// The maps for finding a location's zone, loading them if they aren't
+    /// cached. If loading fails but an earlier load succeeded, returns that one.
+    pub async fn maps(&self) -> Result<Arc<Maps>, Arc<Error>> {
+        match self.maps.try_get_with((), self.load_maps()).await {
+            Ok(maps) => {
+                *self.last_maps.write().await = Some(maps.clone());
+                Ok(maps)
+            }
+            Err(e) => match self.last_maps.read().await.clone() {
+                Some(stale) => {
+                    tracing::warn!("failed to reload maps, serving the previous ones: {}", e);
+                    Ok(stale)
+                }
+                None => Err(e),
+            },
+        }
+    }
+
+    async fn load_maps(&self) -> Result<Arc<Maps>, Error> {
+        let index = self.index().await.map_err(|e| e.to_string())?;
+        let countries: Vec<Country> = index.countries.clone();
+        let loaded: Vec<Result<CountryMap, Error>> = stream::iter(countries)
+            .map(|country| {
+                let client = self.client.clone();
+                async move {
+                    let (geojson, mapping) = futures::try_join!(
+                        data_repo::fetch_geojson(&client, &country.geojson),
+                        data_repo::fetch_mapping(&client, &country.mapping),
+                    )?;
+                    Ok(CountryMap {
+                        code: country.code,
+                        shape_property: country.shape_property,
+                        shapes: Shapes::from_geojson(geojson),
+                        mapping,
+                    })
+                }
+            })
+            .buffered(ZONE_FETCH_CONCURRENCY)
+            .collect()
+            .await;
+        let countries = loaded.into_iter().collect::<Result<Vec<_>, _>>()?;
+        tracing::info!(
+            "loaded maps for {} countries, {} districts",
+            countries.len(),
+            countries.iter().map(|c| c.shapes.len()).sum::<usize>()
+        );
+        Ok(Arc::new(Maps { countries }))
     }
 
     async fn month(&self, zone: &Zone, year: i32, month: u32) -> Result<Month, Arc<Error>> {
