@@ -1,5 +1,5 @@
 ## builder
-FROM alpine:3.22 AS builder
+FROM alpine:3.24 AS builder
 
 WORKDIR /code/simplesolat-api
 
@@ -25,7 +25,7 @@ RUN cargo build --release
 
 
 ## runtime
-FROM alpine:3.22 AS prod
+FROM alpine:3.24 AS prod
 
 WORKDIR /app
 
