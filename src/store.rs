@@ -78,6 +78,19 @@ pub struct Maps {
     countries: Vec<CountryMap>,
 }
 
+/// About 1, 2 and 4 km, in eight directions (the same as the app).
+const NEARBY_STEPS_DEG: [f64; 3] = [0.01, 0.02, 0.04];
+const DIRECTIONS: [(f64, f64); 8] = [
+    (1.0, 0.0),
+    (-1.0, 0.0),
+    (0.0, 1.0),
+    (0.0, -1.0),
+    (1.0, 1.0),
+    (1.0, -1.0),
+    (-1.0, 1.0),
+    (-1.0, -1.0),
+];
+
 /// The zone found for a location.
 pub struct Located {
     pub country: String,
@@ -88,8 +101,22 @@ pub struct Located {
 }
 
 impl Maps {
-    /// The official zone containing the point, if any.
+    /// The official zone for the point, if any. On a beach, a pier or a
+    /// stilt village the point can sit just outside the district maps
+    /// (Kukup, Pulau Perhentian), so like the app, take the nearest district
+    /// within about 4 km.
     pub fn locate(&self, lat: f64, lng: f64) -> Option<Located> {
+        self.locate_exact(lat, lng).or_else(|| {
+            NEARBY_STEPS_DEG.iter().find_map(|step| {
+                DIRECTIONS
+                    .iter()
+                    .find_map(|(d_lat, d_lng)| self.locate_exact(lat + d_lat * step, lng + d_lng * step))
+            })
+        })
+    }
+
+    /// The official zone whose district contains the point exactly.
+    fn locate_exact(&self, lat: f64, lng: f64) -> Option<Located> {
         self.countries.iter().find_map(|c| {
             let shape = c.shapes.find(lng, lat)?;
             let entry = c.mapping.get(shape.property(&c.shape_property)?)?;

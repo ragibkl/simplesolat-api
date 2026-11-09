@@ -94,7 +94,7 @@ async fn test_zones_contains_sgp01() {
     let sgp = sgp.unwrap();
     assert_eq!(sgp.country, "SG");
     assert_eq!(sgp.state, "Singapore");
-    assert_eq!(sgp.location, "Seluruh Singapura");
+    assert_eq!(sgp.location, "Singapore");
 }
 
 #[tokio::test]
@@ -233,6 +233,21 @@ async fn test_v2_zone_by_location() {
     assert_eq!(body["data"]["zone"], "WLY01");
     assert_eq!(body["data"]["timezone"], "Asia/Kuala_Lumpur");
     assert_eq!(body["data"]["authority"], "JAKIM");
+}
+
+#[tokio::test]
+async fn test_v2_coastal_points_take_the_nearest_district() {
+    // Just off the district maps: Kukup's stilt village and Pulau Perhentian.
+    for (lat, lng, zone) in [(1.325, 103.44, "JHR03"), (5.91, 102.74, "TRG02")] {
+        let (status, body) = v2(
+            reqwest::Method::POST,
+            "/v2/zones/by-location",
+            Some(serde_json::json!({"lat": lat, "lng": lng})),
+        )
+        .await;
+        assert_eq!(status, 200, "{lat},{lng}");
+        assert_eq!(body["data"]["zone"], zone, "{lat},{lng}");
+    }
 }
 
 #[tokio::test]
