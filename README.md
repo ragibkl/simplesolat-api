@@ -104,6 +104,50 @@ Indonesia). Times are `"HH:MM"`, 24-hour, local to the zone's `timezone`. Days
 the authority hasn't published yet are left out; if none are published the
 response is `no_prayer_times` (404).
 
+### Prayer times for any location
+
+`POST /v2/prayer-times/by-location` with `{"lat": ..., "lng": ..., "date": "YYYY-MM-DD"}`
+(or `"month": "YYYY-MM"` instead of `date`). Works anywhere in the world, the
+same way the simplesolat app does:
+
+- In an official zone: the authority's timetable, `"source": "official"`,
+  with `zone`, `location`, `authority` (same times as the zone endpoints).
+- Anywhere else: calculated, `"source": "calculated"`, `zone` null, with the
+  `method` used: the country's method from simplesolat-data's `methods.yaml`
+  (default Muslim World League), Shafi'i Asr, imsak 10 minutes before fajr, no
+  dhuha. The country comes from the world map in simplesolat-data (Natural
+  Earth), the time zone from the coordinates.
+
+```json
+{
+  "source": "calculated",
+  "zone": null,
+  "country": "NZ",
+  "country_name": "New Zealand",
+  "timezone": "Pacific/Auckland",
+  "method": {"code": "MuslimWorldLeague", "label": "Muslim World League",
+             "fajr_angle": 18.0, "isha_angle": 17.0, "asr": "shafi"},
+  "data": [
+    {"date": "2026-11-10", "utc_offset": "+13:00", "imsak": "04:18", "fajr": "04:28",
+     "syuruk": "06:07", "dhuhr": "13:06", "asr": "16:53", "maghrib": "20:03", "isha": "21:36"}
+  ]
+}
+```
+
+`data` is always a list (one day for `date`). Times are local `"HH:MM"` in
+`timezone`; `utc_offset` is that zone's offset on the day, so date + time +
+offset is an exact moment even across daylight saving changes.
+`POST /v2/zones/by-location` is unchanged: it still answers
+`no_official_zone` (404) outside the official zones.
+
+`GET /v2/methods` lists the calculation methods, the default, and which
+countries use which method.
+
+Calculated times come from [salah](https://crates.io/crates/salah), a port of
+adhan (the app's library), and match the app's to the minute; the one
+exception is Tehran's method (Iran), whose maghrib angle salah ignores
+(maghrib comes out at sunset).
+
 ### Zones and countries
 
 | Endpoint | Returns |

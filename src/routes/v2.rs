@@ -35,6 +35,8 @@ pub fn router() -> Router<AppState> {
     Router::new()
         .route("/zones", get(get_zones))
         .route("/zones/by-location", post(get_zone_by_location))
+        .route("/prayer-times/by-location", post(get_prayer_times_by_location))
+        .route("/methods", get(get_methods))
         .route("/zones/{zone}", get(get_zone))
         .route("/zones/{zone}/prayer-times/day/{date}", get(get_day))
         .route("/zones/{zone}/prayer-times/month/{month}", get(get_month))
@@ -491,4 +493,225 @@ mod tests {
         assert_eq!(parse_date("2026-10-25").unwrap(), d(2026, 10, 25));
         assert_eq!(parse_date("2026-02-30").unwrap_err().code, "invalid_date");
     }
+}
+
+// Prayer times for any location: official where a zone covers it, calculated
+// (like the app) everywhere else.
+
+static TZ_FINDER: std::sync::LazyLock<tzf_rs::DefaultFinder> =
+    std::sync::LazyLock::new(tzf_rs::DefaultFinder::new);
+
+#[derive(Debug, Deserialize)]
+pub struct TimesAtLocation {
+    pub lat: f64,
+    pub lng: f64,
+    pub date: Option<String>,
+    pub month: Option<String>,
+}
+
+/// A day's times plus the zone's UTC offset that day ("+08:00"), so an app
+/// can turn date + HH:MM into an exact moment, daylight saving included.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DayAtLocation {
+    pub date: NaiveDate,
+    pub utc_offset: String,
+    #[serde(flatten)]
+    pub times: PrayerTimesNoDate,
+}
+
+/// PrayerTimes without the date (it's on DayAtLocation).
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PrayerTimesNoDate {
+    pub imsak: String,
+    pub fajr: String,
+    pub syuruk: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dhuha: Option<String>,
+    pub dhuhr: String,
+    pub asr: String,
+    pub maghrib: String,
+    pub isha: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MethodInfo {
+    pub code: String,
+    pub label: String,
+    pub fajr_angle: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub isha_angle: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub isha_interval: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maghrib_angle: Option<f64>,
+    pub asr: String,
+}
+
+impl MethodInfo {
+    fn new(code: &str, def: &crate::calc::MethodDef) -> Self {
+        Self {
+            code: code.to_string(),
+            label: def.label.clone(),
+            fajr_angle: def.fajr_angle,
+            isha_angle: def.isha_angle,
+            isha_interval: def.isha_interval,
+            maghrib_angle: def.maghrib_angle,
+            asr: "shafi".to_string(),
+        }
+    }
+}
+
+/// `source` is "official" (zone, authority) or "calculated" (method).
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PrayerTimesAtLocation {
+    pub source: String,
+    pub zone: Option<String>,
+    pub country: Option<String>,
+    pub country_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
+    pub timezone: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authority: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method: Option<MethodInfo>,
+    pub data: Vec<DayAtLocation>,
+}
+
+fn day_at(times: PrayerTimes, tz: chrono_tz::Tz) -> DayAtLocation {
+    DayAtLocation {
+        date: times.date,
+        utc_offset: crate::calc::utc_offset(tz, times.date),
+        times: PrayerTimesNoDate {
+            imsak: times.imsak,
+            fajr: times.fajr,
+            syuruk: times.syuruk,
+            dhuha: times.dhuha,
+            dhuhr: times.dhuhr,
+            asr: times.asr,
+            maghrib: times.maghrib,
+            isha: times.isha,
+        },
+    }
+}
+
+/// POST so the location stays out of URLs and logs, like by-location.
+async fn get_prayer_times_by_location(
+    State(state): State<AppState>,
+    body: Result<Json<TimesAtLocation>, JsonRejection>,
+) -> Result<Json<PrayerTimesAtLocation>, ApiError> {
+    let bad = || {
+        ApiError::bad_request(
+            "invalid_request",
+            "send JSON like {\"lat\": 3.139, \"lng\": 101.687, \"date\": \"2026-11-10\"} or with \"month\": \"2026-11\"",
+        )
+    };
+    let Json(req) = body.map_err(|_| bad())?;
+    if !(-90.0..=90.0).contains(&req.lat) || !(-180.0..=180.0).contains(&req.lng) {
+        return Err(ApiError::bad_request(
+            "invalid_location",
+            "lat must be -90 to 90 and lng -180 to 180",
+        ));
+    }
+    let (from, to) = match (&req.date, &req.month) {
+        (Some(d), None) => {
+            let d = parse_date(d)?;
+            (d, d)
+        }
+        (None, Some(m)) => parse_month(m)?,
+        _ => return Err(bad()),
+    };
+
+    let index = index(&state).await?;
+    let maps = state.store.maps().await.map_err(|e| {
+        tracing::error!("failed to load maps: {}", e);
+        ApiError::data_source()
+    })?;
+
+    if let Some(located) = maps.locate(req.lat, req.lng) {
+        let zone = find_zone(&index, &located.zone)?;
+        let tz = zone.tz();
+        let days = times(&state, zone, from, to).await?;
+        let country = find_country(&index, &zone.country).ok();
+        return Ok(Json(PrayerTimesAtLocation {
+            source: "official".to_string(),
+            zone: Some(zone.code.clone()),
+            country: Some(zone.country.clone()),
+            country_name: country.map(|c| c.name.clone()),
+            state: Some(located.state),
+            location: Some(zone.location.clone()),
+            timezone: zone.timezone.clone(),
+            authority: Some(authority(&index, &zone.country)),
+            method: None,
+            data: days.into_iter().map(|d| day_at(d, tz)).collect(),
+        }));
+    }
+
+    let country = maps.country(req.lat, req.lng);
+    let (code, def) = maps.methods.method_for(country.as_ref().map(|c| c.code.as_str()));
+    let tz_name = TZ_FINDER.get_tz_name(req.lng, req.lat);
+    let tz: chrono_tz::Tz = tz_name.parse().unwrap_or(chrono_tz::UTC);
+    let mut data = Vec::new();
+    let mut date = from;
+    while date <= to {
+        let day = crate::calc::calculate(req.lat, req.lng, date, tz, def).ok_or_else(|| {
+            ApiError::new(
+                StatusCode::UNPROCESSABLE_ENTITY,
+                "cannot_calculate",
+                "the prayer times can't be calculated for this location and date",
+            )
+        })?;
+        data.push(DayAtLocation {
+            date: day.date,
+            utc_offset: day.utc_offset,
+            times: PrayerTimesNoDate {
+                imsak: hhmm(day.imsak),
+                fajr: hhmm(day.fajr),
+                syuruk: hhmm(day.syuruk),
+                dhuha: None,
+                dhuhr: hhmm(day.dhuhr),
+                asr: hhmm(day.asr),
+                maghrib: hhmm(day.maghrib),
+                isha: hhmm(day.isha),
+            },
+        });
+        date = date.succ_opt().expect("valid date");
+    }
+    Ok(Json(PrayerTimesAtLocation {
+        source: "calculated".to_string(),
+        zone: None,
+        country: country.as_ref().map(|c| c.code.clone()),
+        country_name: country.map(|c| c.name),
+        state: None,
+        location: None,
+        timezone: tz.name().to_string(),
+        authority: None,
+        method: Some(MethodInfo::new(code, def)),
+        data,
+    }))
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MethodsList {
+    pub default: String,
+    pub methods: Vec<MethodInfo>,
+    /// Country (ISO 3166-1 alpha-2) -> method code, where not the default.
+    pub countries: std::collections::BTreeMap<String, String>,
+}
+
+async fn get_methods(State(state): State<AppState>) -> Result<Json<MethodsList>, ApiError> {
+    let maps = state.store.maps().await.map_err(|e| {
+        tracing::error!("failed to load maps: {}", e);
+        ApiError::data_source()
+    })?;
+    let m = &maps.methods;
+    let mut methods: Vec<MethodInfo> = m.methods.iter().map(|(k, v)| MethodInfo::new(k, v)).collect();
+    methods.sort_by(|a, b| a.code.cmp(&b.code));
+    Ok(Json(MethodsList {
+        default: m.default.clone(),
+        methods,
+        countries: m.countries.clone().into_iter().collect(),
+    }))
 }

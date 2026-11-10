@@ -164,6 +164,21 @@ pub async fn fetch_geojson(
     Ok(serde_json::from_slice(&bytes)?)
 }
 
+/// Fetches methods.yaml: the calculation method of each country.
+pub async fn fetch_methods(
+    client: &reqwest::Client,
+    base_url: &str,
+) -> Result<crate::calc::MethodsDoc, Error> {
+    let text = client
+        .get(format!("{base_url}/methods.yaml"))
+        .send()
+        .await?
+        .error_for_status()?
+        .text()
+        .await?;
+    Ok(serde_yaml::from_str(&text)?)
+}
+
 /// Fetches a country's mapping from district (shape property) to zone.
 pub async fn fetch_mapping(
     client: &reqwest::Client,
