@@ -301,3 +301,78 @@ async fn test_v2_errors() {
     let (status, body) = v2_get("/v2/countries/XX").await;
     assert_eq!((status, body["error"]["code"].as_str()), (404, Some("country_not_found")));
 }
+
+async fn times_at(body: serde_json::Value) -> (u16, serde_json::Value) {
+    v2(reqwest::Method::POST, "/v2/prayer-times/by-location", Some(body)).await
+}
+
+#[tokio::test]
+async fn test_v2_times_by_location_official() {
+    let (status, body) =
+        times_at(serde_json::json!({"lat": 3.139, "lng": 101.687, "date": "2026-11-10"})).await;
+    assert_eq!(status, 200);
+    assert_eq!(body["source"], "official");
+    assert_eq!(body["zone"], "WLY01");
+    assert_eq!(body["authority"], "JAKIM");
+    assert_eq!(body["country_name"], "Malaysia");
+    let day = &body["data"][0];
+    assert_eq!(day["date"], "2026-11-10");
+    assert_eq!(day["utc_offset"], "+08:00");
+    // Same times as the zone endpoint.
+    let (_, zone_day) = v2_get("/v2/zones/WLY01/prayer-times/day/2026-11-10").await;
+    for k in ["imsak", "fajr", "syuruk", "dhuha", "dhuhr", "asr", "maghrib", "isha"] {
+        assert_eq!(day[k], zone_day["data"][k], "{k}");
+    }
+}
+
+#[tokio::test]
+async fn test_v2_times_by_location_calculated_like_the_app() {
+    // Auckland: no official timetable. Expected times from adhan-js (the
+    // app's calculator) with Muslim World League, Shafi'i Asr.
+    let (status, body) =
+        times_at(serde_json::json!({"lat": -36.8485, "lng": 174.7633, "date": "2026-11-10"})).await;
+    assert_eq!(status, 200);
+    assert_eq!(body["source"], "calculated");
+    assert_eq!(body["zone"], serde_json::Value::Null);
+    assert_eq!(body["country"], "NZ");
+    assert_eq!(body["timezone"], "Pacific/Auckland");
+    assert_eq!(body["method"]["code"], "MuslimWorldLeague");
+    let day = &body["data"][0];
+    assert_eq!(day["utc_offset"], "+13:00");
+    let got: Vec<&str> = ["imsak", "fajr", "syuruk", "dhuhr", "asr", "maghrib", "isha"]
+        .iter()
+        .map(|k| day[*k].as_str().unwrap())
+        .collect();
+    assert_eq!(got, ["04:18", "04:28", "06:07", "13:06", "16:53", "20:03", "21:36"]);
+    assert!(day.get("dhuha").is_none());
+}
+
+#[tokio::test]
+async fn test_v2_times_by_location_country_method_and_month() {
+    // Mecca is in an official zone (Umm al-Qura); London is calculated, a
+    // whole month, with the default method.
+    let (status, body) =
+        times_at(serde_json::json!({"lat": 51.5074, "lng": -0.1278, "month": "2026-11"})).await;
+    assert_eq!(status, 200);
+    assert_eq!(body["source"], "calculated");
+    assert_eq!(body["country"], "GB");
+    assert_eq!(body["data"].as_array().unwrap().len(), 30);
+    assert_eq!(body["data"][9]["isha"], "18:07");
+}
+
+#[tokio::test]
+async fn test_v2_times_by_location_bad_requests() {
+    let (status, body) = times_at(serde_json::json!({"lat": 3.1, "lng": 101.6})).await;
+    assert_eq!((status, body["error"]["code"].as_str()), (400, Some("invalid_request")));
+    let (status, body) =
+        times_at(serde_json::json!({"lat": 95.0, "lng": 101.6, "date": "2026-11-10"})).await;
+    assert_eq!((status, body["error"]["code"].as_str()), (400, Some("invalid_location")));
+}
+
+#[tokio::test]
+async fn test_v2_methods() {
+    let (status, body) = v2_get("/v2/methods").await;
+    assert_eq!(status, 200);
+    assert_eq!(body["default"], "MuslimWorldLeague");
+    assert_eq!(body["countries"]["SA"], "UmmAlQura");
+}

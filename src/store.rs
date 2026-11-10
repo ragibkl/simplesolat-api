@@ -74,8 +74,23 @@ struct CountryMap {
     mapping: HashMap<String, MappingEntry>,
 }
 
+/// The world map in simplesolat-data (Natural Earth countries, ISO_A2 and
+/// NAME), for the country of a location outside the official zones.
+const WORLD_MAP: &str = "geojson/world-adm0-20261028.json";
+/// Like the app: small islands and some shores fall outside the world map
+/// (Manama, Malé), so take the nearest country within about 20 km.
+const COUNTRY_NEARBY_STEPS_DEG: [f64; 4] = [0.02, 0.05, 0.1, 0.2];
+
 pub struct Maps {
     countries: Vec<CountryMap>,
+    world: Shapes,
+    pub methods: crate::calc::MethodsDoc,
+}
+
+/// A location's country, from the world map.
+pub struct WorldCountry {
+    pub code: String,
+    pub name: String,
 }
 
 /// About 1, 2 and 4 km, in eight directions (the same as the app).
@@ -111,6 +126,24 @@ impl Maps {
                 DIRECTIONS
                     .iter()
                     .find_map(|(d_lat, d_lng)| self.locate_exact(lat + d_lat * step, lng + d_lng * step))
+            })
+        })
+    }
+
+    /// The country of a point (ISO 3166-1 alpha-2 and name), or None at sea.
+    pub fn country(&self, lat: f64, lng: f64) -> Option<WorldCountry> {
+        let at = |lat: f64, lng: f64| {
+            let shape = self.world.find(lng, lat)?;
+            Some(WorldCountry {
+                code: shape.property("ISO_A2").filter(|c| c.len() == 2)?.to_string(),
+                name: shape.property("NAME").unwrap_or_default().to_string(),
+            })
+        };
+        at(lat, lng).or_else(|| {
+            COUNTRY_NEARBY_STEPS_DEG.iter().find_map(|step| {
+                DIRECTIONS
+                    .iter()
+                    .find_map(|(d_lat, d_lng)| at(lat + d_lat * step, lng + d_lng * step))
             })
         })
     }
@@ -284,7 +317,14 @@ impl DataStore {
             countries.len(),
             countries.iter().map(|c| c.shapes.len()).sum::<usize>()
         );
-        Ok(Arc::new(Maps { countries }))
+        let world_url = format!("{}/{}", self.base_url, WORLD_MAP);
+        let (world, methods) = futures::try_join!(
+            data_repo::fetch_geojson(&self.client, &world_url),
+            data_repo::fetch_methods(&self.client, &self.base_url),
+        )?;
+        let world = Shapes::from_geojson(world);
+        tracing::info!("loaded the world map, {} countries, and {} methods", world.len(), methods.methods.len());
+        Ok(Arc::new(Maps { countries, world, methods }))
     }
 
     async fn month(&self, zone: &Zone, year: i32, month: u32) -> Result<Month, Arc<Error>> {
