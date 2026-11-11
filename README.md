@@ -53,13 +53,20 @@ curl https://api.simplesolat.com/v2/zones/WLY01/prayer-times/day/2026-10-27
 | Brunei | `BN` | [KHEU / MORA](https://www.mora.gov.bn) | 4 |
 | Sri Lanka | `LK` | [ACJU](https://www.acju.lk) | 13 |
 | United Arab Emirates | `AE` | [AWQAF](https://www.awqaf.gov.ae) | 60 |
+| Saudi Arabia | `SA` | [KACST (Umm al-Qura)](https://www.ummulqura.org.sa) | 173 |
+| Qatar | `QA` | [Ministry of Awqaf and Islamic Affairs](https://www.islam.gov.qa) | 1 |
+| Oman | `OM` | Ministry of Endowments and Religious Affairs (official method) | 101 |
 | Turkey | `TR` | [Diyanet](https://namazvakitleri.diyanet.gov.tr) | 865 |
 | Bosnia and Herzegovina | `BA` | [Islamic Community in BiH (Vaktija)](https://vaktija.ba) | 118 |
+| Serbia (Sandžak) | `RS` | Islamic Community in BiH (Vaktija) | 6 |
+| Montenegro (Sandžak) | `ME` | Islamic Community in BiH (Vaktija) | 5 |
 | Albania | `AL` | KMSH (Diyanet) | 20 |
 
-`GET /v2/countries` always has the current list. Outside these countries there
-is no official zone (`no_official_zone`); apps usually calculate times locally
-instead (e.g. with [adhan](https://github.com/batoulapps/adhan-js)).
+`GET /v2/countries` always has the current list. Outside the official zones,
+`POST /v2/prayer-times/by-location` still answers anywhere in the world: it
+gives the official timetable inside a zone and times calculated the same way
+as the simplesolat app elsewhere (`"source": "calculated"`, with the method
+used). See [Prayer times for any location](#prayer-times-for-any-location).
 
 ---
 

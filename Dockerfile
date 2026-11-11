@@ -16,7 +16,8 @@ COPY Cargo.toml Cargo.lock ./
 RUN cargo build --release
 RUN rm -rf ./src/
 
-# copy code files
+# copy code files (build.rs renders README.md into the docs page at "/")
+COPY build.rs README.md ./
 COPY /src/ ./src/
 
 # build code

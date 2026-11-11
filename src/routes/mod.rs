@@ -33,10 +33,16 @@ impl AppState {
     }
 }
 
+/// The API docs: README.md rendered to HTML at build time (build.rs).
+async fn docs() -> axum::response::Html<&'static str> {
+    axum::response::Html(include_str!(concat!(env!("OUT_DIR"), "/index.html")))
+}
+
 pub fn create_app_router(store: Arc<DataStore>) -> Router {
     let state = AppState { store };
 
     Router::new()
+        .route("/", get(docs))
         .route("/health", get(health_check))
         .route("/countries", get(get_countries))
         .route("/prayer-times/by-zone/{zone}", get(get_prayer_times))
