@@ -46,7 +46,7 @@ pub struct Index {
 }
 
 impl Index {
-    fn new(mut countries: Vec<Country>, mut zones: Vec<Zone>) -> Self {
+    pub(crate) fn new(mut countries: Vec<Country>, mut zones: Vec<Zone>) -> Self {
         countries.sort_by(|a, b| a.code.cmp(&b.code));
         zones.sort_by(|a, b| a.code.cmp(&b.code));
         let by_code = zones

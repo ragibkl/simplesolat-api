@@ -56,6 +56,10 @@ pub struct Zone {
     pub state: String,
     pub location: String,
     pub timezone: String,
+    /// The zone's own authority, when it differs from the country's (e.g.
+    /// "Mufti Selangor" for MFSGR01-09); otherwise the country's applies.
+    #[serde(default)]
+    pub source: Option<String>,
 }
 
 impl Zone {

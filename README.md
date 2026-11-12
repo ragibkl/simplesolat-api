@@ -167,6 +167,13 @@ exception is Tehran's method (Iran), whose maghrib angle salah ignores
 
 A zone has `zone`, `country`, `state`, `location`, `timezone` and `authority`.
 Zone codes are unique across countries (`WLY01`, `SGP01`, `DKI02`, `BRN01`...).
+`authority` is the zone's own when it differs from the rest of the country
+(Selangor's 2027 district zones `MFSGR01`–`09`: `Mufti Selangor`).
+
+Zone codes follow the authority, which redraws its zones from time to time
+(JAKIM moved Rompin from PHG02 into the new PHG07 in 2025). Look the zone up
+from the location again rather than storing it, and take a zone's times from
+the same place as the zone.
 
 ### Errors
 
