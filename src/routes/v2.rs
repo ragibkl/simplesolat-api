@@ -126,7 +126,7 @@ impl Zone {
             state: zone.state.clone(),
             location: zone.location.clone(),
             timezone: zone.timezone.clone(),
-            authority: authority(index, &zone.country),
+            authority: authority(index, zone),
         }
     }
 }
@@ -197,11 +197,15 @@ pub struct One<T> {
 
 // Helpers
 
-fn authority(index: &Index, country: &str) -> String {
+/// The zone's own source if it has one, otherwise its country's.
+fn authority(index: &Index, zone: &data_repo::Zone) -> String {
+    if let Some(source) = &zone.source {
+        return source.clone();
+    }
     index
         .countries
         .iter()
-        .find(|c| c.code == country)
+        .find(|c| c.code == zone.country)
         .map(|c| c.source.clone())
         .unwrap_or_default()
 }
@@ -412,7 +416,7 @@ async fn get_day(
     Ok(Json(ZonePrayerTimes {
         zone: zone.code.clone(),
         timezone: zone.timezone.clone(),
-        authority: authority(&index, &zone.country),
+        authority: authority(&index, zone),
         data: days.remove(0),
     }))
 }
@@ -428,7 +432,7 @@ async fn get_range(
     Ok(Json(ZonePrayerTimes {
         zone: zone.code.clone(),
         timezone: zone.timezone.clone(),
-        authority: authority(&index, &zone.country),
+        authority: authority(&index, zone),
         data,
     }))
 }
@@ -453,6 +457,31 @@ mod tests {
 
     fn d(y: i32, m: u32, day: u32) -> NaiveDate {
         NaiveDate::from_ymd_opt(y, m, day).unwrap()
+    }
+
+    #[test]
+    fn test_authority_prefers_the_zones_own_source() {
+        let country = data_repo::Country {
+            code: "MY".into(),
+            name: "Malaysia".into(),
+            source: "JAKIM".into(),
+            geojson: String::new(),
+            mapping: String::new(),
+            shape_property: "shapeName".into(),
+        };
+        let zone = |code: &str, source: Option<&str>| data_repo::Zone {
+            code: code.into(),
+            country: "MY".into(),
+            state: "Selangor".into(),
+            location: "Petaling".into(),
+            timezone: "Asia/Kuala_Lumpur".into(),
+            source: source.map(Into::into),
+        };
+        let jakim = zone("SGR01", None);
+        let mufti = zone("MFSGR03", Some("Mufti Selangor"));
+        let index = Index::new(vec![country], vec![jakim.clone(), mufti.clone()]);
+        assert_eq!(authority(&index, &jakim), "JAKIM");
+        assert_eq!(authority(&index, &mufti), "Mufti Selangor");
     }
 
     #[test]
@@ -643,7 +672,7 @@ async fn get_prayer_times_by_location(
             state: Some(located.state),
             location: Some(zone.location.clone()),
             timezone: zone.timezone.clone(),
-            authority: Some(authority(&index, &zone.country)),
+            authority: Some(authority(&index, zone)),
             method: None,
             data: days.into_iter().map(|d| day_at(d, tz)).collect(),
         }));
