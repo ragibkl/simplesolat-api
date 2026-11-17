@@ -4,42 +4,62 @@
 
 **Live API:** https://api.simplesolat.com
 
-Find the prayer zone for a GPS location, then get its official timetable for a
-day, a month or a year. Times are local (`"HH:MM"`, in the zone's timezone),
-straight from each country's religious authority. No key, no sign-up. Use it,
-or run your own copy (below): it's MIT licensed and has no database.
+Send a location and a date, get that day's prayer times. Inside an official
+zone they come straight from the country's religious authority; anywhere else
+in the world they're calculated with the country's usual method, and the
+response says which. Times are local (`"HH:MM"`, in the place's timezone). No
+key, no sign-up. Use it, or run your own copy (below): it's MIT licensed and
+has no database.
 
 ---
 
 ## Quick start
 
 ```bash
-# 1. Which zone am I in?
-curl -X POST https://api.simplesolat.com/v2/zones/by-location \
-  -H "Content-Type: application/json" -d '{"lat": 3.139, "lng": 101.687}'
-
-# 2. Today's prayer times for that zone
-curl https://api.simplesolat.com/v2/zones/WLY01/prayer-times/day/2026-10-27
+curl -X POST https://api.simplesolat.com/v2/prayer-times/by-location \
+  -H "Content-Type: application/json" \
+  -d '{"lat": 3.139, "lng": 101.687, "date": "2026-11-17"}'
 ```
 
 ```json
 {
+  "source": "official",
   "zone": "WLY01",
+  "country": "MY",
+  "country_name": "Malaysia",
+  "state": "W.P. Kuala Lumpur",
+  "location": "Kuala Lumpur, Putrajaya",
   "timezone": "Asia/Kuala_Lumpur",
   "authority": "JAKIM",
-  "data": {
-    "date": "2026-10-27",
-    "imsak": "05:38",
-    "fajr": "05:48",
-    "syuruk": "06:56",
-    "dhuha": "07:21",
-    "dhuhr": "13:00",
-    "asr": "16:19",
-    "maghrib": "18:59",
-    "isha": "20:09"
-  }
+  "data": [
+    {"date": "2026-11-17", "utc_offset": "+08:00", "imsak": "05:39", "fajr": "05:49",
+     "syuruk": "06:58", "dhuha": "07:23", "dhuhr": "13:01", "asr": "16:23",
+     "maghrib": "18:59", "isha": "20:12"}
+  ]
 }
 ```
+
+Use `"month": "YYYY-MM"` instead of `date` for a whole month. That's usually
+all an app needs: the zone, who publishes its times and the times themselves
+come from one call, so they always match.
+
+### 2027: Selangor and Sabah
+
+JAKIM's e-Solat has no 2027 times for Selangor or Sabah yet. The states'
+own timetables are out, and the API already serves them:
+
+- **Selangor:** from 1 January 2027 Jabatan Mufti Negeri Selangor publishes a
+  timetable for each of the 9 districts instead of SGR01–03. For 2027 dates
+  the API answers with the district zones `MFSGR01`–`09` (authority
+  `Mufti Selangor`): Hulu Selangor, Gombak, Petaling, Hulu Langat, Sepang,
+  Sabak Bernam, Kuala Selangor, Klang, Kuala Langat. 2026 dates still get
+  SGR01–03. Nothing to change on your side if you ask by location and date.
+- **Sabah:** January–May 2027 come from the Sabah mufti's 1448H timetable
+  (same zones, SBH01–09; its source is JAKIM's own falak panel). Those days
+  have `"provisional": true` and are replaced by JAKIM's when it publishes.
+
+If JAKIM later gives Selangor's districts its own codes, the map moves to
+them from a date, the same way. Codes are never reused for another place.
 
 ---
 
@@ -66,7 +86,7 @@ curl https://api.simplesolat.com/v2/zones/WLY01/prayer-times/day/2026-10-27
 `POST /v2/prayer-times/by-location` still answers anywhere in the world: it
 gives the official timetable inside a zone and times calculated the same way
 as the simplesolat app elsewhere (`"source": "calculated"`, with the method
-used). See [Prayer times for any location](#prayer-times-for-any-location).
+used). See [Prayer times for a location](#prayer-times-for-a-location).
 
 ---
 
@@ -75,43 +95,7 @@ used). See [Prayer times for any location](#prayer-times-for-any-location).
 One URL per kind of request, no optional query parameters. All responses are
 JSON; lists come as `{"data": [...]}`, single items as `{"data": {...}}`.
 
-### Find the zone for a location
-
-`POST /v2/zones/by-location` with `{"lat": <-90..90>, "lng": <-180..180>}`
-
-```json
-{
-  "data": {
-    "zone": "WLY01",
-    "country": "MY",
-    "state": "W.P. Kuala Lumpur",
-    "location": "Kuala Lumpur, Putrajaya",
-    "timezone": "Asia/Kuala_Lumpur",
-    "authority": "JAKIM",
-    "district": "Kuala Lumpur"
-  }
-}
-```
-
-It's a POST so the location stays out of URLs, caches and logs; the API
-doesn't log it. Lookups use the same district maps as the simplesolat app. The
-first lookup after a restart loads the maps and takes a few seconds.
-
-### Prayer times for a zone
-
-| Endpoint | `data` |
-|----------|--------|
-| `GET /v2/zones/{zone}/prayer-times/day/{YYYY-MM-DD}` | one day (object) |
-| `GET /v2/zones/{zone}/prayer-times/month/{YYYY-MM}` | every day of the month (list) |
-| `GET /v2/zones/{zone}/prayer-times/year/{YYYY}` | every day of the year (list) |
-
-Each day has `date`, `imsak`, `fajr`, `syuruk`, `dhuhr`, `asr`, `maghrib` and
-`isha`, plus `dhuha` where the authority publishes it (Malaysia, Brunei,
-Indonesia). Times are `"HH:MM"`, 24-hour, local to the zone's `timezone`. Days
-the authority hasn't published yet are left out; if none are published the
-response is `no_prayer_times` (404).
-
-### Prayer times for any location
+### Prayer times for a location
 
 `POST /v2/prayer-times/by-location` with `{"lat": ..., "lng": ..., "date": "YYYY-MM-DD"}`
 (or `"month": "YYYY-MM"` instead of `date`). Works anywhere in the world, the
@@ -143,9 +127,13 @@ same way the simplesolat app does:
 
 `data` is always a list (one day for `date`). Times are local `"HH:MM"` in
 `timezone`; `utc_offset` is that zone's offset on the day, so date + time +
-offset is an exact moment even across daylight saving changes.
-`POST /v2/zones/by-location` is unchanged: it still answers
-`no_official_zone` (404) outside the official zones.
+offset is an exact moment even across daylight saving changes. A day with
+`"provisional": true` comes from a stand-in source until the authority
+publishes (see [2027](#2027-selangor-and-sabah)); fetch it again later.
+
+The zone is the one in force on the requested date: authorities redraw zones
+from time to time, and the API follows from the date they take effect. A
+month request uses the zone of the month.
 
 `GET /v2/methods` lists the calculation methods, the default, and which
 countries use which method.
@@ -154,6 +142,46 @@ Calculated times come from [salah](https://crates.io/crates/salah), a port of
 adhan (the app's library), and match the app's to the minute; the one
 exception is Tehran's method (Iran), whose maghrib angle salah ignores
 (maghrib comes out at sunset).
+
+### Prayer times for a zone code
+
+| Endpoint | `data` |
+|----------|--------|
+| `GET /v2/zones/{zone}/prayer-times/day/{YYYY-MM-DD}` | one day (object) |
+| `GET /v2/zones/{zone}/prayer-times/month/{YYYY-MM}` | every day of the month (list) |
+| `GET /v2/zones/{zone}/prayer-times/year/{YYYY}` | every day of the year (list) |
+
+Each day has `date`, `imsak`, `fajr`, `syuruk`, `dhuhr`, `asr`, `maghrib` and
+`isha`, plus `dhuha` where the authority publishes it (Malaysia, Brunei,
+Indonesia). Times are `"HH:MM"`, 24-hour, local to the zone's `timezone`. Days
+the authority hasn't published yet are left out; if none are published the
+response is `no_prayer_times` (404). Provisional days carry
+`"provisional": true`.
+
+### Just the zone for a location
+
+`POST /v2/zones/by-location` with `{"lat": <-90..90>, "lng": <-180..180>}`,
+optionally `"date": "YYYY-MM-DD"` for the zone in force on that date
+(default: today). Outside the official zones it answers `no_official_zone`
+(404).
+
+```json
+{
+  "data": {
+    "zone": "WLY01",
+    "country": "MY",
+    "state": "W.P. Kuala Lumpur",
+    "location": "Kuala Lumpur, Putrajaya",
+    "timezone": "Asia/Kuala_Lumpur",
+    "authority": "JAKIM",
+    "district": "Kuala Lumpur"
+  }
+}
+```
+
+It's a POST so the location stays out of URLs, caches and logs; the API
+doesn't log it. Lookups use the same district maps as the simplesolat app. The
+first lookup after a restart loads the maps and takes a few seconds.
 
 ### Zones and countries
 
@@ -200,6 +228,11 @@ memory; there are no background jobs.
   `PRAYER_TIMES_MISSING_CACHE_TTL`, so new months show up sooner.
 - **CDN failures** are never cached. If a refetch fails, the last good copy is
   served (zones and maps indefinitely, months for up to 30 days).
+
+**In your app:** the API is free and run by one person, without an uptime
+guarantee (about 99.9% so far). Fetch a month at a time, keep it on the
+phone, and retry later if a request fails; then a short outage never shows.
+Changes to v2 only ever add fields or endpoints.
 
 ---
 

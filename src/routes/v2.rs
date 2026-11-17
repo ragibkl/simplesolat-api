@@ -154,6 +154,9 @@ pub struct PrayerTimes {
     pub asr: String,
     pub maghrib: String,
     pub isha: String,
+    /// From a stand-in source until the authority publishes (replaced later).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub provisional: bool,
 }
 
 fn hhmm(t: NaiveTime) -> String {
@@ -172,6 +175,7 @@ impl From<&PrayerTimeRecord> for PrayerTimes {
             asr: hhmm(r.asr),
             maghrib: hhmm(r.maghrib),
             isha: hhmm(r.isha),
+            provisional: r.provisional,
         }
     }
 }
@@ -361,6 +365,9 @@ async fn get_zone(
 pub struct Location {
     pub lat: f64,
     pub lng: f64,
+    /// "YYYY-MM-DD": the zone in force on that date (zones can be redrawn
+    /// from a date). Default: today in the country.
+    pub date: Option<String>,
 }
 
 /// POST so the location stays out of URLs, caches and access logs; it is
@@ -369,12 +376,13 @@ async fn get_zone_by_location(
     State(state): State<AppState>,
     body: Result<Json<Location>, JsonRejection>,
 ) -> Result<Json<One<LocatedZone>>, ApiError> {
-    let Json(Location { lat, lng }) = body.map_err(|_| {
+    let Json(Location { lat, lng, date }) = body.map_err(|_| {
         ApiError::bad_request(
             "invalid_location",
-            "send JSON like {\"lat\": 3.139, \"lng\": 101.687}",
+            "send JSON like {\"lat\": 3.139, \"lng\": 101.687} (optionally with \"date\": \"2027-01-01\")",
         )
     })?;
+    let date = date.as_deref().map(parse_date).transpose()?;
     if !(-90.0..=90.0).contains(&lat) || !(-180.0..=180.0).contains(&lng) {
         return Err(ApiError::bad_request(
             "invalid_location",
@@ -387,7 +395,7 @@ async fn get_zone_by_location(
         tracing::error!("failed to load maps: {}", e);
         ApiError::data_source()
     })?;
-    let located = maps.locate(lat, lng).ok_or_else(|| {
+    let located = maps.locate(lat, lng, date).ok_or_else(|| {
         ApiError::not_found(
             "no_official_zone",
             "this location isn't in an official zone; see /v2/countries for the countries covered",
@@ -468,6 +476,7 @@ mod tests {
             geojson: String::new(),
             mapping: String::new(),
             shape_property: "shapeName".into(),
+            maps: vec![],
         };
         let zone = |code: &str, source: Option<&str>| data_repo::Zone {
             code: code.into(),
@@ -560,6 +569,8 @@ pub struct PrayerTimesNoDate {
     pub asr: String,
     pub maghrib: String,
     pub isha: String,
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub provisional: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -622,6 +633,7 @@ fn day_at(times: PrayerTimes, tz: chrono_tz::Tz) -> DayAtLocation {
             asr: times.asr,
             maghrib: times.maghrib,
             isha: times.isha,
+            provisional: times.provisional,
         },
     }
 }
@@ -659,7 +671,9 @@ async fn get_prayer_times_by_location(
         ApiError::data_source()
     })?;
 
-    if let Some(located) = maps.locate(req.lat, req.lng) {
+    // The zone in force on the first requested day (a month never spans a
+    // map change: they start on the 1st).
+    if let Some(located) = maps.locate(req.lat, req.lng, Some(from)) {
         let zone = find_zone(&index, &located.zone)?;
         let tz = zone.tz();
         let days = times(&state, zone, from, to).await?;
@@ -704,6 +718,7 @@ async fn get_prayer_times_by_location(
                 asr: hhmm(day.asr),
                 maghrib: hhmm(day.maghrib),
                 isha: hhmm(day.isha),
+                provisional: false,
             },
         });
         date = date.succ_opt().expect("valid date");

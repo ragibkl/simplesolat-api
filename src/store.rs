@@ -14,7 +14,9 @@
 //! - Maps (each country's GeoJSON + mapping, for finding the zone of a GPS
 //!   location): loaded together on the first location lookup, kept like the
 //!   zone index (`index_ttl`, last good copy on failure). About 28 MB of
-//!   GeoJSON in all; Turkey's is the largest.
+//!   GeoJSON in all; Turkey's is the largest. A country with dated `maps`
+//!   keeps every version (a GeoJSON shared by versions is loaded once), and a
+//!   lookup uses the version in force on its date.
 
 use std::{
     collections::HashMap,
@@ -22,7 +24,7 @@ use std::{
     time::{Duration, Instant},
 };
 
-use chrono::{Datelike, NaiveDate};
+use chrono::{Datelike, NaiveDate, Utc};
 use futures::{StreamExt, future, stream};
 use moka::{Expiry, future::Cache};
 use tokio::sync::RwLock;
@@ -66,12 +68,32 @@ impl Index {
     }
 }
 
-/// One country's map and its district-to-zone mapping.
+/// One country's map and its district-to-zone mapping, by date.
 struct CountryMap {
     code: String,
     shape_property: String,
-    shapes: Shapes,
+    /// For "today" when a lookup gives no date (the country's first zone's).
+    tz: chrono_tz::Tz,
+    /// Sorted by `from`; `from: None` means every date.
+    versions: Vec<MapVersion>,
+}
+
+struct MapVersion {
+    from: Option<NaiveDate>,
+    shapes: Arc<Shapes>,
     mapping: HashMap<String, MappingEntry>,
+}
+
+impl CountryMap {
+    /// The version in force on `date`: the last one starting on or before
+    /// it (the first one for earlier dates).
+    fn version(&self, date: NaiveDate) -> &MapVersion {
+        self.versions
+            .iter()
+            .rev()
+            .find(|v| v.from.is_none_or(|from| from <= date))
+            .unwrap_or(&self.versions[0])
+    }
 }
 
 /// The world map in simplesolat-data (Natural Earth countries, ISO_A2 and
@@ -120,12 +142,16 @@ impl Maps {
     /// stilt village the point can sit just outside the district maps
     /// (Kukup, Pulau Perhentian), so like the app, take the nearest district
     /// within about 4 km.
-    pub fn locate(&self, lat: f64, lng: f64) -> Option<Located> {
-        self.locate_exact(lat, lng).or_else(|| {
+    ///
+    /// The zone is the one in force on `date` (countries whose map changes on
+    /// a date, like Selangor's districts from 2027); without a date, today in
+    /// the country.
+    pub fn locate(&self, lat: f64, lng: f64, date: Option<NaiveDate>) -> Option<Located> {
+        self.locate_exact(lat, lng, date).or_else(|| {
             NEARBY_STEPS_DEG.iter().find_map(|step| {
                 DIRECTIONS
                     .iter()
-                    .find_map(|(d_lat, d_lng)| self.locate_exact(lat + d_lat * step, lng + d_lng * step))
+                    .find_map(|(d_lat, d_lng)| self.locate_exact(lat + d_lat * step, lng + d_lng * step, date))
             })
         })
     }
@@ -149,10 +175,12 @@ impl Maps {
     }
 
     /// The official zone whose district contains the point exactly.
-    fn locate_exact(&self, lat: f64, lng: f64) -> Option<Located> {
+    fn locate_exact(&self, lat: f64, lng: f64, date: Option<NaiveDate>) -> Option<Located> {
         self.countries.iter().find_map(|c| {
-            let shape = c.shapes.find(lng, lat)?;
-            let entry = c.mapping.get(shape.property(&c.shape_property)?)?;
+            let date = date.unwrap_or_else(|| Utc::now().with_timezone(&c.tz).date_naive());
+            let version = c.version(date);
+            let shape = version.shapes.find(lng, lat)?;
+            let entry = version.mapping.get(shape.property(&c.shape_property)?)?;
             Some(Located {
                 country: c.code.clone(),
                 zone: entry.zone.clone(),
@@ -295,16 +323,40 @@ impl DataStore {
         let loaded: Vec<Result<CountryMap, Error>> = stream::iter(countries)
             .map(|country| {
                 let client = self.client.clone();
+                let tz = index
+                    .zones
+                    .iter()
+                    .find(|z| z.country == country.code)
+                    .map(|z| z.tz())
+                    .unwrap_or(chrono_tz::UTC);
                 async move {
-                    let (geojson, mapping) = futures::try_join!(
-                        data_repo::fetch_geojson(&client, &country.geojson),
-                        data_repo::fetch_mapping(&client, &country.mapping),
-                    )?;
+                    let dated: Vec<(Option<NaiveDate>, String, String)> = if country.maps.is_empty() {
+                        vec![(None, country.geojson.clone(), country.mapping.clone())]
+                    } else {
+                        let mut maps = country.maps.clone();
+                        maps.sort_by_key(|m| m.from);
+                        maps.into_iter().map(|m| (Some(m.from), m.geojson, m.mapping)).collect()
+                    };
+                    let mut shapes_by_url: HashMap<String, Arc<Shapes>> = HashMap::new();
+                    let mut versions = Vec::new();
+                    for (from, geojson_url, mapping_url) in dated {
+                        let shapes = match shapes_by_url.get(&geojson_url) {
+                            Some(shapes) => shapes.clone(),
+                            None => {
+                                let geojson = data_repo::fetch_geojson(&client, &geojson_url).await?;
+                                let shapes = Arc::new(Shapes::from_geojson(geojson));
+                                shapes_by_url.insert(geojson_url, shapes.clone());
+                                shapes
+                            }
+                        };
+                        let mapping = data_repo::fetch_mapping(&client, &mapping_url).await?;
+                        versions.push(MapVersion { from, shapes, mapping });
+                    }
                     Ok(CountryMap {
                         code: country.code,
                         shape_property: country.shape_property,
-                        shapes: Shapes::from_geojson(geojson),
-                        mapping,
+                        tz,
+                        versions,
                     })
                 }
             })
@@ -315,7 +367,7 @@ impl DataStore {
         tracing::info!(
             "loaded maps for {} countries, {} districts",
             countries.len(),
-            countries.iter().map(|c| c.shapes.len()).sum::<usize>()
+            countries.iter().map(|c| c.version(NaiveDate::MAX).shapes.len()).sum::<usize>()
         );
         let world_url = format!("{}/{}", self.base_url, WORLD_MAP);
         let (world, methods) = futures::try_join!(
@@ -534,6 +586,51 @@ mod tests {
 
     fn date(y: i32, m: u32, d: u32) -> NaiveDate {
         NaiveDate::from_ymd_opt(y, m, d).unwrap()
+    }
+
+    /// A one-square district "Petaling" mapped to SGR01 until 2026 and to
+    /// MFSGR03 from 2027-01-01, sharing one GeoJSON.
+    fn dated_maps() -> Maps {
+        let geojson: crate::geo::FeatureCollection = serde_json::from_str(
+            r#"{"features": [{"properties": {"shapeName": "Petaling"},
+                "geometry": {"type": "Polygon", "coordinates": [[[101,3],[102,3],[102,4],[101,4],[101,3]]]}}]}"#,
+        )
+        .unwrap();
+        let shapes = Arc::new(Shapes::from_geojson(geojson));
+        let mapping = |zone: &str| {
+            HashMap::from([(
+                "Petaling".to_string(),
+                MappingEntry { zone: zone.into(), state: "Selangor".into() },
+            )])
+        };
+        let world: crate::geo::FeatureCollection = serde_json::from_str(r#"{"features": []}"#).unwrap();
+        Maps {
+            countries: vec![CountryMap {
+                code: "MY".into(),
+                shape_property: "shapeName".into(),
+                tz: chrono_tz::Asia::Kuala_Lumpur,
+                versions: vec![
+                    MapVersion { from: Some(date(2026, 1, 1)), shapes: shapes.clone(), mapping: mapping("SGR01") },
+                    MapVersion { from: Some(date(2027, 1, 1)), shapes, mapping: mapping("MFSGR03") },
+                ],
+            }],
+            world: Shapes::from_geojson(world),
+            methods: serde_yaml::from_str("default: X\nmethods: {}\ncountries: {}\n").unwrap(),
+        }
+    }
+
+    #[test]
+    fn test_zone_follows_the_map_in_force_on_the_date() {
+        let maps = dated_maps();
+        let zone = |d| maps.locate(3.5, 101.5, Some(d)).map(|l| l.zone);
+        assert_eq!(zone(date(2026, 12, 31)).as_deref(), Some("SGR01"));
+        assert_eq!(zone(date(2027, 1, 1)).as_deref(), Some("MFSGR03"));
+        assert_eq!(zone(date(2030, 6, 1)).as_deref(), Some("MFSGR03"));
+        // Before the first entry: the first map.
+        assert_eq!(zone(date(2020, 1, 1)).as_deref(), Some("SGR01"));
+        // No date: today in the country, which is one of the two.
+        assert!(maps.locate(3.5, 101.5, None).is_some());
+        assert!(maps.locate(10.0, 10.0, Some(date(2027, 1, 1))).is_none());
     }
 
     #[test]

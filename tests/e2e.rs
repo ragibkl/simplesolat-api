@@ -376,3 +376,46 @@ async fn test_v2_methods() {
     assert_eq!(body["default"], "MuslimWorldLeague");
     assert_eq!(body["countries"]["SA"], "UmmAlQura");
 }
+
+#[tokio::test]
+async fn test_v2_zone_follows_the_map_in_force_on_the_date() {
+    // Petaling: JAKIM's SGR01 until 2026, Mufti Selangor's district zone
+    // MFSGR03 from 2027-01-01.
+    let petaling = |date: &str| serde_json::json!({"lat": 3.0733, "lng": 101.5185, "date": date});
+    for (date, zone) in [("2026-12-31", "SGR01"), ("2027-01-01", "MFSGR03")] {
+        let (status, body) = v2(reqwest::Method::POST, "/v2/zones/by-location", Some(petaling(date))).await;
+        assert_eq!(status, 200, "{date}");
+        assert_eq!(body["data"]["zone"], zone, "{date}");
+    }
+    let (status, body) = v2(
+        reqwest::Method::POST,
+        "/v2/zones/by-location",
+        Some(serde_json::json!({"lat": 3.0733, "lng": 101.5185, "date": "31-12-2026"})),
+    )
+    .await;
+    assert_eq!(status, 400);
+    assert_eq!(body["error"]["code"], "invalid_date");
+
+    let (status, body) = v2(
+        reqwest::Method::POST,
+        "/v2/prayer-times/by-location",
+        Some(serde_json::json!({"lat": 3.0733, "lng": 101.5185, "month": "2027-01"})),
+    )
+    .await;
+    assert_eq!(status, 200);
+    assert_eq!(body["zone"], "MFSGR03");
+    assert_eq!(body["authority"], "Mufti Selangor");
+    assert_eq!(body["data"].as_array().unwrap().len(), 31);
+}
+
+#[tokio::test]
+async fn test_v2_provisional_days_are_marked() {
+    // Sabah January 2027 comes from the Sabah mufti's poster until JAKIM
+    // publishes; JAKIM's own days carry no flag.
+    let (status, body) = v2(reqwest::Method::GET, "/v2/zones/SBH07/prayer-times/day/2027-01-01", None).await;
+    assert_eq!(status, 200);
+    assert_eq!(body["data"]["provisional"], true);
+    let (status, body) = v2(reqwest::Method::GET, "/v2/zones/WLY01/prayer-times/day/2027-01-01", None).await;
+    assert_eq!(status, 200);
+    assert!(body["data"].get("provisional").is_none());
+}
