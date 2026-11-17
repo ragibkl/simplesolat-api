@@ -41,6 +41,18 @@ pub struct Country {
     pub geojson: String,
     pub mapping: String,
     pub shape_property: String,
+    /// The map in force from each date (simplesolat-data `maps`). Empty:
+    /// `geojson` + `mapping` apply on every date.
+    #[serde(default)]
+    pub maps: Vec<DatedMap>,
+}
+
+/// One entry of a country's `maps`: applies from `from` until the next one.
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct DatedMap {
+    pub from: NaiveDate,
+    pub geojson: String,
+    pub mapping: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -95,6 +107,10 @@ pub struct PrayerTimeRecord {
     pub maghrib: NaiveTime,
     #[serde(deserialize_with = "deserialize_time")]
     pub isha: NaiveTime,
+    /// From a stand-in source until the authority publishes (Sabah's
+    /// poster-based months); replaced later.
+    #[serde(default)]
+    pub provisional: bool,
 }
 
 /// Fetches countries.yaml from the data repo.
